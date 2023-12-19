@@ -19,9 +19,6 @@ require("lazy").setup({
   { import = "Lazy.plugins.ui" },
   { import = "Lazy.plugins.utilities" },
 }, {
-  install = {
-    colorscheme = { "nightfly" },
-  },
   checker = {
     enabled = true,
     notify = true,
