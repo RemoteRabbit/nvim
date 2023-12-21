@@ -1,12 +1,10 @@
 return {
   "williamboman/mason.nvim",
   dependencies = {
-    "williamboman/mason-lspconfig.nvim",
     "WhoIsSethDaniel/mason-tool-installer.nvim",
   },
   config = function()
     local mason = require("mason")
-    local mason_lspconfig = require("mason-lspconfig")
     local mti = require("mason-tool-installer")
 
     mason.setup({
@@ -19,18 +17,53 @@ return {
       },
     })
 
-    mason_lspconfig.setup({
-      ensure_installed = {},
-      automatic_installation = true,
-    })
-
     mti.setup({
-      ensure_installed = {
-        "prettier", -- ts/js formatter
-        "stylua", -- lua formatter
-        "eslint_d", -- ts/js linter
-      },
       auto_update = true,
+      -- debounce_hours = 5,
+      ensure_installed = {
+        -- AWS
+        "cfn-lint",
+        -- Azure
+        "azure-pipelines-language-server",
+        "bicep-lsp",
+        -- Bash
+        "bash-debug-adapter",
+        "bash-language-server",
+        -- Erlang
+        "erlang-ls",
+        -- General
+        "prettier",
+        -- Git
+        "actionlint",
+        -- Golang
+        "gci",
+        -- JSON
+        "fixjson",
+        "json-lsp",
+        -- lua
+        "lua-language-server",
+        "luacheck",
+        "luaformatter",
+        "stylua",
+        -- Python
+        "pyright",
+        "ruff",
+        "ruff-lsp",
+        -- Terraform
+        "terraform-ls",
+        "tflint",
+        "tfsec",
+        -- Text
+        "alex",
+        "markdown-toc",
+        "typos-lsp",
+        -- Yaml
+        "spectral-language-server",
+        "yaml-language-server",
+        "yamlfix",
+        "yamlfmt",
+        "yamllint",
+      },
     })
   end,
 }

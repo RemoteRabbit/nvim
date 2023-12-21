@@ -26,6 +26,10 @@ git clone http://github.com/remoterabbit/nvim $HOME/repos/personal/nvim && ln -s
 
 <table will go here>
 
+## Mason Notes
+
+[https://mason-registry.dev/registry/list](https://mason-registry.dev/registry/list)
+
 ## Which-key help
 
 `<CR>` is often seen at the end of some mappings which is used like the `RETURN` or `ENTER` press
