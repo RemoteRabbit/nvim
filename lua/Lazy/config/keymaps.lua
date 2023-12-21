@@ -5,6 +5,7 @@ local keymap = vim.keymap -- for conciseness
 
 -- General Keymaps -------------------
 keymap.set("n", "<leader>l", ":Lazy<CR>", { desc = "Lazy" })
+keymap.set("n", "<leader>gl", ":LazyGit<CR>", { desc = "LazyGit" })
 keymap.set("n", "<leader>m", ":Mason<CR>", { desc = "Mason" })
 
 -- use jk to exit insert mode
@@ -17,14 +18,18 @@ keymap.set("n", "x", '"_x')
 keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
 keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decrement
 
--- window management
-keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" }) -- split window vertically
-keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" }) -- split window horizontally
-keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" }) -- make split windows equal width & height
-keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" }) -- close current split window
+-- windows
+keymap.set("n", "<leader>ww", "<C-W>p", { desc = "Other window", remap = true })
+keymap.set("n", "<leader>wd", "<C-W>c", { desc = "Delete window", remap = true })
+keymap.set("n", "<leader>w-", "<C-W>s", { desc = "Split window below", remap = true })
+keymap.set("n", "<leader>w|", "<C-W>v", { desc = "Split window right", remap = true })
+keymap.set("n", "<leader>-", "<C-W>s", { desc = "Split window below", remap = true })
+keymap.set("n", "<leader>|", "<C-W>v", { desc = "Split window right", remap = true })
 
-keymap.set("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" }) -- open new tab
-keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" }) -- close current tab
-keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" }) --  go to next tab
-keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) --  go to previous tab
-keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" }) --  move current buffer to new tab
+-- tabs
+keymap.set("n", "<leader><tab>l", "<cmd>tablast<cr>", { desc = "Last Tab" })
+keymap.set("n", "<leader><tab>f", "<cmd>tabfirst<cr>", { desc = "First Tab" })
+keymap.set("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
+keymap.set("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next Tab" })
+keymap.set("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close Tab" })
+keymap.set("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
