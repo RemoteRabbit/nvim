@@ -31,6 +31,7 @@ return {
     wk.register({
       f = {
         f = { "<cmd>Telescope find_files hidden=true<cr>", "Find File" }, -- create a binding with label
+        g = { "<cmd>Telescope live_grep<cr>", "Grep" }, -- additional options for creating the keymap
         o = { "<cmd>Telescope oldfiles<cr>", "Open Recent File", noremap = false }, -- additional options for creating the keymap
       },
     }, { prefix = "<leader>" })
