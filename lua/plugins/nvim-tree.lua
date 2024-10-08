@@ -25,15 +25,5 @@ return {
         dotfiles = false,
       },
     })
-    local wk = require("which-key")
-    wk.register({
-      e = {
-        name = "nvim-tree",
-        e = { "<cmd>NvimTreeToggle<CR>", "Toggle file explorer" },
-        f = { "<cmd>NvimTreeFindFileToggle<CR>", "Toggle file explorer on current file" },
-        c = { "<cmd>NvimTreeCollapse<CR>", "Collapse file explorer" },
-        r = { "<cmd>NvimTreeRefresh<CR>", "Refresh file explorer" },
-      },
-    }, { prefix = "<leader>" })
   end,
 }

@@ -1,6 +1,5 @@
 return {
-  "nvim-telescope/telescope.nvim",
-  branch = "0.1.x",
+  'nvim-telescope/telescope.nvim', tag = '0.1.8',
   dependencies = {
     "nvim-lua/plenary.nvim",
     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
@@ -9,31 +8,39 @@ return {
   config = function()
     local telescope = require("telescope")
     local actions = require("telescope.actions")
-    local trouble = require("trouble.providers.telescope")
+    local open_with_trouble = require("trouble.sources.telescope").open
+    local add_to_trouble = require("trouble.sources.telescope").add
 
     telescope.setup({
       defaults = {
-        path_display = { "truncate " },
+        path_display = { "truncate" },
         mappings = {
           i = {
-            ["<C-k>"] = actions.move_selection_previous, -- move to prev result
-            ["<C-j>"] = actions.move_selection_next, -- move to next result
+            ["<C-k>"] = actions.move_selection_previous,
+            ["<C-j>"] = actions.move_selection_next,
             ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-            ["<C-t>"] = trouble.open_with_trouble,
+            ["<C-t>"] = open_with_trouble,
           },
+          n = {
+            ["<C-t>"] = open_with_trouble,
+          }
         },
       },
     })
 
     telescope.load_extension("fzf")
 
-    local wk = require("which-key")
-    wk.register({
-      f = {
-        f = { "<cmd>Telescope find_files hidden=true<cr>", "Find File" }, -- create a binding with label
-        g = { "<cmd>Telescope live_grep<cr>", "Grep" }, -- additional options for creating the keymap
-        o = { "<cmd>Telescope oldfiles<cr>", "Open Recent File", noremap = false }, -- additional options for creating the keymap
-      },
-    }, { prefix = "<leader>" })
+    vim.keymap.set('n', '<leader>ff', function()
+      require('telescope.builtin').find_files({ hidden = true })
+    end, { desc = 'Find files (including hidden)' })
+    vim.keymap.set('n', '<leader>fg', function()
+      require('telescope.builtin').live_grep({ hidden = true })
+    end, { desc = 'Live Grep' })
+    vim.keymap.set('n', '<leader>fb', function()
+      require('telescope.builtin').buffers({ hidden = true })
+    end, { desc = 'Buffer Search' })
+    vim.keymap.set('n', '<leader>fh', function()
+      require('telescope.builtin').help_tags({ hidden = true })
+    end, { desc = 'Help Tags' })
   end,
 }
