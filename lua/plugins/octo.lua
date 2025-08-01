@@ -203,17 +203,37 @@ return {
     -- Smart PR creation using conventional commits
     vim.keymap.set("n", "<leader>gPm", function()
       local branch = vim.fn.system("git branch --show-current"):gsub("\n", "")
-      local commits = vim.fn.system("git log --oneline --no-merges origin/main.." .. branch)
+      print("Current branch: " .. branch)
+      
+      -- Check if we have commits to work with (compare with local main first)
+      local commits = vim.fn.system("git log --oneline --no-merges main.." .. branch)
+      if commits == "" or commits:match("^fatal:") then
+        print("No commits found ahead of main. Make some commits first!")
+        return
+      end
+      
+      -- Check if branch is pushed to remote
+      local remote_check = vim.fn.system("git ls-remote --heads origin " .. branch .. " 2>/dev/null")
+      if remote_check == "" then
+        print("Branch not pushed to remote. Pushing now...")
+        local push_result = vim.fn.system("git push -u origin " .. branch)
+        if vim.v.shell_error ~= 0 then
+          print("❌ Failed to push branch:")
+          print(push_result)
+          return
+        end
+        print("✅ Branch pushed to remote")
+      end
       
       -- Parse conventional commits
       local features, fixes, others = {}, {}, {}
       for line in commits:gmatch("[^\r\n]+") do
         local hash, msg = line:match("(%S+)%s+(.*)")
-        if msg:match("^feat") then
+        if msg and msg:match("^feat") then
           table.insert(features, "- " .. msg:gsub("^feat[^:]*:%s*", ""))
-        elseif msg:match("^fix") then
+        elseif msg and msg:match("^fix") then
           table.insert(fixes, "- " .. msg:gsub("^fix[^:]*:%s*", ""))
-        else
+        elseif msg then
           table.insert(others, "- " .. msg)
         end
       end
@@ -221,20 +241,32 @@ return {
       -- Generate PR body
       local body = ""
       if #features > 0 then
-        body = body .. "## ✨ Features\n" .. table.concat(features, "\n") .. "\n\n"
+        body = body .. "## ✨ Features\\n" .. table.concat(features, "\\n") .. "\\n\\n"
       end
       if #fixes > 0 then
-        body = body .. "## 🐛 Bug Fixes\n" .. table.concat(fixes, "\n") .. "\n\n"
+        body = body .. "## 🐛 Bug Fixes\\n" .. table.concat(fixes, "\\n") .. "\\n\\n"
       end
       if #others > 0 then
-        body = body .. "## 🔧 Other Changes\n" .. table.concat(others, "\n") .. "\n\n"
+        body = body .. "## 🔧 Other Changes\\n" .. table.concat(others, "\\n") .. "\\n\\n"
       end
       
       local title = vim.fn.input("PR Title: ")
       if title and title ~= "" then
-        local cmd = string.format("gh pr create --title '%s' --body '%s' --head %s --base main", title, body:gsub("'", "\\'"), branch)
+        -- Use proper escaping and show the actual command
+        local cmd = string.format('gh pr create --title "%s" --body "%s" --head %s --base main', 
+          title:gsub('"', '\\"'), body, branch)
+        print("Running: " .. cmd)
+        
         local result = vim.fn.system(cmd)
-        print("PR created with conventional commit structure")
+        local exit_code = vim.v.shell_error
+        
+        if exit_code == 0 then
+          print("✅ PR created successfully!")
+          print(result)
+        else
+          print("❌ PR creation failed:")
+          print(result)
+        end
       end
     end, { desc = "Smart PR Creation with Conventional Commits" })
   end,
