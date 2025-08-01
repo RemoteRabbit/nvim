@@ -239,33 +239,57 @@ return {
       end
       
       -- Generate PR body
-      local body = ""
+      local body_parts = {}
       if #features > 0 then
-        body = body .. "## ✨ Features\\n" .. table.concat(features, "\\n") .. "\\n\\n"
+        table.insert(body_parts, "## ✨ Features")
+        for _, feat in ipairs(features) do
+          table.insert(body_parts, feat)
+        end
+        table.insert(body_parts, "")
       end
       if #fixes > 0 then
-        body = body .. "## 🐛 Bug Fixes\\n" .. table.concat(fixes, "\\n") .. "\\n\\n"
+        table.insert(body_parts, "## 🐛 Bug Fixes")
+        for _, fix in ipairs(fixes) do
+          table.insert(body_parts, fix)
+        end
+        table.insert(body_parts, "")
       end
       if #others > 0 then
-        body = body .. "## 🔧 Other Changes\\n" .. table.concat(others, "\\n") .. "\\n\\n"
+        table.insert(body_parts, "## 🔧 Other Changes")
+        for _, other in ipairs(others) do
+          table.insert(body_parts, other)
+        end
+        table.insert(body_parts, "")
       end
       
       local title = vim.fn.input("PR Title: ")
       if title and title ~= "" then
-        -- Use proper escaping and show the actual command
-        local cmd = string.format('gh pr create --title "%s" --body "%s" --head %s --base main', 
-          title:gsub('"', '\\"'), body, branch)
-        print("Running: " .. cmd)
-        
-        local result = vim.fn.system(cmd)
-        local exit_code = vim.v.shell_error
-        
-        if exit_code == 0 then
-          print("✅ PR created successfully!")
-          print(result)
+        -- Write body to temp file to avoid shell escaping issues
+        local temp_file = "/tmp/pr_body_" .. os.time() .. ".md"
+        local file = io.open(temp_file, "w")
+        if file then
+          file:write(table.concat(body_parts, "\n"))
+          file:close()
+          
+          local cmd = string.format('gh pr create --title "%s" --body-file "%s" --head %s --base main', 
+            title:gsub('"', '\\"'), temp_file, branch)
+          print("Running: " .. cmd)
+          
+          local result = vim.fn.system(cmd)
+          local exit_code = vim.v.shell_error
+          
+          -- Clean up temp file
+          os.remove(temp_file)
+          
+          if exit_code == 0 then
+            print("✅ PR created successfully!")
+            print(result)
+          else
+            print("❌ PR creation failed:")
+            print(result)
+          end
         else
-          print("❌ PR creation failed:")
-          print(result)
+          print("❌ Failed to create temp file for PR body")
         end
       end
     end, { desc = "Smart PR Creation with Conventional Commits" })
