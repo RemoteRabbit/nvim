@@ -42,5 +42,17 @@ return {
     vim.keymap.set('n', '<leader>fh', function()
       require('telescope.builtin').help_tags({ hidden = true })
     end, { desc = 'Help Tags' })
+    vim.keymap.set('n', '<leader>fr', function()
+      require('telescope.builtin').oldfiles()
+    end, { desc = 'Recent Files' })
+    vim.keymap.set('n', '<leader>fc', function()
+      require('telescope.builtin').find_files({ cwd = vim.fn.stdpath('config') })
+    end, { desc = 'Config Files' })
+    vim.keymap.set('n', '<leader>fs', function()
+      require('telescope.builtin').lsp_document_symbols()
+    end, { desc = 'Document Symbols' })
+    vim.keymap.set('n', '<leader>fS', function()
+      require('telescope.builtin').lsp_workspace_symbols()
+    end, { desc = 'Workspace Symbols' })
   end,
 }
