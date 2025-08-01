@@ -200,16 +200,42 @@ return {
     -- Quick checkout (moved to avoid gco conflict)
     vim.keymap.set("n", "<leader>gCo", ":Octo pr checkout<CR>", { desc = "Checkout PR" })
     
-    -- Manual PR creation using gh CLI
+    -- Smart PR creation using conventional commits
     vim.keymap.set("n", "<leader>gPm", function()
       local branch = vim.fn.system("git branch --show-current"):gsub("\n", "")
+      local commits = vim.fn.system("git log --oneline --no-merges origin/main.." .. branch)
+      
+      -- Parse conventional commits
+      local features, fixes, others = {}, {}, {}
+      for line in commits:gmatch("[^\r\n]+") do
+        local hash, msg = line:match("(%S+)%s+(.*)")
+        if msg:match("^feat") then
+          table.insert(features, "- " .. msg:gsub("^feat[^:]*:%s*", ""))
+        elseif msg:match("^fix") then
+          table.insert(fixes, "- " .. msg:gsub("^fix[^:]*:%s*", ""))
+        else
+          table.insert(others, "- " .. msg)
+        end
+      end
+      
+      -- Generate PR body
+      local body = ""
+      if #features > 0 then
+        body = body .. "## ✨ Features\n" .. table.concat(features, "\n") .. "\n\n"
+      end
+      if #fixes > 0 then
+        body = body .. "## 🐛 Bug Fixes\n" .. table.concat(fixes, "\n") .. "\n\n"
+      end
+      if #others > 0 then
+        body = body .. "## 🔧 Other Changes\n" .. table.concat(others, "\n") .. "\n\n"
+      end
+      
       local title = vim.fn.input("PR Title: ")
       if title and title ~= "" then
-        local body = vim.fn.input("PR Body (optional): ")
-        local cmd = string.format("gh pr create --title '%s' --body '%s' --head %s --base main", title, body, branch)
+        local cmd = string.format("gh pr create --title '%s' --body '%s' --head %s --base main", title, body:gsub("'", "\\'"), branch)
         local result = vim.fn.system(cmd)
-        print("PR created: " .. result)
+        print("PR created with conventional commit structure")
       end
-    end, { desc = "Manual PR Creation" })
+    end, { desc = "Smart PR Creation with Conventional Commits" })
   end,
 }
