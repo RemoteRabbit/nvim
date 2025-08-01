@@ -166,12 +166,25 @@ return {
     })
 
     -- Pull Request management (git group)
-    vim.keymap.set("n", "<leader>gPr", ":Octo pr create<CR>", { desc = "Create PR" })
+    vim.keymap.set("n", "<leader>gPr", function()
+      print("Creating PR...")
+      vim.cmd("Octo pr create")
+    end, { desc = "Create PR" })
     vim.keymap.set("n", "<leader>gPl", ":Octo pr list<CR>", { desc = "List PRs" })
     vim.keymap.set("n", "<leader>gPo", ":Octo pr<CR>", { desc = "Open Current PR" })
-    vim.keymap.set("n", "<leader>gPv", ":Octo review start<CR>", { desc = "Review PR" })
     vim.keymap.set("n", "<leader>gPs", ":Octo pr search<CR>", { desc = "Search PRs" })
     vim.keymap.set("n", "<leader>gPc", ":Octo pr checkout<CR>", { desc = "Checkout PR" })
+    
+    -- Alternative PR creation methods
+    vim.keymap.set("n", "<leader>gPt", ":Octo pr create --template<CR>", { desc = "Create PR with Template" })
+    vim.keymap.set("n", "<leader>gPd", ":Octo pr create --draft<CR>", { desc = "Create Draft PR" })
+    
+    -- Quick review shortcuts  
+    vim.keymap.set("n", "<leader>gPv", ":Octo review start<CR>", { desc = "Start Review" })
+    vim.keymap.set("n", "<leader>gPR", ":Octo review resume<CR>", { desc = "Resume Review" })
+    vim.keymap.set("n", "<leader>gPa", ":Octo review submit approve<CR>", { desc = "Approve PR" })
+    vim.keymap.set("n", "<leader>gPx", ":Octo review submit request_changes<CR>", { desc = "Request Changes" })
+    vim.keymap.set("n", "<leader>gPf", ":Octo pr files<CR>", { desc = "View PR Files" })
     
     -- Issue management  
     vim.keymap.set("n", "<leader>gIl", ":Octo issue list<CR>", { desc = "List Issues" })
@@ -186,5 +199,17 @@ return {
     
     -- Quick checkout (moved to avoid gco conflict)
     vim.keymap.set("n", "<leader>gCo", ":Octo pr checkout<CR>", { desc = "Checkout PR" })
+    
+    -- Manual PR creation using gh CLI
+    vim.keymap.set("n", "<leader>gPm", function()
+      local branch = vim.fn.system("git branch --show-current"):gsub("\n", "")
+      local title = vim.fn.input("PR Title: ")
+      if title and title ~= "" then
+        local body = vim.fn.input("PR Body (optional): ")
+        local cmd = string.format("gh pr create --title '%s' --body '%s' --head %s --base main", title, body, branch)
+        local result = vim.fn.system(cmd)
+        print("PR created: " .. result)
+      end
+    end, { desc = "Manual PR Creation" })
   end,
 }
