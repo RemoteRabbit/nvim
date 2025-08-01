@@ -200,16 +200,98 @@ return {
     -- Quick checkout (moved to avoid gco conflict)
     vim.keymap.set("n", "<leader>gCo", ":Octo pr checkout<CR>", { desc = "Checkout PR" })
     
-    -- Manual PR creation using gh CLI
+    -- Smart PR creation using conventional commits
     vim.keymap.set("n", "<leader>gPm", function()
       local branch = vim.fn.system("git branch --show-current"):gsub("\n", "")
+      print("Current branch: " .. branch)
+      
+      -- Check if we have commits to work with (compare with local main first)
+      local commits = vim.fn.system("git log --oneline --no-merges main.." .. branch)
+      if commits == "" or commits:match("^fatal:") then
+        print("No commits found ahead of main. Make some commits first!")
+        return
+      end
+      
+      -- Check if branch is pushed to remote
+      local remote_check = vim.fn.system("git ls-remote --heads origin " .. branch .. " 2>/dev/null")
+      if remote_check == "" then
+        print("Branch not pushed to remote. Pushing now...")
+        local push_result = vim.fn.system("git push -u origin " .. branch)
+        if vim.v.shell_error ~= 0 then
+          print("❌ Failed to push branch:")
+          print(push_result)
+          return
+        end
+        print("✅ Branch pushed to remote")
+      end
+      
+      -- Parse conventional commits
+      local features, fixes, others = {}, {}, {}
+      for line in commits:gmatch("[^\r\n]+") do
+        local hash, msg = line:match("(%S+)%s+(.*)")
+        if msg and msg:match("^feat") then
+          table.insert(features, "- " .. msg:gsub("^feat[^:]*:%s*", ""))
+        elseif msg and msg:match("^fix") then
+          table.insert(fixes, "- " .. msg:gsub("^fix[^:]*:%s*", ""))
+        elseif msg then
+          table.insert(others, "- " .. msg)
+        end
+      end
+      
+      -- Generate PR body
+      local body_parts = {}
+      if #features > 0 then
+        table.insert(body_parts, "## ✨ Features")
+        for _, feat in ipairs(features) do
+          table.insert(body_parts, feat)
+        end
+        table.insert(body_parts, "")
+      end
+      if #fixes > 0 then
+        table.insert(body_parts, "## 🐛 Bug Fixes")
+        for _, fix in ipairs(fixes) do
+          table.insert(body_parts, fix)
+        end
+        table.insert(body_parts, "")
+      end
+      if #others > 0 then
+        table.insert(body_parts, "## 🔧 Other Changes")
+        for _, other in ipairs(others) do
+          table.insert(body_parts, other)
+        end
+        table.insert(body_parts, "")
+      end
+      
       local title = vim.fn.input("PR Title: ")
       if title and title ~= "" then
-        local body = vim.fn.input("PR Body (optional): ")
-        local cmd = string.format("gh pr create --title '%s' --body '%s' --head %s --base main", title, body, branch)
-        local result = vim.fn.system(cmd)
-        print("PR created: " .. result)
+        -- Write body to temp file to avoid shell escaping issues
+        local temp_file = "/tmp/pr_body_" .. os.time() .. ".md"
+        local file = io.open(temp_file, "w")
+        if file then
+          file:write(table.concat(body_parts, "\n"))
+          file:close()
+          
+          local cmd = string.format('gh pr create --title "%s" --body-file "%s" --head %s --base main', 
+            title:gsub('"', '\\"'), temp_file, branch)
+          print("Running: " .. cmd)
+          
+          local result = vim.fn.system(cmd)
+          local exit_code = vim.v.shell_error
+          
+          -- Clean up temp file
+          os.remove(temp_file)
+          
+          if exit_code == 0 then
+            print("✅ PR created successfully!")
+            print(result)
+          else
+            print("❌ PR creation failed:")
+            print(result)
+          end
+        else
+          print("❌ Failed to create temp file for PR body")
+        end
       end
-    end, { desc = "Manual PR Creation" })
+    end, { desc = "Smart PR Creation with Conventional Commits" })
   end,
 }
