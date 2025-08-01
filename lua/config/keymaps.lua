@@ -5,8 +5,9 @@ local keymap = vim.keymap -- for conciseness
 
 -- General Keymaps -------------------
 keymap.set("n", "<leader>l", ":Lazy<CR>", { desc = "Lazy" })
-keymap.set("n", "<leader>gl", ":LazyGit<CR>", { desc = "LazyGit" })
-keymap.set("n", "<leader>m", ":Mason<CR>", { desc = "Mason" })
+-- Removed: conflicts with snacks git keybindings
+-- keymap.set("n", "<leader>gl", ":LazyGit<CR>", { desc = "LazyGit" })
+keymap.set("n", "<leader>pm", ":Mason<CR>", { desc = "Mason" })
 
 keymap.set("n", "<leader>cw", ":%s/<C-r><C-w>//g<Left><Left>", { desc = "Change word" })
 
