@@ -7,55 +7,73 @@ return {
   keys = {
     {
       "<leader>re",
-      function() require("refactoring").refactor("Extract Function") end,
+      function()
+        require("refactoring").refactor("Extract Function")
+      end,
       mode = "x",
       desc = "Extract Function",
     },
     {
       "<leader>rf",
-      function() require("refactoring").refactor("Extract Function To File") end,
-      mode = "x", 
+      function()
+        require("refactoring").refactor("Extract Function To File")
+      end,
+      mode = "x",
       desc = "Extract Function To File",
     },
     {
       "<leader>rv",
-      function() require("refactoring").refactor("Extract Variable") end,
+      function()
+        require("refactoring").refactor("Extract Variable")
+      end,
       mode = "x",
       desc = "Extract Variable",
     },
     {
       "<leader>ri",
-      function() require("refactoring").refactor("Inline Variable") end,
+      function()
+        require("refactoring").refactor("Inline Variable")
+      end,
       mode = { "n", "x" },
       desc = "Inline Variable",
     },
     {
       "<leader>rb",
-      function() require("refactoring").refactor("Extract Block") end,
+      function()
+        require("refactoring").refactor("Extract Block")
+      end,
       mode = "x",
       desc = "Extract Block",
     },
     {
       "<leader>rbf",
-      function() require("refactoring").refactor("Extract Block To File") end,
+      function()
+        require("refactoring").refactor("Extract Block To File")
+      end,
       mode = "x",
-      desc = "Extract Block To File", 
+      desc = "Extract Block To File",
     },
     {
       "<leader>rr",
-      function() require("refactoring").select_refactor() end,
+      function()
+        require("refactoring").select_refactor()
+      end,
       mode = { "n", "x" },
       desc = "Select Refactor",
     },
     {
       "<leader>rp",
-      function() require("refactoring").debug.printf({ below = false }) end,
+      function()
+        require("refactoring").debug.printf({ below = false })
+      end,
       mode = "n",
       desc = "Debug Print",
     },
     {
       "<leader>rc",
-      function() require("refactoring").debug.cleanup({}) end,
+      function()
+        require("refactoring").debug.cleanup({})
+      end,
       mode = "n",
       desc = "Debug Cleanup",
     },
@@ -85,18 +103,15 @@ return {
   },
   config = function(_, opts)
     require("refactoring").setup(opts)
-    
+
     -- Load refactoring Telescope extension
     require("telescope").load_extension("refactoring")
-    
+
     -- Telescope refactoring
-    vim.keymap.set(
-      { "n", "x" },
-      "<leader>rt",
-      function() require("telescope").extensions.refactoring.refactors() end,
-      { desc = "Telescope Refactoring" }
-    )
-    
+    vim.keymap.set({ "n", "x" }, "<leader>rt", function()
+      require("telescope").extensions.refactoring.refactors()
+    end, { desc = "Telescope Refactoring" })
+
     -- Additional convenience mappings
     vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "LSP Rename" })
   end,

@@ -8,10 +8,13 @@ return {
     conform.setup({
       formatters_by_ft = {
         lua = { "stylua" },
-        markdown = { "markdownlint" },
         python = { "isort", "black" },
+        go = { "gofmt", "goimports" },
         terraform = { "terraform_fmt" },
-        yaml = { "yamlfix", "yamlfmt" },
+        elixir = { "mix" },
+        json = { "jq" },
+        yaml = { "yamlfmt" },
+        markdown = { "markdownlint" },
         ["_"] = { "trim_whitespace" },
         ["*"] = { "codespell" },
       },

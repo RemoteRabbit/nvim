@@ -19,7 +19,7 @@ return {
   },
   config = function(_, opts)
     require("twilight").setup(opts)
-    
+
     -- Keymap for manual toggle
     vim.keymap.set("n", "<leader>tw", ":Twilight<CR>", { desc = "Toggle Twilight" })
   end,

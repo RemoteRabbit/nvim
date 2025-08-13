@@ -1,6 +1,6 @@
 return {
   "MeanderingProgrammer/render-markdown.nvim",
-  dependencies = { 
+  dependencies = {
     "nvim-treesitter/nvim-treesitter",
     "echasnovski/mini.nvim", -- for icons
   },
@@ -30,7 +30,7 @@ return {
       },
       foregrounds = {
         "RenderMarkdownH1",
-        "RenderMarkdownH2", 
+        "RenderMarkdownH2",
         "RenderMarkdownH3",
         "RenderMarkdownH4",
         "RenderMarkdownH5",
@@ -101,10 +101,17 @@ return {
       cell = "padded",
       min_width = 0,
       border = {
-        "┌", "┬", "┐",
-        "├", "┼", "┤", 
-        "└", "┴", "┘",
-        "│", "─",
+        "┌",
+        "┬",
+        "┐",
+        "├",
+        "┼",
+        "┤",
+        "└",
+        "┴",
+        "┘",
+        "│",
+        "─",
       },
       alignment_indicator = "━",
       head = "RenderMarkdownTableHead",
@@ -141,10 +148,10 @@ return {
   },
   config = function(_, opts)
     require("render-markdown").setup(opts)
-    
+
     -- Toggle rendering
     vim.keymap.set("n", "<leader>mr", ":RenderMarkdown toggle<CR>", { desc = "Toggle Markdown Rendering" })
-    
+
     -- Enable by default for markdown files
     vim.api.nvim_create_autocmd("FileType", {
       pattern = "markdown",

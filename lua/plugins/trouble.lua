@@ -1,8 +1,8 @@
 return {
   "folke/trouble.nvim",
-  dependencies = { 
-    'echasnovski/mini.nvim', 
-    version = false 
+  dependencies = {
+    "echasnovski/mini.nvim",
+    version = false,
   },
   opts = {}, -- for default options, refer to the configuration section for custom setup.
   cmd = "Trouble",
