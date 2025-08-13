@@ -31,6 +31,7 @@ return {
         { "<leader>o", group = "outline" },
         { "<leader>p", group = "packages/profile" },
         { "<leader>r", group = "refactor/run/rest" },
+        { "<leader>rs", group = "security scans" },
         { "<leader>s", group = "screenshot" },
         { "<leader>t", group = "test/terminal/todo" },
         { "<leader>tc", group = "coverage" },
