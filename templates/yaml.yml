@@ -1,0 +1,10 @@
+# {{_file_name_}} - {{_cursor_}}
+# Created: {{_date_}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{_input_:config_name_}}
+  namespace: default
+data:
+  key: value
