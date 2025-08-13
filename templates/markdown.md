@@ -1,6 +1,6 @@
 # {{_input_:title_}}
 
-**Author:** {{_author_}}  
+**Author:** {{_author_}}
 **Date:** {{_date_}}
 
 ## Overview

@@ -4,7 +4,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{_input_:config_name_}}
+  name: "config-name"  # Replace with desired name
   namespace: default
 data:
   key: value
