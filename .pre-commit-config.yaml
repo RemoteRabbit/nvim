@@ -1,0 +1,67 @@
+repos:
+  # General file formatting and linting
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+      - id: mixed-line-ending
+
+  # Lua formatting with StyLua
+  - repo: https://github.com/JohnnyMorganz/StyLua
+    rev: v0.20.0
+    hooks:
+      - id: stylua
+        args: [--config-path=stylua.toml]
+
+  # Lua linting with Luacheck
+  - repo: https://github.com/luarocks/luacheck
+    rev: v1.1.0
+    hooks:
+      - id: luacheck
+        args: [--config=.luacheckrc]
+
+  # Conventional commit messages
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v3.2.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: [optional-scope]
+
+  # Additional security checks
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: [--baseline, .secrets.baseline]
+        exclude: package.lock.json
+
+  # Auto-documentation generation
+  - repo: local
+    hooks:
+      - id: generate-plugin-docs
+        name: Generate Plugin Documentation
+        entry: scripts/generate-docs.sh
+        language: script
+        files: ^lua/plugins/.*\.lua$
+        pass_filenames: false
+
+      - id: update-readme-plugins
+        name: Update README with Plugin List
+        entry: scripts/update-readme.sh
+        language: script
+        files: ^(lua/plugins/.*\.lua|README\.md)$
+        pass_filenames: false
+
+      - id: extract-keybindings
+        name: Extract Keybindings Documentation
+        entry: scripts/extract-keybindings.py
+        language: system
+        files: ^lua/.*\.lua$
+        pass_filenames: false
