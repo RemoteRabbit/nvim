@@ -141,9 +141,24 @@ return {
 
       -- Keymaps
       vim.keymap.set("n", "<leader>S", '<cmd>lua require("spectre").toggle()<CR>', { desc = "Toggle Spectre" })
-      vim.keymap.set("n", "<leader>sw", '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', { desc = "Search current word" })
-      vim.keymap.set("v", "<leader>sw", '<esc><cmd>lua require("spectre").open_visual()<CR>', { desc = "Search current word" })
-      vim.keymap.set("n", "<leader>sp", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', { desc = "Search on current file" })
+      vim.keymap.set(
+        "n",
+        "<leader>sw",
+        '<cmd>lua require("spectre").open_visual({select_word=true})<CR>',
+        { desc = "Search current word" }
+      )
+      vim.keymap.set(
+        "v",
+        "<leader>sw",
+        '<esc><cmd>lua require("spectre").open_visual()<CR>',
+        { desc = "Search current word" }
+      )
+      vim.keymap.set(
+        "n",
+        "<leader>sp",
+        '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>',
+        { desc = "Search on current file" }
+      )
     end,
   },
   {
@@ -158,7 +173,7 @@ return {
     config = function()
       local telescope = require("telescope")
       local actions = require("telescope.actions")
-      
+
       telescope.setup({
         defaults = {
           prompt_prefix = "🔍 ",
@@ -303,7 +318,12 @@ return {
       vim.keymap.set("n", "<leader>fr", "<cmd>Telescope resume<cr>", { desc = "Resume last search" })
       vim.keymap.set("n", "<leader>fk", "<cmd>Telescope keymaps<cr>", { desc = "Keymaps" })
       vim.keymap.set("n", "<leader>fd", ":Telescope file_browser<CR>", { desc = "File browser" })
-      vim.keymap.set("n", "<leader>fD", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", { desc = "File browser (current dir)" })
+      vim.keymap.set(
+        "n",
+        "<leader>fD",
+        ":Telescope file_browser path=%:p:h select_buffer=true<CR>",
+        { desc = "File browser (current dir)" }
+      )
     end,
   },
 }

@@ -86,7 +86,7 @@ return {
           info = { "DiagnosticInfo", "#2563EB" },
           hint = { "DiagnosticHint", "#10B981" },
           default = { "Identifier", "#7C3AED" },
-          test = { "Identifier", "#FF006E" }
+          test = { "Identifier", "#FF006E" },
         },
         search = {
           command = "rg",
@@ -97,15 +97,24 @@ return {
             "--line-number",
             "--column",
           },
-          pattern = [[\b(KEYWORDS):]]
+          pattern = [[\b(KEYWORDS):]],
         },
       })
 
       -- Keymaps
-      vim.keymap.set("n", "]t", function() require("todo-comments").jump_next() end, { desc = "Next todo comment" })
-      vim.keymap.set("n", "[t", function() require("todo-comments").jump_prev() end, { desc = "Previous todo comment" })
+      vim.keymap.set("n", "]t", function()
+        require("todo-comments").jump_next()
+      end, { desc = "Next todo comment" })
+      vim.keymap.set("n", "[t", function()
+        require("todo-comments").jump_prev()
+      end, { desc = "Previous todo comment" })
       vim.keymap.set("n", "<leader>tt", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
-      vim.keymap.set("n", "<leader>tT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME,NOTE,WARN,WARNING<cr>", { desc = "Find todos/fix/notes/warnings" })
+      vim.keymap.set(
+        "n",
+        "<leader>tT",
+        "<cmd>TodoTelescope keywords=TODO,FIX,FIXME,NOTE,WARN,WARNING<cr>",
+        { desc = "Find todos/fix/notes/warnings" }
+      )
       vim.keymap.set("n", "<leader>tl", "<cmd>TodoLocList<cr>", { desc = "Todo location list" })
       vim.keymap.set("n", "<leader>tq", "<cmd>TodoQuickFix<cr>", { desc = "Todo quickfix" })
     end,
@@ -163,7 +172,9 @@ return {
     "iamcco/markdown-preview.nvim",
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
     ft = { "markdown" },
-    build = function() vim.fn["mkdp#util#install"]() end,
+    build = function()
+      vim.fn["mkdp#util#install"]()
+    end,
     config = function()
       vim.g.mkdp_auto_start = 0
       vim.g.mkdp_auto_close = 1
@@ -241,7 +252,7 @@ return {
         },
       })
     end,
-    dependencies = { {"nvim-tree/nvim-web-devicons"}},
+    dependencies = { { "nvim-tree/nvim-web-devicons" } },
   },
   {
     -- Enhanced markdown editing

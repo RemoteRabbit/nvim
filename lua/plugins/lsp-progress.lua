@@ -12,8 +12,8 @@ return {
           local client = vim.lsp.get_client_by_id(client_id)
           return client and client.name or nil
         end,
-        notification_group = function(msg) 
-          return msg.lsp_server and msg.lsp_server.name or "lsp" 
+        notification_group = function(msg)
+          return msg.lsp_server and msg.lsp_server.name or "lsp"
         end,
         ignore = {},
         display = {
@@ -29,11 +29,11 @@ return {
           priority = 30,
           skip_history = true,
           format_message = require("fidget.progress.display").default_format_message,
-          format_annote = function(msg) 
-            return msg.title 
+          format_annote = function(msg)
+            return msg.title
           end,
-          format_group_name = function(group) 
-            return tostring(group) 
+          format_group_name = function(group)
+            return tostring(group)
           end,
           overrides = {
             rust_analyzer = { name = "rust-analyzer" },
@@ -86,5 +86,5 @@ return {
         path = string.format("%s/fidget.nvim.log", vim.fn.stdpath("cache")),
       },
     })
-  end
+  end,
 }

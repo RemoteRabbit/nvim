@@ -1,132 +1,230 @@
-# RemoteRabbit NeoVim Configuration
+# 🚀 Personal Neovim Configuration
 
-A modern NeoVim configuration using [Lazy.nvim](https://github.com/folke/lazy.nvim) as the plugin manager.
+> A modern, feature-rich Neovim setup built for productivity and development workflow optimization.
 
-## Features
+📊 **Config Stats:** 54 plugins • 3 core configs • 9 file templates
 
-- LSP integration with Mason for easy language server management
-- Fuzzy finding with Telescope
-- Git integration with Gitsigns and Lazygit
-- File tree with nvim-tree
-- Syntax highlighting with Treesitter
-- Code completion with nvim-cmp
-- Debugging support with nvim-dap
-- Markdown rendering and note-taking with Obsidian
-- Code formatting and linting
-- Beautiful UI with Catppuccin theme
+## ✨ Key Features
 
-## Installation
+### 🔧 Development Tools
+- **Language Server Protocol (LSP)** - Full IDE-like features with auto-completion, diagnostics, and code actions
+- **Debug Adapter Protocol (DAP)** - Integrated debugging support for multiple languages
+- **Tree-sitter** - Advanced syntax highlighting and code understanding
+- **Auto-formatting** - Code formatting with conform.nvim and language-specific tools
+- **Linting** - Real-time code analysis and error detection
 
-### Standard Installation
+### 🎨 User Interface
+- **Catppuccin Theme** - Beautiful, eye-friendly color scheme
+- **Enhanced UI** - Custom statusline, bufferline, and floating windows
+- **File Explorer** - Feature-rich nvim-tree with git integration
+- **Fuzzy Finding** - Telescope for lightning-fast file and content search
 
-```shell
-git clone https://github.com/remoterabbit/nvim $HOME/.config/nvim
+### ⚡ Productivity
+- **Git Integration** - Full git workflow with lazygit, gitsigns, and fugitive
+- **Terminal Integration** - Seamless terminal and tmux navigation
+- **Session Management** - Project-aware sessions and workspace restoration
+- **Snippet System** - Extensive snippet collection for faster coding
+
+### 🧪 Testing & Quality
+- **Neotest** - Integrated test runner with language-specific adapters
+- **Code Coverage** - Visual coverage indicators
+- **Pre-commit Hooks** - Automated code quality checks and documentation generation
+
+## 🛠️ Installation
+
+### Prerequisites
+- **Neovim 0.10.0+** or later
+- **Git** for plugin management
+- **Node.js** for LSP servers
+- **Python** and **pip** for additional tools
+- **Ripgrep** for fast searching
+- A [Nerd Font](https://www.nerdfonts.com/) for icons
+
+### Quick Setup
+
+```bash
+# Backup existing config (optional)
+mv ~/.config/nvim ~/.config/nvim.backup
+
+# Clone this configuration
+git clone https://github.com/remoterabbit/nvim.git ~/.config/nvim
+
+# Start Neovim (plugins will auto-install)
+nvim
 ```
 
-### My Personal Setup
-
-```shell
-mkdir -p $HOME/repos/personal
-git clone https://github.com/remoterabbit/nvim $HOME/repos/personal/nvim
-ln -sf $HOME/repos/personal/nvim $HOME/.config/nvim
-```
-
-### Standalone Installation (No Git)
-
-```shell
-git clone https://github.com/remoterabbit/nvim $HOME/.config/nvim
-rm -rf $HOME/.config/nvim/.git
-```
-
-## Post-Installation
-
-After cloning and launching NeoVim:
-
-1. Lazy.nvim will automatically install all plugins
-2. Run `:checkhealth` to verify everything is working correctly
-3. Install any missing dependencies as suggested by checkhealth
-
-## Plugin Overview
-
-| Plugin | Description |
-| ------ | ----------- |
-| [lazy.nvim](https://github.com/folke/lazy.nvim) | Modern plugin manager for NeoVim |
-| [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) | Fuzzy finder for files, buffers, grep, and more |
-| [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) | Syntax highlighting and code parsing |
-| [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) | Language Server Protocol configuration |
-| [mason.nvim](https://github.com/williamboman/mason.nvim) | Package manager for LSP servers, DAP servers, linters, and formatters |
-| [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) | Auto-completion engine |
-| [gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim) | Git integration with signs, hunks, and blame |
-| [nvim-tree.lua](https://github.com/nvim-tree/nvim-tree.lua) | File explorer tree |
-| [harpoon](https://github.com/ThePrimeagen/harpoon) | Quick file navigation and marking |
-| [lazygit.nvim](https://github.com/kdheepak/lazygit.nvim) | Lazygit integration for advanced git operations |
-| [which-key.nvim](https://github.com/folke/which-key.nvim) | Displays available keybindings in popup |
-| [catppuccin](https://github.com/catppuccin/nvim) | Soothing pastel theme |
-| [nvim-dap](https://github.com/mfussenegger/nvim-dap) | Debug Adapter Protocol client |
-| [conform.nvim](https://github.com/stevearc/conform.nvim) | Lightweight formatter plugin |
-| [trouble.nvim](https://github.com/folke/trouble.nvim) | Pretty list for diagnostics, references, and more |
-| [obsidian.nvim](https://github.com/epwalsh/obsidian.nvim) | Obsidian vault integration for note-taking |
-| [render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim) | Markdown rendering with enhanced visuals |
-| [nvim-spectre](https://github.com/nvim-pack/nvim-spectre) | Find and replace panel |
-| [todo-comments.nvim](https://github.com/folke/todo-comments.nvim) | Highlight and search TODO comments |
-| [undotree](https://github.com/mbbill/undotree) | Visualize undo history |
-| [autopairs](https://github.com/windwp/nvim-autopairs) | Auto-close brackets, quotes, etc. |
-| [indent-blankline.nvim](https://github.com/lukas-reineke/indent-blankline.nvim) | Indentation guides |
-| [satellite.nvim](https://github.com/lewis6991/satellite.nvim) | Scrollbar with git and diagnostic info |
-| [twilight.nvim](https://github.com/folke/twilight.nvim) | Dims inactive portions of code |
-| [cloak.nvim](https://github.com/laytan/cloak.nvim) | Hide/show secrets and sensitive information |
-| [vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator) | Seamless navigation between tmux panes and vim splits |
-| [Comment.nvim](https://github.com/numToStr/Comment.nvim) | Smart commenting with treesitter integration |
-| [snacks.nvim](https://github.com/folke/snacks.nvim) | Collection of small QoL plugins |
-| [refactoring.nvim](https://github.com/ThePrimeagen/refactoring.nvim) | Code refactoring tools |
-| [octo.nvim](https://github.com/pwntester/octo.nvim) | GitHub integration for issues and PRs |
-
-## Key Features
-
-### LSP & Development
-- Full LSP support with auto-completion, diagnostics, and formatting
-- Debugging with DAP for multiple languages
-- Code actions and refactoring tools
-- Integrated terminal and git workflows
-
-### File Management
-- Fast file finding with Telescope
-- Project-wide search and replace
-- Quick file navigation with Harpoon
-- File tree browser with git integration
-
-### Writing & Documentation
-- Obsidian vault integration for note-taking
-- Enhanced markdown rendering
-- Table editing mode
-- TODO comment highlighting
-
-### UI & Experience
-- Beautiful Catppuccin theme
-- Indentation guides and scrollbar
-- Which-key for discoverable keybindings
-- Twilight mode for focused editing
-
-## Configuration Structure
+## 📂 Structure
 
 ```
-nvim/
-├── init.lua              # Entry point
-├── lua/
-│   ├── config/           # Core configuration
-│   │   ├── lazy.lua      # Lazy.nvim setup
-│   │   ├── options.lua   # NeoVim options
-│   │   └── keymaps.lua   # Key mappings
-│   └── plugins/          # Plugin configurations
-└── lazy-lock.json        # Plugin version lock file
+~/.config/nvim/
+├── 📁 lua/
+│   ├── 📁 config/          # Core configuration
+│   │   ├── options.lua     # Neovim options
+│   │   ├── keymaps.lua     # Global keymaps
+│   │   └── lazy.lua        # Plugin manager setup
+│   └── 📁 plugins/         # Plugin configurations
+├── 📁 docs/                # Auto-generated documentation
+│   ├── KEYBINDINGS.md      # Comprehensive keybinding reference
+│   └── PLUGINS.md          # Detailed plugin documentation
+├── 📁 scripts/             # Automation scripts
+├── 📁 templates/           # File templates
+├── init.lua               # Entry point
+└── stylua.toml           # Code formatting config
 ```
 
-## Resources
+## 📚 Documentation
 
-- [Mason Registry](https://mason-registry.dev/registry/list) - Available LSP servers and tools
-- [Lazy.nvim Documentation](https://lazy.folke.io/) - Plugin manager documentation
-- [NeoVim Documentation](https://neovim.io/doc/) - Official NeoVim docs
+- **[Keybindings Reference](docs/KEYBINDINGS.md)** - Complete list of all keybindings organized by mode
+- **[Plugin Documentation](docs/PLUGINS.md)** - Detailed information about each plugin
+- **[Contributing Guidelines](.github/CONTRIBUTING.md)** - How to contribute to this configuration
 
-## Key Mapping Note
+## ⌨️ Key Mappings
 
-`<CR>` in key mappings refers to the RETURN/ENTER key press.
+### Leader Key: `<space>`
+
+| Category | Key | Description |
+|----------|-----|-------------|
+| **Files** | `<leader>ff` | Find files |
+| **Search** | `<leader>fg` | Live grep |
+| **Git** | `<leader>gg` | LazyGit |
+| **LSP** | `<leader>ca` | Code actions |
+| **Debug** | `<leader>dt` | Toggle breakpoint |
+
+> 💡 **Tip:** Press `<space>` in normal mode to see all available keybindings with which-key.
+
+## 🔧 Customization
+
+### Adding New Plugins
+
+1. Create a new file in `lua/plugins/`
+2. Follow the existing plugin structure
+3. Run `:Lazy` to manage plugins
+
+### Language Support
+
+This configuration includes LSP support for:
+- **Python** (Pyright)
+- **JavaScript/TypeScript** (ts_ls)
+- **Lua** (lua_ls)
+- **Go** (gopls)
+- **Rust** (rust-analyzer)
+- **And many more...**
+
+## 🤝 Contributing
+
+Found a bug or want to add a feature? Contributions are welcome!
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run pre-commit hooks: `pre-commit run --all-files`
+5. Submit a pull request
+
+## 📄 License
+
+This configuration is released into the public domain under the [Unlicense](LICENSE).
+
+---
+
+⭐ **Star this repo if you find it useful!**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- AUTO-GENERATED PLUGIN LIST START -->
+
+### Installed Plugins (54 total)
+
+#### 🔧 Language & LSP
+
+- [hashivim/vim-terraform](https://github.com/hashivim/vim-terraform)
+- [neovim/nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
+- [RRethy/vim-illuminate](https://github.com/RRethy/vim-illuminate)
+- [onsails/lspkind.nvim](https://github.com/onsails/lspkind.nvim)
+- [j-hui/fidget.nvim](https://github.com/j-hui/fidget.nvim)
+- [williamboman/mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim)
+- [williamboman/mason.nvim](https://github.com/williamboman/mason.nvim)
+
+#### 🎨 UI & Themes
+
+- [catppuccin/nvim](https://github.com/catppuccin/nvim)
+- [norcalli/nvim-colorizer.lua](https://github.com/norcalli/nvim-colorizer.lua)
+- [stevearc/dressing.nvim](https://github.com/stevearc/dressing.nvim)
+- [nvim-lualine/lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)
+
+#### 🔍 Navigation & Search
+
+- [nvim-pack/nvim-spectre](https://github.com/nvim-pack/nvim-spectre)
+- [nvim-tree/nvim-tree.lua](https://github.com/nvim-tree/nvim-tree.lua)
+- [nvim-telescope/telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
+- [nvim-treesitter/nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
+- [mbbill/undotree](https://github.com/mbbill/undotree)
+
+#### ✏️ Editing
+
+- [windwp/nvim-autopairs](https://github.com/windwp/nvim-autopairs)
+- [numToStr/Comment.nvim](https://github.com/numToStr/Comment.nvim)
+- [mg979/vim-visual-multi](https://github.com/mg979/vim-visual-multi)
+- [folke/todo-comments.nvim](https://github.com/folke/todo-comments.nvim)
+
+#### 📝 Git Integration
+
+- [lewis6991/gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim)
+- [lewis6991/gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim)
+- [kdheepak/lazygit.nvim](https://github.com/kdheepak/lazygit.nvim)
+
+#### 🐛 Testing & Debugging
+
+- [mfussenegger/nvim-dap](https://github.com/mfussenegger/nvim-dap)
+- [nvim-neotest/neotest](https://github.com/nvim-neotest/neotest)
+
+#### 📋 Productivity
+
+- [MattesGroeger/vim-bookmarks](https://github.com/MattesGroeger/vim-bookmarks)
+- [nvim-neorg/neorg](https://github.com/nvim-neorg/neorg)
+
+#### 💻 Terminal
+
+- [christoomey/vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator)
+
+#### 🔌 Other Plugins
+
+- [laytan/cloak.nvim](https://github.com/laytan/cloak.nvim)
+- [mfussenegger/nvim-lint](https://github.com/mfussenegger/nvim-lint)
+- [stevearc/conform.nvim](https://github.com/stevearc/conform.nvim)
+- [akinsho/toggleterm.nvim](https://github.com/akinsho/toggleterm.nvim)
+- [folke/trouble.nvim](https://github.com/folke/trouble.nvim)
+- [stevearc/dressing.nvim](https://github.com/stevearc/dressing.nvim)
+- [glepnir/template.nvim](https://github.com/glepnir/template.nvim)
+- [ThePrimeagen/harpoon](https://github.com/ThePrimeagen/harpoon)
+- [lukas-reineke/indent-blankline.nvim](https://github.com/lukas-reineke/indent-blankline.nvim)
+- [paretje/nvim-man](https://github.com/paretje/nvim-man)
+- [epwalsh/obsidian.nvim](https://github.com/epwalsh/obsidian.nvim)
+- [pwntester/octo.nvim](https://github.com/pwntester/octo.nvim)
+- [hedyhli/outline.nvim](https://github.com/hedyhli/outline.nvim)
+- [nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim)
+- [ThePrimeagen/refactoring.nvim](https://github.com/ThePrimeagen/refactoring.nvim)
+- [MeanderingProgrammer/render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim)
+- [lewis6991/satellite.nvim](https://github.com/lewis6991/satellite.nvim)
+- [mrjones2014/smart-splits.nvim](https://github.com/mrjones2014/smart-splits.nvim)
+- [folke/snacks.nvim](https://github.com/folke/snacks.nvim)
+- [nvim-pack/nvim-spectre](https://github.com/nvim-pack/nvim-spectre)
+- [folke/trouble.nvim](https://github.com/folke/trouble.nvim)
+- [folke/twilight.nvim](https://github.com/folke/twilight.nvim)
+- [dhruvasagar/vim-table-mode](https://github.com/dhruvasagar/vim-table-mode)
+- [nvim-tree/nvim-web-devicons](https://github.com/nvim-tree/nvim-web-devicons)
+- [folke/which-key.nvim](https://github.com/folke/which-key.nvim)
+- [folke/zen-mode.nvim](https://github.com/folke/zen-mode.nvim)
+
+<!-- AUTO-GENERATED PLUGIN LIST END -->

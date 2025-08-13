@@ -32,7 +32,7 @@ return {
   },
   config = function(_, opts)
     require("ibl").setup(opts)
-    
+
     -- Rainbow colors for indent guides
     local hooks = require("ibl.hooks")
     hooks.register(hooks.type.HIGHLIGHT_SETUP, function()

@@ -30,8 +30,12 @@ return {
       })
 
       -- Keymaps for reference navigation
-      vim.keymap.set("n", "<A-n>", function() require("illuminate").goto_next_reference() end, { desc = "Next reference" })
-      vim.keymap.set("n", "<A-p>", function() require("illuminate").goto_prev_reference() end, { desc = "Previous reference" })
+      vim.keymap.set("n", "<A-n>", function()
+        require("illuminate").goto_next_reference()
+      end, { desc = "Next reference" })
+      vim.keymap.set("n", "<A-p>", function()
+        require("illuminate").goto_prev_reference()
+      end, { desc = "Previous reference" })
     end,
   },
   {
@@ -135,7 +139,7 @@ return {
       })
 
       -- Show breadcrumbs in winbar
-      vim.api.nvim_create_autocmd({"CursorMoved", "BufEnter"}, {
+      vim.api.nvim_create_autocmd({ "CursorMoved", "BufEnter" }, {
         callback = function()
           if navic.is_available() then
             vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"

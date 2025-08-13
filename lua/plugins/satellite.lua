@@ -18,13 +18,13 @@ return {
         enable = true,
         overlap = true,
         priority = 1000,
-        symbols = { "⎺", "⎻", "⎼", "⎽" }
+        symbols = { "⎺", "⎻", "⎼", "⎽" },
       },
       search = {
         enable = true,
         overlap = true,
         priority = 1000,
-        symbols = { "󰍉" }
+        symbols = { "󰍉" },
       },
       diagnostic = {
         enable = true,
@@ -36,7 +36,7 @@ return {
           [vim.diagnostic.severity.WARN] = "●",
           [vim.diagnostic.severity.INFO] = "●",
           [vim.diagnostic.severity.HINT] = "●",
-        }
+        },
       },
       gitsigns = {
         enable = true,
@@ -46,14 +46,14 @@ return {
           add = "│",
           change = "│",
           delete = "-",
-        }
+        },
       },
       marks = {
         enable = true,
         overlap = true,
         priority = 1000,
         key = "m",
-        symbols = { "⚫" }
+        symbols = { "⚫" },
       },
     },
   },

@@ -8,7 +8,7 @@ return {
   event = "VeryLazy",
   config = function()
     require("octo").setup({
-      default_remote = {"upstream", "origin"},
+      default_remote = { "upstream", "origin" },
       default_merge_method = "squash",
       ssh_aliases = {},
       reaction_viewer_hint_icon = "",
@@ -28,19 +28,19 @@ return {
       issues = {
         order_by = {
           field = "CREATED_AT",
-          direction = "DESC"
-        }
+          direction = "DESC",
+        },
       },
       pull_requests = {
         order_by = {
           field = "CREATED_AT",
-          direction = "DESC"
+          direction = "DESC",
         },
-        always_select_remote_on_create = false
+        always_select_remote_on_create = false,
       },
       file_panel = {
         size = 10,
-        use_icons = true
+        use_icons = true,
       },
       mappings_disable_default = false,
       mappings = {
@@ -161,7 +161,7 @@ return {
           select_prev_entry = { lhs = "[q", desc = "move to next changed file" },
           close_review_tab = { lhs = "<C-c>", desc = "close review tab" },
           toggle_viewed = { lhs = "<leader><space>", desc = "toggle viewer viewed state" },
-        }
+        },
       },
     })
 
@@ -174,44 +174,44 @@ return {
     vim.keymap.set("n", "<leader>gPo", ":Octo pr<CR>", { desc = "Open Current PR" })
     vim.keymap.set("n", "<leader>gPs", ":Octo pr search<CR>", { desc = "Search PRs" })
     vim.keymap.set("n", "<leader>gPc", ":Octo pr checkout<CR>", { desc = "Checkout PR" })
-    
+
     -- Alternative PR creation methods
     vim.keymap.set("n", "<leader>gPt", ":Octo pr create --template<CR>", { desc = "Create PR with Template" })
     vim.keymap.set("n", "<leader>gPd", ":Octo pr create --draft<CR>", { desc = "Create Draft PR" })
-    
-    -- Quick review shortcuts  
+
+    -- Quick review shortcuts
     vim.keymap.set("n", "<leader>gPv", ":Octo review start<CR>", { desc = "Start Review" })
     vim.keymap.set("n", "<leader>gPR", ":Octo review resume<CR>", { desc = "Resume Review" })
     vim.keymap.set("n", "<leader>gPa", ":Octo review submit approve<CR>", { desc = "Approve PR" })
     vim.keymap.set("n", "<leader>gPx", ":Octo review submit request_changes<CR>", { desc = "Request Changes" })
     vim.keymap.set("n", "<leader>gPf", ":Octo pr files<CR>", { desc = "View PR Files" })
-    
-    -- Issue management  
+
+    -- Issue management
     vim.keymap.set("n", "<leader>gIl", ":Octo issue list<CR>", { desc = "List Issues" })
     vim.keymap.set("n", "<leader>gIn", ":Octo issue create<CR>", { desc = "New Issue" })
     vim.keymap.set("n", "<leader>gIo", ":Octo issue<CR>", { desc = "Open Issue" })
     vim.keymap.set("n", "<leader>gIs", ":Octo issue search<CR>", { desc = "Search Issues" })
-    
+
     -- Repository management
     vim.keymap.set("n", "<leader>gRl", ":Octo repo list<CR>", { desc = "List Repos" })
     vim.keymap.set("n", "<leader>gRf", ":Octo repo fork<CR>", { desc = "Fork Repo" })
     vim.keymap.set("n", "<leader>gRb", ":Octo repo browser<CR>", { desc = "Open Repo in Browser" })
-    
+
     -- Quick checkout (moved to avoid gco conflict)
     vim.keymap.set("n", "<leader>gCo", ":Octo pr checkout<CR>", { desc = "Checkout PR" })
-    
+
     -- Smart PR creation using conventional commits
     vim.keymap.set("n", "<leader>gPm", function()
       local branch = vim.fn.system("git branch --show-current"):gsub("\n", "")
       print("Current branch: " .. branch)
-      
+
       -- Check if we have commits to work with (compare with local main first)
       local commits = vim.fn.system("git log --oneline --no-merges main.." .. branch)
       if commits == "" or commits:match("^fatal:") then
         print("No commits found ahead of main. Make some commits first!")
         return
       end
-      
+
       -- Check if branch is pushed to remote
       local remote_check = vim.fn.system("git ls-remote --heads origin " .. branch .. " 2>/dev/null")
       if remote_check == "" then
@@ -224,7 +224,7 @@ return {
         end
         print("✅ Branch pushed to remote")
       end
-      
+
       -- Parse conventional commits
       local features, fixes, others = {}, {}, {}
       for line in commits:gmatch("[^\r\n]+") do
@@ -237,7 +237,7 @@ return {
           table.insert(others, "- " .. msg)
         end
       end
-      
+
       -- Generate PR body
       local body_parts = {}
       if #features > 0 then
@@ -261,7 +261,7 @@ return {
         end
         table.insert(body_parts, "")
       end
-      
+
       local title = vim.fn.input("PR Title: ")
       if title and title ~= "" then
         -- Write body to temp file to avoid shell escaping issues
@@ -270,17 +270,21 @@ return {
         if file then
           file:write(table.concat(body_parts, "\n"))
           file:close()
-          
-          local cmd = string.format('gh pr create --title "%s" --body-file "%s" --head %s --base main', 
-            title:gsub('"', '\\"'), temp_file, branch)
+
+          local cmd = string.format(
+            'gh pr create --title "%s" --body-file "%s" --head %s --base main',
+            title:gsub('"', '\\"'),
+            temp_file,
+            branch
+          )
           print("Running: " .. cmd)
-          
+
           local result = vim.fn.system(cmd)
           local exit_code = vim.v.shell_error
-          
+
           -- Clean up temp file
           os.remove(temp_file)
-          
+
           if exit_code == 0 then
             print("✅ PR created successfully!")
             print(result)

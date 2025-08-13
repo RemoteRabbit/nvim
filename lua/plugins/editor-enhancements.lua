@@ -6,13 +6,13 @@ return {
     config = function()
       vim.g.VM_theme = "iceblue"
       vim.g.VM_highlight_matches = "hi! Search gui=underline"
-      
+
       -- Keymaps (VM provides these by default, but documenting here)
       -- <C-n> - select word and next occurrence
       -- <C-Down>/<C-Up> - create cursor above/below
       -- n/N - navigate to next/prev occurrence
       -- [/] - navigate to next/prev cursor
-      -- q - skip current and get next occurrence  
+      -- q - skip current and get next occurrence
       -- Q - remove current cursor/selection
     end,
   },
@@ -278,73 +278,127 @@ return {
       local fmt = require("luasnip.extras.fmt").fmt
 
       luasnip.add_snippets("python", {
-        s("def", fmt([[
+        s(
+          "def",
+          fmt(
+            [[
         def {}({}):
             """{}"""
             {}
-        ]], { i(1, "function_name"), i(2), i(3, "Description"), i(0) })),
-        
-        s("class", fmt([[
+        ]],
+            { i(1, "function_name"), i(2), i(3, "Description"), i(0) }
+          )
+        ),
+
+        s(
+          "class",
+          fmt(
+            [[
         class {}({}):
             """{}"""
-            
+
             def __init__(self{}):
                 {}
-        ]], { i(1, "ClassName"), i(2, "object"), i(3, "Description"), i(4), i(0) })),
-        
-        s("ifmain", t({
-          "if __name__ == \"__main__\":",
-          "    main()"
-        })),
+        ]],
+            { i(1, "ClassName"), i(2, "object"), i(3, "Description"), i(4), i(0) }
+          )
+        ),
+
+        s(
+          "ifmain",
+          t({
+            'if __name__ == "__main__":',
+            "    main()",
+          })
+        ),
       })
 
       luasnip.add_snippets("go", {
-        s("func", fmt([[
+        s(
+          "func",
+          fmt(
+            [[
         func {}({}) {} {{
             {}
         }}
-        ]], { i(1, "functionName"), i(2), i(3, "returnType"), i(0) })),
-        
-        s("struct", fmt([[
+        ]],
+            { i(1, "functionName"), i(2), i(3, "returnType"), i(0) }
+          )
+        ),
+
+        s(
+          "struct",
+          fmt(
+            [[
         type {} struct {{
             {}
         }}
-        ]], { i(1, "StructName"), i(0) })),
-        
-        s("iferr", t({
-          "if err != nil {",
-          "\treturn err",
-          "}"
-        })),
+        ]],
+            { i(1, "StructName"), i(0) }
+          )
+        ),
+
+        s(
+          "iferr",
+          t({
+            "if err != nil {",
+            "\treturn err",
+            "}",
+          })
+        ),
       })
 
       luasnip.add_snippets("terraform", {
-        s("resource", fmt([[
+        s(
+          "resource",
+          fmt(
+            [[
         resource "{}" "{}" {{
             {}
         }}
-        ]], { i(1, "resource_type"), i(2, "name"), i(0) })),
-        
-        s("variable", fmt([[
+        ]],
+            { i(1, "resource_type"), i(2, "name"), i(0) }
+          )
+        ),
+
+        s(
+          "variable",
+          fmt(
+            [[
         variable "{}" {{
             description = "{}"
             type        = {}
             default     = {}
         }}
-        ]], { i(1, "var_name"), i(2, "description"), i(3, "string"), i(0) })),
-        
-        s("output", fmt([[
+        ]],
+            { i(1, "var_name"), i(2, "description"), i(3, "string"), i(0) }
+          )
+        ),
+
+        s(
+          "output",
+          fmt(
+            [[
         output "{}" {{
             description = "{}"
             value       = {}
         }}
-        ]], { i(1, "output_name"), i(2, "description"), i(0) })),
+        ]],
+            { i(1, "output_name"), i(2, "description"), i(0) }
+          )
+        ),
       })
 
       -- Keymaps
-      vim.keymap.set({ "i" }, "<C-K>", function() luasnip.expand() end, { silent = true })
-      vim.keymap.set({ "i", "s" }, "<C-L>", function() luasnip.jump(1) end, { silent = true })
-      vim.keymap.set({ "i", "s" }, "<C-J>", function() luasnip.jump(-1) end, { silent = true })
+      vim.keymap.set({ "i" }, "<C-K>", function()
+        luasnip.expand()
+      end, { silent = true })
+      vim.keymap.set({ "i", "s" }, "<C-L>", function()
+        luasnip.jump(1)
+      end, { silent = true })
+      vim.keymap.set({ "i", "s" }, "<C-J>", function()
+        luasnip.jump(-1)
+      end, { silent = true })
       vim.keymap.set({ "i", "s" }, "<C-E>", function()
         if luasnip.choice_active() then
           luasnip.change_choice(1)
@@ -388,19 +442,14 @@ return {
 
       -- Custom rules
       autopairs.add_rules({
-        Rule("$", "$", { "tex", "latex" })
-          :with_pair(ts_conds.is_not_ts_node({ "string", "comment" })),
-        Rule("/**", "**/", "javascript")
-          :with_pair(ts_conds.is_ts_node({ "comment" })),
+        Rule("$", "$", { "tex", "latex" }):with_pair(ts_conds.is_not_ts_node({ "string", "comment" })),
+        Rule("/**", "**/", "javascript"):with_pair(ts_conds.is_ts_node({ "comment" })),
       })
 
       -- Integration with cmp
       local cmp_autopairs = require("nvim-autopairs.completion.cmp")
       local cmp = require("cmp")
-      cmp.event:on(
-        "confirm_done",
-        cmp_autopairs.on_confirm_done()
-      )
+      cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
     end,
   },
 }

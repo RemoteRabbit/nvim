@@ -51,13 +51,15 @@ repos:
         language: script
         files: ^lua/plugins/.*\.lua$
         pass_filenames: false
+        stages: [manual]
 
       - id: update-readme-plugins
         name: Update README with Plugin List
         entry: scripts/update-readme.sh
         language: script
-        files: ^(lua/plugins/.*\.lua|README\.md)$
+        files: ^lua/plugins/.*\.lua$
         pass_filenames: false
+        stages: [manual]
 
       - id: extract-keybindings
         name: Extract Keybindings Documentation
@@ -65,3 +67,4 @@ repos:
         language: system
         files: ^lua/.*\.lua$
         pass_filenames: false
+        stages: [manual]

@@ -106,7 +106,7 @@ return {
     -- Enhanced git blame
     "f-person/git-blame.nvim",
     config = function()
-      vim.g.gitblame_enabled = 0  -- Disable by default, toggle manually
+      vim.g.gitblame_enabled = 0 -- Disable by default, toggle manually
       vim.g.gitblame_message_template = "<summary> • <date> • <author>"
       vim.g.gitblame_highlight_group = "LineNr"
       vim.g.gitblame_date_format = "%r"

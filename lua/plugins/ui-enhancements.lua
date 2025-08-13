@@ -40,7 +40,7 @@ return {
             count.hints = count.hints + 1
           end
         end
-        
+
         local result = ""
         if count.errors > 0 then
           result = result .. " " .. count.errors
@@ -219,7 +219,12 @@ return {
       vim.keymap.set("n", "[b", "<cmd>BufferLineCyclePrev<cr>", { desc = "Prev buffer" })
       vim.keymap.set("n", "]b", "<cmd>BufferLineCycleNext<cr>", { desc = "Next buffer" })
       vim.keymap.set("n", "<leader>bp", "<cmd>BufferLineTogglePin<cr>", { desc = "Pin buffer" })
-      vim.keymap.set("n", "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", { desc = "Delete non-pinned buffers" })
+      vim.keymap.set(
+        "n",
+        "<leader>bP",
+        "<Cmd>BufferLineGroupClose ungrouped<CR>",
+        { desc = "Delete non-pinned buffers" }
+      )
       vim.keymap.set("n", "<leader>bo", "<Cmd>BufferLineCloseOthers<CR>", { desc = "Delete other buffers" })
       vim.keymap.set("n", "<leader>br", "<Cmd>BufferLineCloseRight<CR>", { desc = "Delete buffers to the right" })
       vim.keymap.set("n", "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", { desc = "Delete buffers to the left" })

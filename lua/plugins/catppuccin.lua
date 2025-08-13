@@ -71,7 +71,7 @@ return {
           ["@lsp.type.comment"] = { fg = colors.overlay1, style = { "italic" } },
 
           -- Language-specific enhancements using Catppuccin palette
-          
+
           -- Terraform
           ["@lsp.type.variable.terraform"] = { fg = colors.flamingo, style = { "bold" } },
           ["@lsp.type.property.terraform"] = { fg = colors.sapphire, style = { "italic" } },
@@ -84,7 +84,7 @@ return {
           ["@lsp.type.operator.terraform"] = { fg = colors.pink },
           ["@lsp.type.number.terraform"] = { fg = colors.peach, style = { "bold" } },
 
-          -- Python  
+          -- Python
           ["@lsp.type.class.python"] = { fg = colors.peach, style = { "bold" } },
           ["@lsp.type.function.python"] = { fg = colors.blue, style = { "bold" } },
           ["@lsp.type.method.python"] = { fg = colors.sapphire, style = { "bold" } },

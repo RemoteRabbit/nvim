@@ -31,7 +31,7 @@ return {
         pyenv_path = "~/.pyenv/versions",
         fd_binary_name = "fd",
       })
-      
+
       -- Keymaps
       vim.keymap.set("n", "<leader>vs", "<cmd>VenvSelect<cr>", { desc = "Select Python environment" })
       vim.keymap.set("n", "<leader>vc", "<cmd>VenvSelectCached<cr>", { desc = "Select cached environment" })
@@ -83,7 +83,7 @@ return {
         luasnip = true,
         iferr_vertical_shift = 4,
       })
-      
+
       -- Auto commands
       local format_sync_grp = vim.api.nvim_create_augroup("GoImport", {})
       vim.api.nvim_create_autocmd("BufWritePre", {
@@ -93,7 +93,7 @@ return {
         end,
         group = format_sync_grp,
       })
-      
+
       -- Keymaps
       vim.keymap.set("n", "<leader>gsj", "<cmd>GoAddTag json<cr>", { desc = "Add JSON tags" })
       vim.keymap.set("n", "<leader>gsy", "<cmd>GoAddTag yaml<cr>", { desc = "Add YAML tags" })
@@ -158,7 +158,7 @@ return {
     end,
   },
   {
-    -- YAML tools  
+    -- YAML tools
     "someone-stole-my-name/yaml-companion.nvim",
     dependencies = {
       { "neovim/nvim-lspconfig" },
@@ -212,10 +212,10 @@ return {
           },
         },
       })
-      
+
       -- Telescope integration
       require("telescope").load_extension("yaml_schema")
-      
+
       -- Keymaps
       vim.keymap.set("n", "<leader>ys", "<cmd>Telescope yaml_schema<cr>", { desc = "YAML schema" })
     end,
@@ -262,7 +262,7 @@ return {
         custom_dynamic_variables = {},
         yank_dry_run = true,
       })
-      
+
       -- Keymaps
       vim.keymap.set("n", "<leader>rr", "<cmd>RestNvim<cr>", { desc = "Run REST request" })
       vim.keymap.set("n", "<leader>rp", "<cmd>RestNvimPreview<cr>", { desc = "Preview REST request" })

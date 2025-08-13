@@ -64,8 +64,18 @@ return {
 
       -- Keymaps
       vim.keymap.set("n", "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", { desc = "Float terminal" })
-      vim.keymap.set("n", "<leader>th", "<cmd>ToggleTerm size=10 direction=horizontal<cr>", { desc = "Horizontal terminal" })
-      vim.keymap.set("n", "<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr>", { desc = "Vertical terminal" })
+      vim.keymap.set(
+        "n",
+        "<leader>th",
+        "<cmd>ToggleTerm size=10 direction=horizontal<cr>",
+        { desc = "Horizontal terminal" }
+      )
+      vim.keymap.set(
+        "n",
+        "<leader>tv",
+        "<cmd>ToggleTerm size=80 direction=vertical<cr>",
+        { desc = "Vertical terminal" }
+      )
       vim.keymap.set("n", "<leader>tg", "<cmd>lua _LAZYGIT_TOGGLE()<CR>", { desc = "Lazygit" })
       vim.keymap.set("n", "<leader>tu", "<cmd>lua _HTOP_TOGGLE()<CR>", { desc = "Htop" })
       vim.keymap.set("n", "<leader>tp", "<cmd>lua _PYTHON_TOGGLE()<CR>", { desc = "Python REPL" })
@@ -81,7 +91,7 @@ return {
           "toggleterm",
           direction = "horizontal",
           autos_croll = true,
-          quit_on_exit = "success"
+          quit_on_exit = "success",
         },
         component_aliases = {
           default = {
@@ -276,8 +286,14 @@ return {
 
       -- Signs
       vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
-      vim.fn.sign_define("DapBreakpointCondition", { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
-      vim.fn.sign_define("DapBreakpointRejected", { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
+      vim.fn.sign_define(
+        "DapBreakpointCondition",
+        { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" }
+      )
+      vim.fn.sign_define(
+        "DapBreakpointRejected",
+        { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" }
+      )
       vim.fn.sign_define("DapLogPoint", { text = "", texthl = "DiagnosticSignInfo", linehl = "", numhl = "" })
       vim.fn.sign_define("DapStopped", { text = "", texthl = "DiagnosticSignWarn", linehl = "Visual", numhl = "" })
 
@@ -287,9 +303,19 @@ return {
       -- Keymaps
       vim.keymap.set("n", "<leader>db", "<cmd>DapToggleBreakpoint<cr>", { desc = "Toggle Breakpoint" })
       vim.keymap.set("n", "<leader>dB", "<cmd>DapSetBreakpoint<cr>", { desc = "Set Breakpoint" })
-      vim.keymap.set("n", "<leader>lp", "<cmd>lua require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<cr>", { desc = "Log Point" })
+      vim.keymap.set(
+        "n",
+        "<leader>lp",
+        "<cmd>lua require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<cr>",
+        { desc = "Log Point" }
+      )
       vim.keymap.set("n", "<leader>dr", "<cmd>DapContinue<cr>", { desc = "Start/Continue" })
-      vim.keymap.set("n", "<leader>da", "<cmd>lua require('dap').continue({ before = get_args })<cr>", { desc = "Run with Args" })
+      vim.keymap.set(
+        "n",
+        "<leader>da",
+        "<cmd>lua require('dap').continue({ before = get_args })<cr>",
+        { desc = "Run with Args" }
+      )
       vim.keymap.set("n", "<leader>dC", "<cmd>lua require('dap').run_to_cursor()<cr>", { desc = "Run to Cursor" })
       vim.keymap.set("n", "<leader>dg", "<cmd>lua require('dap').goto_()<cr>", { desc = "Go to line (no execute)" })
       vim.keymap.set("n", "<leader>di", "<cmd>DapStepInto<cr>", { desc = "Step Into" })
@@ -312,7 +338,7 @@ return {
     dependencies = { "akinsho/toggleterm.nvim" },
     config = function()
       require("lazydocker").setup({})
-      
+
       -- Keymap
       vim.keymap.set("n", "<leader>ld", "<cmd>LazyDocker<cr>", { desc = "LazyDocker" })
     end,

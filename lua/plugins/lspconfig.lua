@@ -145,7 +145,7 @@ return {
       callback = function(event)
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         local bufnr = event.buf
-        
+
         -- Enable inlay hints if supported
         if client and client.supports_method("textDocument/inlayHint") then
           vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
@@ -165,9 +165,43 @@ return {
           client.server_capabilities.semanticTokensProvider = {
             full = true,
             legend = {
-              tokenTypes = { "namespace", "type", "class", "enum", "interface", "struct", "typeParameter", "parameter", "variable", "property", "enumMember", "event", "function", "method", "macro", "keyword", "modifier", "comment", "string", "number", "regexp", "operator" },
-              tokenModifiers = { "declaration", "definition", "readonly", "static", "deprecated", "abstract", "async", "modification", "documentation", "defaultLibrary" }
-            }
+              tokenTypes = {
+                "namespace",
+                "type",
+                "class",
+                "enum",
+                "interface",
+                "struct",
+                "typeParameter",
+                "parameter",
+                "variable",
+                "property",
+                "enumMember",
+                "event",
+                "function",
+                "method",
+                "macro",
+                "keyword",
+                "modifier",
+                "comment",
+                "string",
+                "number",
+                "regexp",
+                "operator",
+              },
+              tokenModifiers = {
+                "declaration",
+                "definition",
+                "readonly",
+                "static",
+                "deprecated",
+                "abstract",
+                "async",
+                "modification",
+                "documentation",
+                "defaultLibrary",
+              },
+            },
           }
         end
 
@@ -236,7 +270,7 @@ return {
             vim.notify("No LSP clients attached to this buffer", vim.log.levels.INFO)
             return
           end
-          
+
           local info = {}
           for _, client in pairs(clients) do
             local capabilities = {}
@@ -249,10 +283,10 @@ return {
             if client.supports_method("textDocument/hover") then
               table.insert(capabilities, "hover")
             end
-            
+
             table.insert(info, string.format("%s: %s", client.name, table.concat(capabilities, ", ")))
           end
-          
+
           vim.notify("LSP Clients:\n" .. table.concat(info, "\n"), vim.log.levels.INFO)
         end)
       end,

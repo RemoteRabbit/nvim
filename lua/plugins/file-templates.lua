@@ -78,7 +78,7 @@ output "example_output" {
         ["elixir.ex"] = [[defmodule {{_input_:module_name_}} do
   @moduledoc """
   {{_cursor_}}
-  
+
   Author: {{_author_}}
   Date: {{_date_}}
   """
@@ -140,7 +140,7 @@ return M
 ]],
         ["markdown.md"] = [[# {{_input_:title_}}
 
-**Author:** {{_author_}}  
+**Author:** {{_author_}}
 **Date:** {{_date_}}
 
 ## Overview
@@ -177,7 +177,7 @@ return M
         use_as_default_filename = true,
         -- Default author
         default_author = "Your Name",
-        -- Default email  
+        -- Default email
         default_email = "your.email@example.com",
         -- Custom templates
         templates = {
@@ -223,7 +223,7 @@ return M
               "# Created: {{date}}",
               "",
               "terraform {",
-              "  required_version = \">= 1.0\"",
+              '  required_version = ">= 1.0"',
               "  required_providers {",
               "    aws = {",
               '      source  = "hashicorp/aws"',
