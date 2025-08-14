@@ -20,6 +20,16 @@ return {
             capabilities = capabilities,
           })
         end,
+        ["terraformls"] = function()
+          require("lspconfig").terraformls.setup({
+            capabilities = require("cmp_nvim_lsp").default_capabilities(),
+            settings = {
+              terraformls = {
+                ignoreSingleFileWarning = true,
+              },
+            },
+          })
+        end,
       },
     })
   end,

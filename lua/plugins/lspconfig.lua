@@ -17,18 +17,17 @@ return {
     local cmp = require("cmp")
     local luasnip = require("luasnip")
     local select_opts = { behavior = cmp.SelectBehavior.Insert }
-    local sign = function(opts)
-      vim.fn.sign_define(opts.name, {
-        texthl = opts.name,
-        text = opts.text,
-        numhl = "",
-      })
-    end
-
-    sign({ name = "DiagnosticSignError", text = " " })
-    sign({ name = "DiagnosticSignWarn", text = " " })
-    sign({ name = "DiagnosticSignHint", text = "󰌵 " })
-    sign({ name = "DiagnosticSignInfo", text = " " })
+    -- Configure diagnostic signs (modern approach)
+    vim.diagnostic.config({
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = " ",
+          [vim.diagnostic.severity.WARN] = " ",
+          [vim.diagnostic.severity.INFO] = " ",
+          [vim.diagnostic.severity.HINT] = "󰌵 ",
+        },
+      },
+    })
 
     vim.diagnostic.config({
       virtual_text = {
@@ -160,49 +159,9 @@ return {
           })
         end
 
-        -- Enable semantic tokens if supported
+        -- Disable semantic tokens to avoid errors
         if client and client.supports_method("textDocument/semanticTokens/full") then
-          client.server_capabilities.semanticTokensProvider = {
-            full = true,
-            legend = {
-              tokenTypes = {
-                "namespace",
-                "type",
-                "class",
-                "enum",
-                "interface",
-                "struct",
-                "typeParameter",
-                "parameter",
-                "variable",
-                "property",
-                "enumMember",
-                "event",
-                "function",
-                "method",
-                "macro",
-                "keyword",
-                "modifier",
-                "comment",
-                "string",
-                "number",
-                "regexp",
-                "operator",
-              },
-              tokenModifiers = {
-                "declaration",
-                "definition",
-                "readonly",
-                "static",
-                "deprecated",
-                "abstract",
-                "async",
-                "modification",
-                "documentation",
-                "defaultLibrary",
-              },
-            },
-          }
+          client.server_capabilities.semanticTokensProvider = nil
         end
 
         local bufmap = function(mode, lhs, rhs)
