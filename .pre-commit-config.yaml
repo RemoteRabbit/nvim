@@ -1,7 +1,7 @@
 repos:
   # General file formatting and linting
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -14,21 +14,21 @@ repos:
 
   # Lua formatting with StyLua
   - repo: https://github.com/JohnnyMorganz/StyLua
-    rev: v0.20.0
+    rev: v2.1.0
     hooks:
       - id: stylua
         args: [--config-path=stylua.toml]
 
   # Lua linting with Luacheck
   - repo: https://github.com/luarocks/luacheck
-    rev: v1.1.0
+    rev: v1.2.0
     hooks:
       - id: luacheck
         args: [--config=.luacheckrc]
 
   # Conventional commit messages
   - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v3.2.0
+    rev: v4.2.0
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]

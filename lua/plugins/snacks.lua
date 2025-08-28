@@ -50,6 +50,21 @@ return {
       enabled = true,
     },
 
+    -- Lazygit configuration
+    lazygit = {
+      win = {
+        style = "float",
+        width = 0.95,
+        height = 0.95,
+        border = "rounded",
+      },
+      throttle = {
+        ms = 50, -- Faster updates for better performance
+      },
+      focus = true,
+      enter = true,
+    },
+
     -- Input (replaces part of noice.nvim)
     input = {
       enabled = true,

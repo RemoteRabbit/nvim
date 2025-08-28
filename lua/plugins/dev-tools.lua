@@ -42,11 +42,32 @@ return {
         vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts)
       end
 
-      vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
+      vim.cmd("autocmd! TermOpen term://* if expand('<afile>') !~# 'lazygit' | lua set_terminal_keymaps() | endif")
 
       -- Terminal configurations
       local Terminal = require("toggleterm.terminal").Terminal
-      local lazygit = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" })
+      local lazygit = Terminal:new({
+        cmd = "lazygit",
+        hidden = true,
+        direction = "float",
+        float_opts = {
+          border = "rounded",
+          width = function()
+            return math.floor(vim.o.columns * 0.95)
+          end,
+          height = function()
+            return math.floor(vim.o.lines * 0.95)
+          end,
+        },
+        on_open = function(term)
+          -- Don't set global terminal keymaps for lazygit
+          vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<esc>", "q", { noremap = true, silent = true })
+          vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
+          -- Focus and enter insert immediately
+          vim.api.nvim_set_current_win(term.window)
+          vim.cmd("startinsert!")
+        end,
+      })
       local htop = Terminal:new({ cmd = "htop", hidden = true, direction = "float" })
       local python = Terminal:new({ cmd = "python", hidden = true, direction = "horizontal" })
 

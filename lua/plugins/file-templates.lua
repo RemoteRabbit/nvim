@@ -1,4 +1,3 @@
--- File templates for different languages
 return {
   {
     -- Template system
