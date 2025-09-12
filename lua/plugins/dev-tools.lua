@@ -40,9 +40,18 @@ return {
         vim.keymap.set("t", "<C-k>", [[<Cmd>wincmd k<CR>]], opts)
         vim.keymap.set("t", "<C-l>", [[<Cmd>wincmd l<CR>]], opts)
         vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts)
+        -- Add keymap to close terminal in normal mode
+        vim.keymap.set("n", "q", "<cmd>close<CR>", { buffer = 0, desc = "Close terminal" })
       end
 
-      vim.cmd("autocmd! TermOpen term://* if expand('<afile>') !~# 'lazygit' | lua set_terminal_keymaps() | endif")
+      vim.api.nvim_create_autocmd("TermOpen", {
+        pattern = "term://*",
+        callback = function()
+          if string.find(vim.fn.expand("<afile>"), "lazygit") == nil then
+            set_terminal_keymaps()
+          end
+        end,
+      })
 
       -- Terminal configurations
       local Terminal = require("toggleterm.terminal").Terminal

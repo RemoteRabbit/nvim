@@ -18,10 +18,17 @@ return {
         ["_"] = { "trim_whitespace" },
         ["*"] = { "codespell" },
       },
-      format_on_save = {
-        lsp_fallback = true,
-        timeout_ms = 500,
-      },
+      format_on_save = function(bufnr)
+        -- Don't format .norg files (Neorg handles its own formatting)
+        local bufname = vim.api.nvim_buf_get_name(bufnr)
+        if bufname:match("%.norg$") then
+          return nil
+        end
+        return {
+          lsp_fallback = true,
+          timeout_ms = 500,
+        }
+      end,
       notify_on_error = true,
     })
   end,

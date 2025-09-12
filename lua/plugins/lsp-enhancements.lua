@@ -75,8 +75,9 @@ return {
         move_cursor_key = nil,
         -- Filter out terminal buffers to prevent URI errors
         filter = function(bufnr)
-          local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
-          return buftype ~= "terminal"
+          local buftype = vim.bo[bufnr].buftype
+          local filetype = vim.bo[bufnr].filetype
+          return buftype ~= "terminal" and filetype ~= "toggleterm"
         end,
       })
     end,
