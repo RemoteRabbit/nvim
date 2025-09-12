@@ -30,16 +30,16 @@ return {
           ["core.keybinds"] = {
             config = {
               default_keybinds = true,
-              neorg_leader = "<leader>n",
+              neorg_leader = "<leader>N",
             },
           },
         },
       })
 
       -- Keymaps
-      vim.keymap.set("n", "<leader>ni", "<cmd>Neorg index<cr>", { desc = "Neorg index" })
-      vim.keymap.set("n", "<leader>nr", "<cmd>Neorg return<cr>", { desc = "Return to previous buffer" })
-      vim.keymap.set("n", "<leader>nw", "<cmd>Neorg workspace<cr>", { desc = "Select workspace" })
+      vim.keymap.set("n", "<leader>Ni", "<cmd>Neorg index<cr>", { desc = "Neorg index" })
+      vim.keymap.set("n", "<leader>Nr", "<cmd>Neorg return<cr>", { desc = "Return to previous buffer" })
+      vim.keymap.set("n", "<leader>Nw", "<cmd>Neorg workspace<cr>", { desc = "Select workspace" })
     end,
   },
   {
@@ -155,10 +155,12 @@ return {
         shadow_blur_radius = 0,
         shadow_offset_x = 0,
         shadow_offset_y = 0,
-        line_number = true,
-        round_corner = true,
-        window_controls = true,
-        output = "~/Pictures/silicon-{time:%Y-%m-%d-%H%M%S}.png",
+        line_number = false, -- Use false to avoid --no-line-number flag
+        round_corner = false, -- Use false to avoid --no-round-corner flag
+        window_controls = false, -- Use false to avoid --no-window-controls flag
+        output = function()
+          return "~/Pictures/silicon-" .. os.date("%Y-%m-%d-%H%M%S") .. ".png"
+        end,
         debug = false,
       })
 
