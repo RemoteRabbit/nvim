@@ -27,7 +27,7 @@ return {
         { "<leader>j", group = "jq" },
         { "<leader>l", group = "lazy" },
         { "<leader>m", group = "markdown/minimap" },
-        { "<leader>n", group = "neorg" },
+        { "<leader>N", group = "neorg" },
         { "<leader>o", group = "outline" },
         { "<leader>p", group = "packages/profile" },
         { "<leader>r", group = "refactor/run/rest" },
