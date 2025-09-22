@@ -528,47 +528,4 @@ return {
       vim.keymap.set("n", "<leader>Dq", "<cmd>DBUILastQueryInfo<cr>", { desc = "Last query info" })
     end,
   },
-  {
-    -- HTTP Client (REST)
-    "NTBBloodbath/rest.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("rest-nvim").setup({
-        result_split_horizontal = false,
-        result_split_in_place = false,
-        stay_in_current_window_after_split = true,
-        skip_ssl_verification = false,
-        encode_url = true,
-        highlight = {
-          enabled = true,
-          timeout = 150,
-        },
-        result = {
-          show_url = true,
-          show_curl_command = false,
-          show_http_info = true,
-          show_headers = true,
-          formatters = {
-            json = "jq",
-            html = function(body)
-              if vim.fn.executable("tidy") == 1 then
-                return vim.fn.system({ "tidy", "-i", "-q", "--show-errors", "0" }, body):gsub("\n$", "")
-              else
-                return body
-              end
-            end,
-          },
-        },
-        jump_to_request = false,
-        env_file = ".env",
-        custom_dynamic_variables = {},
-        yank_dry_run = true,
-      })
-
-      -- Keymaps
-      vim.keymap.set("n", "<leader>Hr", "<Plug>RestNvim", { desc = "Run HTTP request" })
-      vim.keymap.set("n", "<leader>Hp", "<Plug>RestNvimPreview", { desc = "Preview HTTP request" })
-      vim.keymap.set("n", "<leader>Hl", "<Plug>RestNvimLast", { desc = "Re-run last HTTP request" })
-    end,
-  },
 }
