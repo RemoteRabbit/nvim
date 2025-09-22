@@ -141,7 +141,7 @@ return {
     dependencies = { "MunifTanjim/nui.nvim" },
     config = function()
       require("package-info").setup({
-        colors = {
+        highlight = {
           up_to_date = "#3C4048",
           outdated = "#d19a66",
         },

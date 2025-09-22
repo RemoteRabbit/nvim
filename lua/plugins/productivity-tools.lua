@@ -69,6 +69,12 @@ return {
         },
         merge_keywords = true,
         highlight = {
+          error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
+          warning = { "DiagnosticWarn", "WarningMsg", "#FBBF24" },
+          info = { "DiagnosticInfo", "#2563EB" },
+          hint = { "DiagnosticHint", "#10B981" },
+          default = { "Identifier", "#7C3AED" },
+          test = { "Identifier", "#FF006E" },
           multiline = true,
           multiline_pattern = "^.",
           multiline_context = 10,
@@ -79,14 +85,6 @@ return {
           comments_only = true,
           max_line_len = 400,
           exclude = {},
-        },
-        colors = {
-          error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
-          warning = { "DiagnosticWarn", "WarningMsg", "#FBBF24" },
-          info = { "DiagnosticInfo", "#2563EB" },
-          hint = { "DiagnosticHint", "#10B981" },
-          default = { "Identifier", "#7C3AED" },
-          test = { "Identifier", "#FF006E" },
         },
         search = {
           command = "rg",
