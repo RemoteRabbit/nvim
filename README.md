@@ -142,9 +142,10 @@ This configuration is released into the public domain under the [Unlicense](LICE
 
 
 
+
 <!-- AUTO-GENERATED PLUGIN LIST START -->
 
-### Installed Plugins (54 total)
+### Installed Plugins (55 total)
 
 #### 🔧 Language & LSP
 
@@ -223,6 +224,7 @@ This configuration is released into the public domain under the [Unlicense](LICE
 - [folke/trouble.nvim](https://github.com/folke/trouble.nvim)
 - [folke/twilight.nvim](https://github.com/folke/twilight.nvim)
 - [dhruvasagar/vim-table-mode](https://github.com/dhruvasagar/vim-table-mode)
+- [wakatime/vim-wakatime](https://github.com/wakatime/vim-wakatime)
 - [nvim-tree/nvim-web-devicons](https://github.com/nvim-tree/nvim-web-devicons)
 - [folke/which-key.nvim](https://github.com/folke/which-key.nvim)
 - [folke/zen-mode.nvim](https://github.com/folke/zen-mode.nvim)

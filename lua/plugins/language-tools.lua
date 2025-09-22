@@ -232,41 +232,24 @@ return {
   },
   {
     -- REST client
-    "rest-nvim/rest.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    "mistweaverco/kulala.nvim",
     config = function()
-      require("rest-nvim").setup({
-        result_split_horizontal = false,
-        result_split_in_place = false,
-        stay_in_current_window_after_split = false,
-        skip_ssl_verification = false,
-        encode_url = true,
-        highlight = {
-          enabled = true,
-          timeout = 150,
-        },
-        result = {
-          show_url = true,
-          show_curl_command = false,
-          show_http_info = true,
-          show_headers = true,
-          formatters = {
-            json = "jq",
-            html = function(body)
-              return vim.fn.system({ "tidy", "-i", "-q", "-" }, body)
-            end,
-          },
-        },
-        jump_to_request = false,
-        env_file = ".env",
-        custom_dynamic_variables = {},
-        yank_dry_run = true,
+      require("kulala").setup({
+        default_view = "body",
+        default_env = "dev",
+        debug = false,
       })
 
       -- Keymaps
-      vim.keymap.set("n", "<leader>rr", "<cmd>RestNvim<cr>", { desc = "Run REST request" })
-      vim.keymap.set("n", "<leader>rp", "<cmd>RestNvimPreview<cr>", { desc = "Preview REST request" })
-      vim.keymap.set("n", "<leader>rl", "<cmd>RestNvimLast<cr>", { desc = "Run last REST request" })
+      vim.keymap.set("n", "<leader>rr", "<cmd>lua require('kulala').run()<cr>", { desc = "Run REST request" })
+      vim.keymap.set("n", "<leader>rp", "<cmd>lua require('kulala').preview()<cr>", { desc = "Preview REST request" })
+      vim.keymap.set(
+        "n",
+        "<leader>rl",
+        "<cmd>lua require('kulala').replay()<cr>",
+        { desc = "Replay last REST request" }
+      )
+      vim.keymap.set("n", "<leader>ri", "<cmd>lua require('kulala').inspect()<cr>", { desc = "Inspect REST request" })
     end,
   },
 }
