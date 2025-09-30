@@ -29,6 +29,11 @@ return {
         insecure = false,
         remote = "origin",
       },
+      create_mr = {
+        delete_branch = true,
+        squash = true,
+        target = "main",
+      },
       log_path = vim.fn.stdpath("cache") .. "/gitlab.nvim.log",
       debug = { go_request = true, go_response = true },
     })
