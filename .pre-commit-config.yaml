@@ -32,7 +32,6 @@ repos:
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
-        args: [--verbose]
 
   # Additional security checks
   - repo: https://github.com/Yelp/detect-secrets
