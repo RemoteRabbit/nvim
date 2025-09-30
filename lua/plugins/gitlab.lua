@@ -84,7 +84,20 @@ return {
           require("gitlab").create_mr()
         end
       else
-        vim.cmd("Octo pr create")
+        -- Generate description for GitHub PR too
+        local pr_desc = require("utils.pr_description")
+        local description, error = pr_desc.generate_description({ is_gitlab = false })
+        if error then
+          print("Error generating description: " .. error)
+          vim.cmd("Octo pr create") -- Fallback to basic creation
+        elseif description then
+          -- Copy description to clipboard for pasting into PR
+          vim.fn.setreg("+", description)
+          print("Generated PR description (copied to clipboard)")
+          vim.cmd("Octo pr create")
+        else
+          vim.cmd("Octo pr create")
+        end
       end
     end, { desc = "Create PR/MR with Generated Description" })
 
