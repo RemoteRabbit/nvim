@@ -24,6 +24,23 @@ return {
     local gitlab_proxy = vim.fn.system(git_dir .. "git config --get http.gitlab.proxy"):gsub("%s+", "")
 
     require("gitlab").setup({
+      gitlab_url = gitlab_url,
+      project_path = project_path,
+      auth_provider = function()
+        local token = vim.fn.system(git_dir .. "git config --get gitlab.token 2>/dev/null"):gsub("%s+", "")
+        local url = gitlab_url
+
+        if token == "" then
+          token = os.getenv("GITLAB_TOKEN")
+        end
+
+        if not token or token == "" then
+          vim.notify("GitLab token not found. Set with: git config --global gitlab.token <token>", vim.log.levels.WARN)
+          return nil, nil, "No GitLab token found"
+        end
+
+        return token, url, nil
+      end,
       debug = {
         request = true, -- Requests to/from Go server
         response = true,
