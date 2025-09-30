@@ -13,29 +13,8 @@ return {
   event = "VeryLazy",
   config = function()
     require("gitlab").setup({
-      -- Authentication from git config first, then environment variables
-      auth_provider = function()
-        -- Try git config first
-        local token = vim.fn.system("git config --get gitlab.token 2>/dev/null"):gsub("\n", "")
-        local url = vim.fn.system("git config --get gitlab.url 2>/dev/null"):gsub("\n", "")
-
-        -- Fall back to environment variables
-        if token == "" then
-          token = os.getenv("GITLAB_TOKEN")
-        end
-        if url == "" then
-          url = os.getenv("GITLAB_URL") or "https://gitlab.com"
-        end
-
-        if not token or token == "" then
-          vim.notify("GitLab token not found. Set with: git config --global gitlab.token <token>", vim.log.levels.WARN)
-          return nil, nil, "No GitLab token found"
-        end
-
-        return token, url, nil
-      end,
       log_path = vim.fn.stdpath("cache") .. "/gitlab.nvim.log",
-      debug = { go_request = false, go_response = false },
+      debug = { go_request = true, go_response = true },
     })
 
     -- Helper function to detect if current repo is GitLab
@@ -52,6 +31,26 @@ return {
         vim.cmd("Octo pr create")
       end
     end, { desc = "Create PR/MR" })
+
+    -- Add description generator keymap for GitLab
+    vim.keymap.set("n", "<leader>gPg", function()
+      if is_gitlab_repo() then
+        local pr_desc = require("utils.pr_description")
+        local description, error = pr_desc.generate_description({ is_gitlab = true })
+        if error then
+          print("Error: " .. error)
+        elseif description then
+          -- Copy description to clipboard and show it
+          vim.fn.setreg("+", description)
+          vim.cmd("new")
+          vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(description, "\n"))
+          vim.bo.filetype = "markdown"
+          print("Generated GitLab MR description (copied to clipboard)")
+        end
+      else
+        vim.cmd("Octo pr create --template")
+      end
+    end, { desc = "Generate PR/MR Description" })
 
     vim.keymap.set("n", "<leader>gPl", function()
       if is_gitlab_repo() then
