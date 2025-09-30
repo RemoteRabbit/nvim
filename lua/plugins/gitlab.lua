@@ -7,14 +7,57 @@ return {
     "stevearc/dressing.nvim",
     "nvim-tree/nvim-web-devicons",
   },
+  branch = "main",
   build = function()
     require("gitlab.server").build(true)
   end,
   event = "VeryLazy",
   config = function()
+    local git_root = vim.fn.system("git rev-parse --show-toplevel 2>/dev/null"):gsub("%s+", "")
+    local git_dir = git_root ~= "" and ("cd " .. git_root .. " && ") or ""
+    local gitlab_url = vim.fn.system(git_dir .. "git config --get gitlab.url 2>/dev/null"):gsub("%s+", "")
+    if gitlab_url == "" then
+      gitlab_url = os.getenv("GITLAB_URL") or "https://gitlab.com"
+    end
+    local remote_url = vim.fn.system(git_dir .. "git config --get remote.origin.url 2>/dev/null"):gsub("%s+", "")
+    local project_path = remote_url:match("https?://[^/]+/(.+)%.git$") or remote_url:match("https?://[^/]+/(.+)$")
+    local gitlab_proxy = vim.fn.system(git_dir .. "git config --get http.gitlab.proxy"):gsub("%s+", "")
+
     require("gitlab").setup({
+      gitlab_url = gitlab_url,
+      project_path = project_path,
+      auth_provider = function()
+        local token = vim.fn.system(git_dir .. "git config --get gitlab.token 2>/dev/null"):gsub("%s+", "")
+        local url = gitlab_url
+
+        if token == "" then
+          token = os.getenv("GITLAB_TOKEN")
+        end
+
+        if not token or token == "" then
+          vim.notify("GitLab token not found. Set with: git config --global gitlab.token <token>", vim.log.levels.WARN)
+          return nil, nil, "No GitLab token found"
+        end
+
+        return token, url, nil
+      end,
+      debug = {
+        request = true, -- Requests to/from Go server
+        response = true,
+        gitlab_request = true, -- Requests to/from Gitlab
+        gitlab_response = true,
+      },
+      connection_settings = {
+        proxy = gitlab_proxy,
+        insecure = false,
+        remote = "origin",
+      },
+      create_mr = {
+        delete_branch = true,
+        squash = true,
+        target = "main",
+      },
       log_path = vim.fn.stdpath("cache") .. "/gitlab.nvim.log",
-      debug = { go_request = true, go_response = true },
     })
 
     -- Helper function to detect if current repo is GitLab
@@ -41,7 +84,20 @@ return {
           require("gitlab").create_mr()
         end
       else
-        vim.cmd("Octo pr create")
+        -- Generate description for GitHub PR too
+        local pr_desc = require("utils.pr_description")
+        local description, error = pr_desc.generate_description({ is_gitlab = false })
+        if error then
+          print("Error generating description: " .. error)
+          vim.cmd("Octo pr create") -- Fallback to basic creation
+        elseif description then
+          -- Copy description to clipboard for pasting into PR
+          vim.fn.setreg("+", description)
+          print("Generated PR description (copied to clipboard)")
+          vim.cmd("Octo pr create")
+        else
+          vim.cmd("Octo pr create")
+        end
       end
     end, { desc = "Create PR/MR with Generated Description" })
 
