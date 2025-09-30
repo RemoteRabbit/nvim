@@ -24,6 +24,11 @@ return {
     local gitlab_proxy = vim.fn.system(git_dir .. "git config --get http.gitlab.proxy"):gsub("%s+", "")
 
     require("gitlab").setup({
+      connection_settings = {
+        proxy = gitlab_proxy,
+        insecure = false,
+        remote = "origin",
+      },
       log_path = vim.fn.stdpath("cache") .. "/gitlab.nvim.log",
       debug = { go_request = true, go_response = true },
     })
