@@ -228,9 +228,194 @@ function M.generate_description(opts)
     table.insert(description, "")
   end
 
-  -- Add commit stats
+  -- Get file change statistics
+  local file_changes = vim.fn.systemlist("git diff --name-status " .. base_branch .. ".." .. branch)
+  local file_stats = vim.fn.system("git diff --stat " .. base_branch .. ".." .. branch)
+
+  -- Parse file stats for total changes
+  local total_files = 0
+  local total_insertions = 0
+  local total_deletions = 0
+  local stats_line = "none"
+
+  if file_stats and file_stats ~= "" then
+    -- Split into lines and get the last line that has content
+    local lines = vim.split(file_stats, "\n")
+    for i = #lines, 1, -1 do
+      local line = lines[i]:match("^%s*(.-)%s*$") -- trim whitespace
+      if line and line ~= "" and line:match("files? changed") then
+        stats_line = line
+        break
+      end
+    end
+
+    if stats_line and stats_line ~= "none" then
+      total_files = tonumber(stats_line:match("(%d+) files? changed")) or 0
+      -- Handle formats like "38 insertions(+)" or just "38 insertions"
+      total_insertions = tonumber(stats_line:match("(%d+) insertions?%(?%+?%)?")) or 0
+      total_deletions = tonumber(stats_line:match("(%d+) deletions?%(?%-?%)?")) or 0
+    end
+  end
+
+  -- Group files by directory
+  local file_groups = {}
+  local file_stats_detailed = {}
+
+  if #file_changes > 0 then
+    -- Get detailed file stats
+    local detailed_stats = vim.fn.systemlist("git diff --numstat " .. base_branch .. ".." .. branch)
+    for _, line in ipairs(detailed_stats) do
+      local insertions, deletions, filepath = line:match("(%S+)%s+(%S+)%s+(.+)")
+      if filepath then
+        file_stats_detailed[filepath] = {
+          insertions = insertions == "-" and 0 or tonumber(insertions) or 0,
+          deletions = deletions == "-" and 0 or tonumber(deletions) or 0,
+        }
+      end
+    end
+
+    -- Group files by directory with intelligent module detection
+    for _, change in ipairs(file_changes) do
+      local status = change:sub(1, 1)
+      local filepath = change:sub(3) -- Skip status and tab
+
+      -- Determine group name
+      local group_name = "Root"
+      if filepath:match("^src/") or filepath:match("^lib/") then
+        local parts = vim.split(filepath, "/")
+        if #parts > 1 then
+          group_name = parts[2]:gsub("^%l", string.upper) -- Capitalize first letter
+        end
+      elseif filepath:match("^test") or filepath:match("_test%.") or filepath:match("%.test%.") then
+        group_name = "Tests"
+      elseif filepath:match("^doc") or filepath:match("README") or filepath:match("%.md$") then
+        group_name = "Documentation"
+      elseif filepath:match("^config") or filepath:match("%.config%.") then
+        group_name = "Configuration"
+      else
+        local dir = filepath:match("^([^/]+)/")
+        if dir then
+          group_name = dir:gsub("^%l", string.upper)
+        end
+      end
+
+      if not file_groups[group_name] then
+        file_groups[group_name] = {}
+      end
+
+      -- Get status symbol
+      local symbol = ""
+      if status == "A" then
+        symbol = " ✨"
+      elseif status == "M" then
+        symbol = " 📝"
+      elseif status == "D" then
+        symbol = " 🗑️"
+      elseif status == "R" then
+        symbol = " ↻"
+      end
+
+      -- Get detailed stats for this file
+      local stats = file_stats_detailed[filepath]
+      local stats_str = ""
+      if stats then
+        if stats.insertions > 0 and stats.deletions > 0 then
+          stats_str = string.format(" (+%d/-%d)", stats.insertions, stats.deletions)
+        elseif stats.insertions > 0 then
+          stats_str = string.format(" (+%d)", stats.insertions)
+        elseif stats.deletions > 0 then
+          stats_str = string.format(" (-%d)", stats.deletions)
+        end
+      end
+
+      table.insert(file_groups[group_name], {
+        path = filepath,
+        symbol = symbol,
+        stats = stats_str,
+      })
+    end
+
+    -- Add file changes section
+    if next(file_groups) then
+      table.insert(description, "## 📁 File Changes")
+      table.insert(description, "")
+
+      -- Sort groups with priority order
+      local priority_order = { "Root", "Src", "Lib", "Api", "Components", "Utils", "Config" }
+      local sorted_groups = {}
+
+      -- Add priority groups first
+      for _, priority_group in ipairs(priority_order) do
+        if file_groups[priority_group] then
+          table.insert(sorted_groups, priority_group)
+        end
+      end
+
+      -- Add remaining groups
+      for group_name, _ in pairs(file_groups) do
+        local found = false
+        for _, priority_group in ipairs(priority_order) do
+          if group_name == priority_group then
+            found = true
+            break
+          end
+        end
+        if not found then
+          table.insert(sorted_groups, group_name)
+        end
+      end
+
+      -- Sort non-priority groups alphabetically, but keep Tests and Documentation at end
+      table.sort(sorted_groups, function(a, b)
+        if a == "Tests" or a == "Documentation" or a == "Root" then
+          return false
+        end
+        if b == "Tests" or b == "Documentation" or b == "Root" then
+          return true
+        end
+        return a < b
+      end)
+
+      for _, group_name in ipairs(sorted_groups) do
+        local files = file_groups[group_name]
+        if files and #files > 0 then
+          -- Calculate group totals
+          local group_insertions = 0
+          local group_deletions = 0
+          for _, file_info in ipairs(files) do
+            local stats = file_stats_detailed[file_info.path]
+            if stats then
+              group_insertions = group_insertions + stats.insertions
+              group_deletions = group_deletions + stats.deletions
+            end
+          end
+
+          table.insert(
+            description,
+            string.format("### %s (+%d/-%d lines)", group_name, group_insertions, group_deletions)
+          )
+          for _, file_info in ipairs(files) do
+            table.insert(description, string.format("- `%s`%s%s", file_info.path, file_info.stats, file_info.symbol))
+          end
+          table.insert(description, "")
+        end
+      end
+    end
+  end
+
+  -- Add commit and change stats
   table.insert(description, "---")
   table.insert(description, "")
+  table.insert(
+    description,
+    "**Changes:** "
+      .. total_files
+      .. " files, +"
+      .. total_insertions
+      .. " insertions, -"
+      .. total_deletions
+      .. " deletions"
+  )
   table.insert(description, "**Commits:** " .. total_commits)
   table.insert(description, "**Branch:** `" .. branch .. "`")
   table.insert(description, "**Base:** `" .. base_branch .. "`")
