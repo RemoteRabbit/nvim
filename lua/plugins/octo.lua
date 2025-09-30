@@ -165,26 +165,11 @@ return {
       },
     })
 
-    -- Pull Request management (git group)
-    vim.keymap.set("n", "<leader>gPr", function()
-      print("Creating PR...")
-      vim.cmd("Octo pr create")
-    end, { desc = "Create PR" })
-    vim.keymap.set("n", "<leader>gPl", ":Octo pr list<CR>", { desc = "List PRs" })
-    vim.keymap.set("n", "<leader>gPo", ":Octo pr<CR>", { desc = "Open Current PR" })
-    vim.keymap.set("n", "<leader>gPs", ":Octo pr search<CR>", { desc = "Search PRs" })
-    vim.keymap.set("n", "<leader>gPc", ":Octo pr checkout<CR>", { desc = "Checkout PR" })
+    -- Note: Main PR keymaps moved to gitlab.lua for context-aware handling
 
-    -- Alternative PR creation methods
+    -- GitHub-specific PR creation methods (only available for GitHub)
     vim.keymap.set("n", "<leader>gPt", ":Octo pr create --template<CR>", { desc = "Create PR with Template" })
     vim.keymap.set("n", "<leader>gPd", ":Octo pr create --draft<CR>", { desc = "Create Draft PR" })
-
-    -- Quick review shortcuts
-    vim.keymap.set("n", "<leader>gPv", ":Octo review start<CR>", { desc = "Start Review" })
-    vim.keymap.set("n", "<leader>gPR", ":Octo review resume<CR>", { desc = "Resume Review" })
-    vim.keymap.set("n", "<leader>gPa", ":Octo review submit approve<CR>", { desc = "Approve PR" })
-    vim.keymap.set("n", "<leader>gPx", ":Octo review submit request_changes<CR>", { desc = "Request Changes" })
-    vim.keymap.set("n", "<leader>gPf", ":Octo pr files<CR>", { desc = "View PR Files" })
 
     -- Issue management
     vim.keymap.set("n", "<leader>gIl", ":Octo issue list<CR>", { desc = "List Issues" })
