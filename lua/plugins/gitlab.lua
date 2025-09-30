@@ -26,11 +26,24 @@ return {
     -- Context-aware keymaps that work with both GitHub (octo) and GitLab
     vim.keymap.set("n", "<leader>gPr", function()
       if is_gitlab_repo() then
-        require("gitlab").create_mr()
+        -- Generate description first, then create MR
+        local pr_desc = require("utils.pr_description")
+        local description, error = pr_desc.generate_description({ is_gitlab = true })
+        if error then
+          print("Error generating description: " .. error)
+          require("gitlab").create_mr() -- Fallback to basic creation
+        elseif description then
+          -- Copy description to clipboard for pasting into MR
+          vim.fn.setreg("+", description)
+          print("Generated MR description (copied to clipboard)")
+          require("gitlab").create_mr()
+        else
+          require("gitlab").create_mr()
+        end
       else
         vim.cmd("Octo pr create")
       end
-    end, { desc = "Create PR/MR" })
+    end, { desc = "Create PR/MR with Generated Description" })
 
     -- Add description generator keymap for GitLab
     vim.keymap.set("n", "<leader>gPg", function()
