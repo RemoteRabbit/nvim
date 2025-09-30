@@ -7,6 +7,7 @@ return {
     "stevearc/dressing.nvim",
     "nvim-tree/nvim-web-devicons",
   },
+  branch = "main",
   build = function()
     require("gitlab.server").build(true)
   end,
