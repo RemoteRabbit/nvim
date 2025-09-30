@@ -24,6 +24,12 @@ return {
     local gitlab_proxy = vim.fn.system(git_dir .. "git config --get http.gitlab.proxy"):gsub("%s+", "")
 
     require("gitlab").setup({
+      debug = {
+        request = true, -- Requests to/from Go server
+        response = true,
+        gitlab_request = true, -- Requests to/from Gitlab
+        gitlab_response = true,
+      },
       connection_settings = {
         proxy = gitlab_proxy,
         insecure = false,
@@ -35,7 +41,6 @@ return {
         target = "main",
       },
       log_path = vim.fn.stdpath("cache") .. "/gitlab.nvim.log",
-      debug = { go_request = true, go_response = true },
     })
 
     -- Helper function to detect if current repo is GitLab
