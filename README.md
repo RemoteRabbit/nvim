@@ -143,9 +143,10 @@ This configuration is released into the public domain under the [Unlicense](LICE
 
 
 
+
 <!-- AUTO-GENERATED PLUGIN LIST START -->
 
-### Installed Plugins (55 total)
+### Installed Plugins (56 total)
 
 #### 🔧 Language & LSP
 
@@ -182,6 +183,7 @@ This configuration is released into the public domain under the [Unlicense](LICE
 #### 📝 Git Integration
 
 - [lewis6991/gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim)
+- [harrisoncramer/gitlab.nvim](https://github.com/harrisoncramer/gitlab.nvim)
 - [lewis6991/gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim)
 - [kdheepak/lazygit.nvim](https://github.com/kdheepak/lazygit.nvim)
 
