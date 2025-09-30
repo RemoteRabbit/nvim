@@ -13,6 +13,16 @@ return {
   end,
   event = "VeryLazy",
   config = function()
+    local git_root = vim.fn.system("git rev-parse --show-toplevel 2>/dev/null"):gsub("%s+", "")
+    local git_dir = git_root ~= "" and ("cd " .. git_root .. " && ") or ""
+    local gitlab_url = vim.fn.system(git_dir .. "git config --get gitlab.url 2>/dev/null"):gsub("%s+", "")
+    if gitlab_url == "" then
+      gitlab_url = os.getenv("GITLAB_URL") or "https://gitlab.com"
+    end
+    local remote_url = vim.fn.system(git_dir .. "git config --get remote.origin.url 2>/dev/null"):gsub("%s+", "")
+    local project_path = remote_url:match("https?://[^/]+/(.+)%.git$") or remote_url:match("https?://[^/]+/(.+)$")
+    local gitlab_proxy = vim.fn.system(git_dir .. "git config --get http.gitlab.proxy"):gsub("%s+", "")
+
     require("gitlab").setup({
       log_path = vim.fn.stdpath("cache") .. "/gitlab.nvim.log",
       debug = { go_request = true, go_response = true },
