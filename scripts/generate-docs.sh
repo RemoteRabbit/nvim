@@ -23,6 +23,18 @@ extract_plugin_info() {
     # Extract description comments
     grep -E '^\s*--.*' "$file" | head -3 | sed 's/^\s*--\s*/- /' | head -1
 
+    # Extract dependencies
+    local deps_section=$(awk '/dependencies\s*=\s*{/,/^\s*}/' "$file" 2>/dev/null)
+    if [ -n "$deps_section" ]; then
+        local deps=$(echo "$deps_section" | grep -oE '"[^/]+/[^"]+"' | tr -d '"' | sort -u)
+        if [ -n "$deps" ]; then
+            echo "- **Dependencies:**"
+            echo "$deps" | while IFS= read -r dep; do
+                [ -n "$dep" ] && echo "  - [$dep](https://github.com/$dep)"
+            done
+        fi
+    fi
+
     # Extract key features from setup calls
     if grep -q "setup(" "$file"; then
         echo "- **Configured:** Yes"
