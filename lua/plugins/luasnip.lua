@@ -5,7 +5,6 @@ return {
   build = "make install_jsregexp",
   dependencies = {
     "rafamadriz/friendly-snippets",
-    "saadparwaiz1/cmp_luasnip",
   },
   config = function()
     local luasnip = require("luasnip")
@@ -144,6 +143,24 @@ return {
       }}
       ]],
           { i(1, "output_name"), i(2, "description"), i(0) }
+        )
+      ),
+
+      s(
+        "module",
+        fmt(
+          [[
+      module "{}" {{
+          source = "{}"
+
+          # Required variables:
+          {}
+
+          # Optional variables:
+          {}
+      }}
+      ]],
+          { i(1, "module_name"), i(2, "./modules/example"), i(3, "# Add required vars"), i(0) }
         )
       ),
     })

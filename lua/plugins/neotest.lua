@@ -1,4 +1,4 @@
--- Testing integration for various languages
+-- Universal test runner
 return {
   {
     -- Universal test runner
@@ -172,41 +172,6 @@ return {
       vim.keymap.set("n", "<leader>td", function()
         require("neotest").run.run({ strategy = "dap" })
       end, { desc = "Debug nearest test" })
-    end,
-  },
-  {
-    -- Coverage display
-    "andythigpen/nvim-coverage",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("coverage").setup({
-        commands = true,
-        highlights = {
-          covered = { fg = "#C3E88D" },
-          uncovered = { fg = "#F07178" },
-        },
-        signs = {
-          covered = { hl = "CoverageCovered", text = "▎" },
-          uncovered = { hl = "CoverageUncovered", text = "▎" },
-        },
-        summary = {
-          min_coverage = 80.0,
-        },
-        lang = {
-          python = {
-            coverage_command = "coverage json --fail-under=0 -q -o -",
-            coverage_file = "coverage.json",
-          },
-          go = {
-            coverage_command = "go test -coverprofile=coverage.out ./... && go tool cover -func=coverage.out",
-          },
-        },
-      })
-
-      -- Keymaps
-      vim.keymap.set("n", "<leader>tcr", "<cmd>Coverage<cr>", { desc = "Show coverage" })
-      vim.keymap.set("n", "<leader>tcc", "<cmd>CoverageHide<cr>", { desc = "Hide coverage" })
-      vim.keymap.set("n", "<leader>tcs", "<cmd>CoverageSummary<cr>", { desc = "Coverage summary" })
     end,
   },
 }

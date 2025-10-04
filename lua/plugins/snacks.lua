@@ -33,24 +33,20 @@ return {
       },
     },
 
-    -- Notifications (replaces nvim-notify)
     notifier = {
       enabled = true,
       timeout = 3000,
     },
 
-    -- Bufferline (replaces bufferline.nvim)
     bufferline = {
       enabled = true,
       style = "minimal",
     },
 
-    -- Statuscolumn
     statuscolumn = {
       enabled = true,
     },
 
-    -- Lazygit configuration
     lazygit = {
       win = {
         style = "float",
@@ -59,33 +55,28 @@ return {
         border = "rounded",
       },
       throttle = {
-        ms = 50, -- Faster updates for better performance
+        ms = 50,
       },
       focus = true,
       enter = true,
     },
 
-    -- Input (replaces part of noice.nvim)
     input = {
       enabled = true,
     },
 
-    -- Better quickfix
     quickfile = {
       enabled = true,
     },
 
-    -- Words highlighting
     words = {
       enabled = true,
     },
 
-    -- Indent guides
     indent = {
       enabled = true,
     },
 
-    -- Scroll indicator
     scroll = {
       enabled = true,
     },
@@ -180,16 +171,14 @@ return {
     vim.api.nvim_create_autocmd("User", {
       pattern = "VeryLazy",
       callback = function()
-        -- Setup some globals for debugging (lazy-loaded)
         _G.dd = function(...)
           Snacks.debug.inspect(...)
         end
         _G.bt = function()
           Snacks.debug.backtrace()
         end
-        vim.print = _G.dd -- Override print to use snacks for `:=` command
+        vim.print = _G.dd
 
-        -- Create some toggle mappings
         Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
         Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
         Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
