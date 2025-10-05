@@ -8,9 +8,11 @@ return {
     conform.setup({
       formatters_by_ft = {
         lua = { "stylua" },
-        python = { "isort", "black" },
+        python = { "ruff_format", "ruff_organize_imports" },
         go = { "gofmt", "goimports" },
         terraform = { "terraform_fmt" },
+        sh = { "shfmt" },
+        bash = { "shfmt" },
         elixir = { "mix" },
         json = { "jq" },
         yaml = { "yamlfmt" },

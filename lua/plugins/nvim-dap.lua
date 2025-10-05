@@ -21,7 +21,6 @@ return {
       dapui.close()
     end
 
-    -- Keymaps
     vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" })
     vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "Continue/Start Debugging" })
     vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "Step Into" })

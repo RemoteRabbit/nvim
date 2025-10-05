@@ -25,7 +25,6 @@ return {
     vim.g.table_mode_motion_left_map = "<Bar><Left>"
     vim.g.table_mode_motion_right_map = "<Bar><Right>"
 
-    -- Keymaps
     vim.keymap.set("n", "<leader>mt", ":TableModeToggle<CR>", { desc = "Toggle Table Mode" })
     vim.keymap.set("n", "<leader>ma", ":TableModeRealign<CR>", { desc = "Realign Table" })
 
