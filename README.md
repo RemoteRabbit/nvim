@@ -145,15 +145,15 @@ This configuration is released into the public domain under the [Unlicense](LICE
 
 
 
+
 <!-- AUTO-GENERATED PLUGIN LIST START -->
 
-### Installed Plugins (86 total)
+### Installed Plugins (93 total)
 
 #### 🔧 Language & LSP
 
 - [neovim/nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
 - [onsails/lspkind.nvim](https://github.com/onsails/lspkind.nvim)
-- [j-hui/fidget.nvim](https://github.com/j-hui/fidget.nvim)
 - [ray-x/lsp_signature.nvim](https://github.com/ray-x/lsp_signature.nvim)
 - [williamboman/mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim)
 - [williamboman/mason.nvim](https://github.com/williamboman/mason.nvim)
@@ -162,17 +162,18 @@ This configuration is released into the public domain under the [Unlicense](LICE
 
 - [akinsho/bufferline.nvim](https://github.com/akinsho/bufferline.nvim)
 - [catppuccin/nvim](https://github.com/catppuccin/nvim)
-- [norcalli/nvim-colorizer.lua](https://github.com/norcalli/nvim-colorizer.lua)
 - [nvim-lualine/lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)
+- [norcalli/nvim-colorizer.lua](https://github.com/norcalli/nvim-colorizer.lua)
 - [kristijanhusak/vim-dadbod-ui](https://github.com/kristijanhusak/vim-dadbod-ui)
 
 #### 🔍 Navigation & Search
 
+- [ldelossa/litee-calltree.nvim](https://github.com/ldelossa/litee-calltree.nvim)
 - [nvim-tree/nvim-tree.lua](https://github.com/nvim-tree/nvim-tree.lua)
+- [nvim-treesitter/nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 - [nvim-treesitter/nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects)
 - [nvim-telescope/telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [cappyzawa/telescope-terraform.nvim](https://github.com/cappyzawa/telescope-terraform.nvim)
-- [nvim-treesitter/nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 - [mbbill/undotree](https://github.com/mbbill/undotree)
 
 #### 💡 Completion
@@ -182,15 +183,17 @@ This configuration is released into the public domain under the [Unlicense](LICE
 
 #### ✏️ Editing
 
-- [windwp/nvim-autopairs](https://github.com/windwp/nvim-autopairs)
 - [numToStr/Comment.nvim](https://github.com/numToStr/Comment.nvim)
+- [](https://github.com/)
+- [windwp/nvim-autopairs](https://github.com/windwp/nvim-autopairs)
 - [kylechui/nvim-surround](https://github.com/kylechui/nvim-surround)
 - [folke/todo-comments.nvim](https://github.com/folke/todo-comments.nvim)
 
 #### 📝 Git Integration
 
-- [lewis6991/gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim)
+- [f-person/git-blame.nvim](https://github.com/f-person/git-blame.nvim)
 - [harrisoncramer/gitlab.nvim](https://github.com/harrisoncramer/gitlab.nvim)
+- [ruifm/gitlinker.nvim](https://github.com/ruifm/gitlinker.nvim)
 - [lewis6991/gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim)
 - [kdheepak/lazygit.nvim](https://github.com/kdheepak/lazygit.nvim)
 
@@ -198,6 +201,7 @@ This configuration is released into the public domain under the [Unlicense](LICE
 
 - [nvim-neotest/neotest](https://github.com/nvim-neotest/neotest)
 - [mfussenegger/nvim-dap](https://github.com/mfussenegger/nvim-dap)
+- [mfussenegger/nvim-dap-python](https://github.com/mfussenegger/nvim-dap-python)
 
 #### 📋 Productivity
 
@@ -209,29 +213,34 @@ This configuration is released into the public domain under the [Unlicense](LICE
 
 #### 🔌 Other Plugins
 
+- [stevearc/aerial.nvim](https://github.com/stevearc/aerial.nvim)
 - [laytan/cloak.nvim](https://github.com/laytan/cloak.nvim)
 - [stevearc/conform.nvim](https://github.com/stevearc/conform.nvim)
 - [glepnir/dashboard-nvim](https://github.com/glepnir/dashboard-nvim)
-- [folke/trouble.nvim](https://github.com/folke/trouble.nvim)
 - [sindrets/diffview.nvim](https://github.com/sindrets/diffview.nvim)
+- [ekalinin/Dockerfile.vim](https://github.com/ekalinin/Dockerfile.vim)
 - [stevearc/dressing.nvim](https://github.com/stevearc/dressing.nvim)
 - [elixir-tools/elixir-tools.nvim](https://github.com/elixir-tools/elixir-tools.nvim)
 - [allaman/emoji.nvim](https://github.com/allaman/emoji.nvim)
+- [j-hui/fidget.nvim](https://github.com/j-hui/fidget.nvim)
 - [ray-x/go.nvim](https://github.com/ray-x/go.nvim)
+- [junegunn/gv.vim](https://github.com/junegunn/gv.vim)
 - [ThePrimeagen/harpoon](https://github.com/ThePrimeagen/harpoon)
 - [lukas-reineke/indent-blankline.nvim](https://github.com/lukas-reineke/indent-blankline.nvim)
 - [mistweaverco/kulala.nvim](https://github.com/mistweaverco/kulala.nvim)
+- [ldelossa/litee.nvim](https://github.com/ldelossa/litee.nvim)
 - [L3MON4D3/LuaSnip](https://github.com/L3MON4D3/LuaSnip)
-- [paretje/nvim-man](https://github.com/paretje/nvim-man)
 - [iamcco/markdown-preview.nvim](https://github.com/iamcco/markdown-preview.nvim)
 - [wfxr/minimap.vim](https://github.com/wfxr/minimap.vim)
 - [karb94/neoscroll.nvim](https://github.com/karb94/neoscroll.nvim)
 - [andythigpen/nvim-coverage](https://github.com/andythigpen/nvim-coverage)
 - [gennaro-tedesco/nvim-jqx](https://github.com/gennaro-tedesco/nvim-jqx)
 - [mfussenegger/nvim-lint](https://github.com/mfussenegger/nvim-lint)
+- [paretje/nvim-man](https://github.com/paretje/nvim-man)
 - [SmiteshP/nvim-navic](https://github.com/SmiteshP/nvim-navic)
 - [michaelrommel/nvim-silicon](https://github.com/michaelrommel/nvim-silicon)
 - [kevinhwang91/nvim-ufo](https://github.com/kevinhwang91/nvim-ufo)
+- [nvim-tree/nvim-web-devicons](https://github.com/nvim-tree/nvim-web-devicons)
 - [epwalsh/obsidian.nvim](https://github.com/epwalsh/obsidian.nvim)
 - [pwntester/octo.nvim](https://github.com/pwntester/octo.nvim)
 - [hedyhli/outline.nvim](https://github.com/hedyhli/outline.nvim)
@@ -260,7 +269,6 @@ This configuration is released into the public domain under the [Unlicense](LICE
 - [mg979/vim-visual-multi](https://github.com/mg979/vim-visual-multi)
 - [lukas-reineke/virt-column.nvim](https://github.com/lukas-reineke/virt-column.nvim)
 - [wakatime/vim-wakatime](https://github.com/wakatime/vim-wakatime)
-- [nvim-tree/nvim-web-devicons](https://github.com/nvim-tree/nvim-web-devicons)
 - [folke/which-key.nvim](https://github.com/folke/which-key.nvim)
 - [someone-stole-my-name/yaml-companion.nvim](https://github.com/someone-stole-my-name/yaml-companion.nvim)
 - [folke/zen-mode.nvim](https://github.com/folke/zen-mode.nvim)

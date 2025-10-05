@@ -1,4 +1,3 @@
--- Smart surround
 return {
   "kylechui/nvim-surround",
   version = "*",

@@ -1,4 +1,3 @@
--- Project dashboard
 return {
   "glepnir/dashboard-nvim",
   event = "VimEnter",

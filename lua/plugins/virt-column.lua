@@ -1,4 +1,3 @@
--- Color columns and line length guides
 return {
   "lukas-reineke/virt-column.nvim",
   config = function()

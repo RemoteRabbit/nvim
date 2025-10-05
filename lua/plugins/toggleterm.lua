@@ -1,4 +1,3 @@
--- Built-in terminal
 return {
   {
     -- Built-in terminal

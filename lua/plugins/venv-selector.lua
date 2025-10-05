@@ -1,4 +1,3 @@
--- Python environment management
 return {
   {
     -- Python environment management
@@ -24,7 +23,6 @@ return {
         fd_binary_name = "fd",
       })
 
-      -- Keymaps
       vim.keymap.set("n", "<leader>vs", "<cmd>VenvSelect<cr>", { desc = "Select Python environment" })
       vim.keymap.set("n", "<leader>vc", "<cmd>VenvSelectCached<cr>", { desc = "Select cached environment" })
     end,

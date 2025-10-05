@@ -1,4 +1,3 @@
--- Database browser
 return {
   {
     -- Database browser
@@ -20,7 +19,6 @@ return {
       vim.g.db_ui_win_position = "left"
       vim.g.db_ui_winwidth = 40
 
-      -- Keymaps
       vim.keymap.set("n", "<leader>Du", "<cmd>DBUIToggle<cr>", { desc = "Toggle DBUI" })
       vim.keymap.set("n", "<leader>Df", "<cmd>DBUIFindBuffer<cr>", { desc = "Find DB buffer" })
       vim.keymap.set("n", "<leader>Dr", "<cmd>DBUIRenameBuffer<cr>", { desc = "Rename DB buffer" })

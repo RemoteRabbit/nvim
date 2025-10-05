@@ -1,4 +1,3 @@
--- LSP Progress indicator in statusline
 return {
   "j-hui/fidget.nvim",
   config = function()

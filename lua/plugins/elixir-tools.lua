@@ -1,4 +1,3 @@
--- Elixir tools
 return {
   {
     -- Elixir tools

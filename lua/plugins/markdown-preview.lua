@@ -1,4 +1,3 @@
--- Markdown preview
 return {
   "iamcco/markdown-preview.nvim",
   cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
@@ -22,7 +21,6 @@ return {
     vim.g.mkdp_combine_preview = 0
     vim.g.mkdp_combine_preview_auto_refresh = 1
 
-    -- Keymaps
     vim.keymap.set("n", "<leader>mp", "<cmd>MarkdownPreview<cr>", { desc = "Markdown preview" })
     vim.keymap.set("n", "<leader>mP", "<cmd>MarkdownPreviewStop<cr>", { desc = "Stop markdown preview" })
     vim.keymap.set("n", "<leader>mt", "<cmd>MarkdownPreviewToggle<cr>", { desc = "Toggle markdown preview" })

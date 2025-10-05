@@ -1,4 +1,3 @@
--- Smart window management for better workflow
 return {
   {
     "mrjones2014/smart-splits.nvim",

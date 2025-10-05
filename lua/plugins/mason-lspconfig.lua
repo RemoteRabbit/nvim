@@ -3,21 +3,44 @@ return {
   config = function()
     require("mason-lspconfig").setup({
       ensure_installed = {
-        "pyright", -- Python
-        "terraformls", -- Terraform
-        "lua_ls", -- Lua
-        "elixirls", -- Elixir
-        "erlangls", -- Erlang (requires rebar3)
-        "jsonls", -- JSON
-        "yamlls", -- YAML
-        "marksman", -- Markdown
-        "bashls", -- Bash
+        "pyright",
+        "ruff",
+        "terraformls",
+        "lua_ls",
+        "elixirls",
+        "erlangls",
+        "jsonls",
+        "yamlls",
+        "marksman",
+        "bashls",
+        "dockerls",
       },
       handlers = {
         function(server_name)
           local capabilities = require("blink.cmp").get_lsp_capabilities()
           require("lspconfig")[server_name].setup({
             capabilities = capabilities,
+          })
+        end,
+        ["ruff_lsp"] = function()
+          require("lspconfig").ruff_lsp.setup({
+            capabilities = require("blink.cmp").get_lsp_capabilities(),
+            init_options = {
+              settings = {
+                args = {
+                  "--config=pyproject.toml",
+                },
+              },
+            },
+            on_attach = function(client, bufnr)
+              client.server_capabilities.hoverProvider = false
+              vim.keymap.set("n", "<leader>co", function()
+                vim.lsp.buf.code_action({
+                  context = { only = { "source.organizeImports" } },
+                  apply = true,
+                })
+              end, { buffer = bufnr, desc = "Organize imports (ruff)" })
+            end,
           })
         end,
         ["terraformls"] = function()
@@ -52,14 +75,11 @@ return {
               },
             },
             on_attach = function(client, bufnr)
-              -- Enable inlay hints for module variables
               if client.server_capabilities.inlayHintProvider then
                 vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
               end
 
-              -- Add keymap to show module info
               vim.keymap.set("n", "<leader>tV", function()
-                -- Get current word under cursor
                 local word = vim.fn.expand("<cword>")
                 if word and word ~= "" then
                   vim.lsp.buf.hover()

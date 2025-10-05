@@ -1,4 +1,3 @@
--- Enhanced signature help
 return {
   {
     -- Enhanced signature help

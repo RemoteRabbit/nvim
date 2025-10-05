@@ -1,4 +1,3 @@
--- Enhanced markdown editing
 return {
   "preservim/vim-markdown",
   dependencies = { "godlygeek/tabular" },

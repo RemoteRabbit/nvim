@@ -1,4 +1,3 @@
--- Advanced git analysis
 return {
   {
     -- Advanced git analysis
@@ -221,7 +220,6 @@ return {
         },
       })
 
-      -- Keymaps
       vim.keymap.set("n", "<leader>gd", "<cmd>DiffviewOpen<cr>", { desc = "Open diffview" })
       vim.keymap.set("n", "<leader>gD", "<cmd>DiffviewClose<cr>", { desc = "Close diffview" })
       vim.keymap.set("n", "<leader>gh", "<cmd>DiffviewFileHistory<cr>", { desc = "File history" })

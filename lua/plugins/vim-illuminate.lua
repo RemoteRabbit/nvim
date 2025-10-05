@@ -1,4 +1,3 @@
--- Reference highlighting and enhanced LSP features
 return {
   {
     -- Reference highlighting and enhanced LSP features

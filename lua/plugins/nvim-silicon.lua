@@ -1,4 +1,3 @@
--- Code screenshots
 return {
   "michaelrommel/nvim-silicon",
   lazy = true,
@@ -24,7 +23,6 @@ return {
       debug = false,
     })
 
-    -- Keymaps
     vim.keymap.set("v", "<leader>sc", ":Silicon<cr>", { desc = "Screenshot code" })
     vim.keymap.set("n", "<leader>sc", ":Silicon<cr>", { desc = "Screenshot code" })
   end,

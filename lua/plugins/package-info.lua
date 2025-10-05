@@ -1,4 +1,3 @@
--- Dependency analysis
 return {
   {
     -- Dependency analysis
@@ -23,7 +22,6 @@ return {
         package_manager = "npm",
       })
 
-      -- Keymaps
       vim.keymap.set(
         "n",
         "<leader>ns",

@@ -1,4 +1,3 @@
--- Enhanced statusline with LSP info, git, diagnostics
 return {
   "nvim-lualine/lualine.nvim",
   config = function()

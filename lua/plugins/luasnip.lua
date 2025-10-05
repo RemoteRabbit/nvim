@@ -1,4 +1,3 @@
--- Enhanced snippets
 return {
   "L3MON4D3/LuaSnip",
   version = "v2.*",
@@ -20,14 +19,10 @@ return {
       end,
     })
 
-    -- Load VSCode snippets
     require("luasnip.loaders.from_vscode").lazy_load()
     require("luasnip.loaders.from_vscode").lazy_load({ paths = "~/.config/nvim/snippets" })
 
-    -- Load custom Lua snippets
     require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/lua/snippets" })
-
-    -- Custom snippets
     local s = luasnip.snippet
     local t = luasnip.text_node
     local i = luasnip.insert_node
@@ -165,7 +160,6 @@ return {
       ),
     })
 
-    -- Keymaps
     vim.keymap.set({ "i" }, "<C-K>", function()
       luasnip.expand()
     end, { silent = true })

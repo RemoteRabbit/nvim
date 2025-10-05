@@ -1,4 +1,3 @@
--- Go tools
 return {
   {
     -- Go tools
@@ -57,15 +56,15 @@ return {
         group = format_sync_grp,
       })
 
-      -- Keymaps
-      vim.keymap.set("n", "<leader>gsj", "<cmd>GoAddTag json<cr>", { desc = "Add JSON tags" })
-      vim.keymap.set("n", "<leader>gsy", "<cmd>GoAddTag yaml<cr>", { desc = "Add YAML tags" })
-      vim.keymap.set("n", "<leader>gsr", "<cmd>GoRMTag<cr>", { desc = "Remove tags" })
-      vim.keymap.set("n", "<leader>gsf", "<cmd>GoFillStruct<cr>", { desc = "Fill struct" })
-      vim.keymap.set("n", "<leader>gse", "<cmd>GoIfErr<cr>", { desc = "Add if err" })
-      vim.keymap.set("n", "<leader>gch", "<cmd>GoCoverage<cr>", { desc = "Test coverage" })
-      vim.keymap.set("n", "<leader>gcc", "<cmd>GoCoverageToggle<cr>", { desc = "Toggle coverage" })
-      vim.keymap.set("n", "<leader>gcb", "<cmd>GoCoverageBrowser<cr>", { desc = "Coverage browser" })
+      -- Keymaps (using <leader>G to avoid conflict with git)
+      vim.keymap.set("n", "<leader>Gsj", "<cmd>GoAddTag json<cr>", { desc = "Add JSON tags" })
+      vim.keymap.set("n", "<leader>Gsy", "<cmd>GoAddTag yaml<cr>", { desc = "Add YAML tags" })
+      vim.keymap.set("n", "<leader>Gsr", "<cmd>GoRMTag<cr>", { desc = "Remove tags" })
+      vim.keymap.set("n", "<leader>Gsf", "<cmd>GoFillStruct<cr>", { desc = "Fill struct" })
+      vim.keymap.set("n", "<leader>Gse", "<cmd>GoIfErr<cr>", { desc = "Add if err" })
+      vim.keymap.set("n", "<leader>Gch", "<cmd>GoCoverage<cr>", { desc = "Test coverage" })
+      vim.keymap.set("n", "<leader>Gcc", "<cmd>GoCoverageToggle<cr>", { desc = "Toggle coverage" })
+      vim.keymap.set("n", "<leader>Gcb", "<cmd>GoCoverageBrowser<cr>", { desc = "Coverage browser" })
     end,
     event = { "CmdlineEnter" },
     ft = { "go", "gomod" },
