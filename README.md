@@ -146,9 +146,10 @@ This configuration is released into the public domain under the [Unlicense](LICE
 
 
 
+
 <!-- AUTO-GENERATED PLUGIN LIST START -->
 
-### Installed Plugins (93 total)
+### Installed Plugins (94 total)
 
 #### 🔧 Language & LSP
 
@@ -257,6 +258,7 @@ This configuration is released into the public domain under the [Unlicense](LICE
 - [nvim-pack/nvim-spectre](https://github.com/nvim-pack/nvim-spectre)
 - [wellle/targets.vim](https://github.com/wellle/targets.vim)
 - [nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim)
+- [nvim-telescope/telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [akinsho/toggleterm.nvim](https://github.com/akinsho/toggleterm.nvim)
 - [folke/trouble.nvim](https://github.com/folke/trouble.nvim)
 - [folke/twilight.nvim](https://github.com/folke/twilight.nvim)
