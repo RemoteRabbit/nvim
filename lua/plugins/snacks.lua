@@ -3,8 +3,11 @@ return {
   priority = 1000,
   lazy = false,
   opts = {
+    bufferline = {
+      style = "minimal",
+    },
+    -----
     dashboard = {
-      enabled = true,
       preset = {
         header = [[
      --------------------------------------------------------------------------------------------------------
@@ -32,21 +35,7 @@ return {
         },
       },
     },
-
-    notifier = {
-      enabled = true,
-      timeout = 3000,
-    },
-
-    bufferline = {
-      enabled = true,
-      style = "minimal",
-    },
-
-    statuscolumn = {
-      enabled = true,
-    },
-
+    -----
     lazygit = {
       win = {
         style = "float",
@@ -60,25 +49,9 @@ return {
       focus = true,
       enter = true,
     },
-
-    input = {
-      enabled = true,
-    },
-
-    quickfile = {
-      enabled = true,
-    },
-
-    words = {
-      enabled = true,
-    },
-
-    indent = {
-      enabled = true,
-    },
-
-    scroll = {
-      enabled = true,
+    -----
+    notifier = {
+      timeout = 3000,
     },
   },
   keys = {
@@ -139,20 +112,6 @@ return {
       desc = "Rename File",
     },
     {
-      "<c-/>",
-      function()
-        Snacks.terminal()
-      end,
-      desc = "Toggle Terminal",
-    },
-    {
-      "<c-_>",
-      function()
-        Snacks.terminal()
-      end,
-      desc = "Toggle Terminal",
-    },
-    {
       "]]",
       function()
         Snacks.words.jump(vim.v.count1)
@@ -165,6 +124,12 @@ return {
         Snacks.words.jump(-vim.v.count1)
       end,
       desc = "Prev Reference",
+    },
+    {
+      "<leader>zm",
+      function()
+        Snacks.zen()
+      end,
     },
   },
   init = function()
