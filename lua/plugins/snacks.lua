@@ -53,8 +53,95 @@ return {
     notifier = {
       timeout = 3000,
     },
+    -----
+    scratch = {
+      name = "Scratch",
+      ft = function()
+        local current_ft = vim.bo.filetype
+        return current_ft and current_ft ~= "" and current_ft or "markdown"
+      end,
+    },
   },
   keys = {
+    {
+      "<leader>.",
+      function()
+        local filetypes = {
+          "markdown",
+          "lua",
+          "python",
+          "bash",
+          "text",
+          "json",
+          "yaml",
+        }
+
+        local current_ft = vim.bo.filetype
+        if current_ft and current_ft ~= "" then
+          local found = false
+          for _, ft in ipairs(filetypes) do
+            if ft == current_ft then
+              found = true
+              break
+            end
+          end
+          if not found then
+            table.insert(filetypes, 1, current_ft .. " (current)")
+          end
+        end
+
+        vim.ui.select(filetypes, {
+          prompt = "Select filetype: ",
+          format_item = function(item)
+            return item
+          end,
+        }, function(choice)
+          if choice then
+            local selected_ft = choice:gsub(" %(current%)", "")
+            Snacks.scratch({ ft = selected_ft })
+          end
+        end)
+      end,
+      desc = "Toggle Scratch Buffer",
+    },
+    {
+      "<leader>S",
+      function()
+        Snacks.scratch.select()
+      end,
+      desc = "Select scratch buffer.",
+    },
+    {
+      "<leader>sd",
+      function()
+        local items = Snacks.scratch.list()
+        if #items == 0 then
+          vim.notify("No scratch buffers found", vim.log.levels.INFO)
+          return
+        end
+
+        vim.ui.select(items, {
+          prompt = "Delete Scratch Buffer",
+          format_item = function(item)
+            local icon = item.icon or Snacks.util.icon(item.ft, "filetype") or "󰈔"
+            return icon .. " " .. item.name .. (item.cwd and " (" .. vim.fn.fnamemodify(item.cwd, ":p:~") .. ")" or "")
+          end,
+        }, function(selected)
+          if selected then
+            -- Close any open buffers for this file
+            for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+              if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_name(buf) == selected.file then
+                vim.api.nvim_buf_delete(buf, { force = true })
+              end
+            end
+            -- Delete the actual file
+            vim.fn.delete(selected.file)
+            vim.notify("Deleted scratch: " .. selected.name, vim.log.levels.INFO)
+          end
+        end)
+      end,
+      desc = "Delete scratch buffer",
+    },
     {
       "<leader>un",
       function()
