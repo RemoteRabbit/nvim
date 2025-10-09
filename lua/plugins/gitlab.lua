@@ -279,8 +279,5 @@ return {
     vim.api.nvim_create_user_command("GitlabPipeline", function()
       require("gitlab").pipeline()
     end, { desc = "View Pipeline" })
-
-    -- Print setup message
-    vim.notify("GitLab.nvim loaded! Use :GitlabMR to get started", vim.log.levels.INFO)
   end,
 }
