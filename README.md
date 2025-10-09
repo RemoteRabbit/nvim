@@ -146,9 +146,10 @@ This configuration is released into the public domain under the [Unlicense](LICE
 
 
 
+
 <!-- AUTO-GENERATED PLUGIN LIST START -->
 
-### Installed Plugins (93 total)
+### Installed Plugins (97 total)
 
 #### 🔧 Language & LSP
 
@@ -233,7 +234,9 @@ This configuration is released into the public domain under the [Unlicense](LICE
 - [iamcco/markdown-preview.nvim](https://github.com/iamcco/markdown-preview.nvim)
 - [wfxr/minimap.vim](https://github.com/wfxr/minimap.vim)
 - [karb94/neoscroll.nvim](https://github.com/karb94/neoscroll.nvim)
+- [saxon1964/neovim-tips](https://github.com/saxon1964/neovim-tips)
 - [andythigpen/nvim-coverage](https://github.com/andythigpen/nvim-coverage)
+- [warpaint9299/nvim-devdocs](https://github.com/warpaint9299/nvim-devdocs)
 - [gennaro-tedesco/nvim-jqx](https://github.com/gennaro-tedesco/nvim-jqx)
 - [mfussenegger/nvim-lint](https://github.com/mfussenegger/nvim-lint)
 - [paretje/nvim-man](https://github.com/paretje/nvim-man)
@@ -252,11 +255,13 @@ This configuration is released into the public domain under the [Unlicense](LICE
 - [MeanderingProgrammer/render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim)
 - [lewis6991/satellite.nvim](https://github.com/lewis6991/satellite.nvim)
 - [b0o/schemastore.nvim](https://github.com/b0o/schemastore.nvim)
+- [LintaoAmons/scratch.nvim](https://github.com/LintaoAmons/scratch.nvim)
 - [mrjones2014/smart-splits.nvim](https://github.com/mrjones2014/smart-splits.nvim)
 - [folke/snacks.nvim](https://github.com/folke/snacks.nvim)
 - [nvim-pack/nvim-spectre](https://github.com/nvim-pack/nvim-spectre)
 - [wellle/targets.vim](https://github.com/wellle/targets.vim)
 - [nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim)
+- [nvim-telescope/telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [akinsho/toggleterm.nvim](https://github.com/akinsho/toggleterm.nvim)
 - [folke/trouble.nvim](https://github.com/folke/trouble.nvim)
 - [folke/twilight.nvim](https://github.com/folke/twilight.nvim)
