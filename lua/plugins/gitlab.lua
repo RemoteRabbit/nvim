@@ -4,7 +4,6 @@ return {
     "MunifTanjim/nui.nvim",
     "nvim-lua/plenary.nvim",
     "sindrets/diffview.nvim",
-    "stevearc/dressing.nvim",
     "nvim-tree/nvim-web-devicons",
   },
   branch = "main",
