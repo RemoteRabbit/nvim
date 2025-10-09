@@ -1,6 +1,5 @@
 return {
   {
-    -- Reference highlighting and enhanced LSP features
     "RRethy/vim-illuminate",
     config = function()
       require("illuminate").configure({
