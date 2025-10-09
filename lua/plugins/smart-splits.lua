@@ -8,7 +8,6 @@ return {
           "quickfix",
           "prompt",
         },
-        ignored_filetypes = { "NvimTree" },
         default_amount = 3,
         at_edge = "wrap",
         move_cursor_same_row = false,
