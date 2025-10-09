@@ -9,18 +9,19 @@ return {
   config = function()
     require("octo").setup({
       default_remote = { "upstream", "origin" },
+      default_delete_branch = true,
       default_merge_method = "squash",
-      ssh_aliases = {},
       reaction_viewer_hint_icon = "",
-      user_icon = " ",
+      user_icon = "🦫 ",
       timeline_marker = "",
       timeline_indent = 2,
       right_bubble_delimiter = "",
       left_bubble_delimiter = "",
-      github_hostname = "",
       snippet_context_lines = 4,
-      gh_env = {},
       timeout = 5000,
+      picker_config = {
+        use_emojis = true,
+      },
       ui = {
         use_signcolumn = true,
         use_signstatus = true,
@@ -165,8 +166,6 @@ return {
       },
     })
 
-    -- Note: Main PR keymaps moved to gitlab.lua for context-aware handling
-
     -- GitHub-specific PR creation methods (only available for GitHub)
     vim.keymap.set("n", "<leader>gPt", ":Octo pr create --template<CR>", { desc = "Create PR with Template" })
     vim.keymap.set("n", "<leader>gPd", ":Octo pr create --draft<CR>", { desc = "Create Draft PR" })
@@ -239,37 +238,23 @@ return {
           text = text:gsub("(closes?) #(%d+)", "%1 [#%2](https://github.com/" .. github_repo .. "/issues/%2)")
           text = text:gsub("(resolves?) #(%d+)", "%1 [#%2](https://github.com/" .. github_repo .. "/issues/%2)")
         end
-
-        -- Replace Jira ticket references (common patterns)
-        -- Matches patterns like: PROJ-123, ENG-456, TASK-789, etc.
-        text = text:gsub("([A-Z][A-Z0-9]*%-[0-9]+)", function(ticket)
-          -- You can customize this URL pattern for your organization
-          -- Common patterns:
-          -- Atlassian: https://company.atlassian.net/browse/TICKET
-          -- Linear: https://linear.app/company/issue/TICKET
-          return "[" .. ticket .. "](https://company.atlassian.net/browse/" .. ticket .. ")"
-        end)
-
         return text
       end
 
       for _, line in ipairs(commit_subjects) do
         local hash, subject = line:match("(%S+)%s+(.*)")
         if subject then
-          -- Filter out merge-like commits that slip through --no-merges
           local is_merge_like = subject:match("^[Mm]erge ")
             or subject:match("^[Mm]erged ")
             or subject:match("^[Mm]erge pull request")
             or subject:match("^[Mm]erge branch")
           if not is_merge_like then
-            -- Get the full commit message for this hash
             local full_message = vim.fn.system("git log -1 --format='%s%n%b' " .. hash):gsub("\n$", "")
             local lines = vim.split(full_message, "\n")
             local commit_subject = lines[1] or subject
             local body_lines = {}
             local breaking_change = ""
 
-            -- Process body lines
             for i = 2, #lines do
               local body_line = lines[i]
               if body_line and body_line ~= "" then
@@ -281,7 +266,6 @@ return {
               end
             end
 
-            -- Enhanced breaking change detection (! syntax)
             local is_breaking = commit_subject:match("!:")
             if is_breaking and not breaking_change then
               breaking_change = "Breaking change in: " .. commit_subject:gsub("!:", ":")
