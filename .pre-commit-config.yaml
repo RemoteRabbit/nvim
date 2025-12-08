@@ -14,9 +14,9 @@ repos:
 
   # Lua formatting with StyLua
   - repo: https://github.com/JohnnyMorganz/StyLua
-    rev: v2.1.0
+    rev: v2.3.1
     hooks:
-      - id: stylua
+      - id: stylua-github
         args: [--config-path=stylua.toml]
 
   # Lua linting with Luacheck
@@ -40,6 +40,23 @@ repos:
       - id: detect-secrets
         args: [--baseline, .secrets.baseline]
         exclude: package.lock.json
+
+  # Neovim config validation
+  - repo: local
+    hooks:
+      - id: validate-nvim-config
+        name: Validate Neovim Config
+        entry: scripts/validate.sh
+        language: script
+        files: ^(lua/.*\.lua|init\.lua)$
+        pass_filenames: false
+
+      - id: check-lua-syntax
+        name: Check Lua Syntax
+        entry: bash -c 'for f in "$@"; do luac -p "$f" || exit 1; done' --
+        language: system
+        files: \.lua$
+        types: [lua]
 
   # Auto-documentation generation
   - repo: local
