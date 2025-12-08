@@ -64,13 +64,18 @@ jobs:
           mkdir -p "$XDG_STATE_HOME"
           mkdir -p "$XDG_CACHE_HOME"
 
-          # Copy config (exclude test directories to avoid self-copy)
-          cp -r lua init.lua "$XDG_CONFIG_HOME/nvim/"
-          [ -f lazy-lock.json ] && cp lazy-lock.json "$XDG_CONFIG_HOME/nvim/" || true
+          # Create minimal init that skips plugin installation
+          cat > "$XDG_CONFIG_HOME/nvim/init.lua" << 'EOF'
+          vim.g.mapleader = " "
+          -- Skip lazy.nvim in CI - just validate core config loads
+          require("config.options")
+          require("config.keymaps")
+          print("STARTUP_OK")
+          EOF
+          cp -r lua "$XDG_CONFIG_HOME/nvim/"
 
-          # Test startup (allow plugin download to fail in CI)
-          timeout 60 nvim --headless -c "lua print('STARTUP_OK')" -c "qa!" 2>&1 || true
-
+          # Test startup (should be fast without plugins)
+          timeout 10 nvim --headless -c "qa!" 2>&1
           echo "✅ Neovim startup check completed"
 
       - name: Check for common issues
