@@ -98,28 +98,30 @@ function M.find_conflicts(opts)
   local seen = {}
 
   for _, map in ipairs(keymaps) do
+    local should_process = true
+
     -- Skip if leader_only and not a leader mapping
     if leader_only and not map.lhs:match("^<[Ll]eader>") then
-      goto continue
+      should_process = false
     end
 
     -- Skip ignored patterns unless explicitly requested
-    if not include_ignored and is_ignored(map.lhs, map.mode) then
-      goto continue
+    if should_process and not include_ignored and is_ignored(map.lhs, map.mode) then
+      should_process = false
     end
 
-    local key = map.mode .. ":" .. normalize_key(map.lhs)
+    if should_process then
+      local key = map.mode .. ":" .. normalize_key(map.lhs)
 
-    if seen[key] then
-      if not conflicts[key] then
-        conflicts[key] = { seen[key] }
+      if seen[key] then
+        if not conflicts[key] then
+          conflicts[key] = { seen[key] }
+        end
+        table.insert(conflicts[key], map)
+      else
+        seen[key] = map
       end
-      table.insert(conflicts[key], map)
-    else
-      seen[key] = map
     end
-
-    ::continue::
   end
 
   return conflicts
