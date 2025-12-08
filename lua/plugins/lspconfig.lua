@@ -4,9 +4,44 @@ return {
     "saghen/blink.cmp",
   },
   config = function()
-    local lspconfig = require("lspconfig")
     local lsp_capabilities = require("blink.cmp").get_lsp_capabilities()
-    -- Configure diagnostic signs (modern approach)
+
+    -- Lua language server configuration
+    vim.lsp.config("lua_ls", {
+      capabilities = lsp_capabilities,
+      root_markers = { ".luarc.json", ".luarc.jsonc", ".luacheckrc", ".stylua.toml", "stylua.toml", ".git" },
+      settings = {
+        Lua = {
+          runtime = {
+            version = "LuaJIT",
+          },
+          diagnostics = {
+            globals = {
+              "love",
+              "vim",
+            },
+          },
+          workspace = {
+            checkThirdParty = false,
+            library = {
+              vim.env.VIMRUNTIME,
+            },
+          },
+          telemetry = {
+            enable = false,
+          },
+        },
+      },
+    })
+
+    vim.lsp.enable("lua_ls")
+
+    -- Custom hover handler with rounded border
+    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+      border = "rounded",
+    })
+
+    -- Diagnostic configuration
     vim.diagnostic.config({
       signs = {
         text = {
@@ -16,40 +51,20 @@ return {
           [vim.diagnostic.severity.HINT] = "󰌵 ",
         },
       },
-    })
-
-    vim.diagnostic.config({
       virtual_text = {
-        prefix = "",
+        prefix = "",
         spacing = 2,
       },
-      signs = true,
       underline = true,
       update_in_insert = false,
-
       severity_sort = true,
-      severity = {
-        error = "Error",
-        warn = "Warning",
-        info = "Information",
-        hint = "Hint",
-      },
-
       float = {
         source = "always",
         border = "rounded",
-        winblend = 10,
-        max_width = 80,
       },
     })
-    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 
-    vim.lsp.handlers["textDocument/signatureHelp"] =
-      vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
-
-    -- LSP servers are configured via mason-lspconfig handlers
-    -- No need for manual setup here
-
+    -- Single LspAttach autocmd for all LSP-related setup
     vim.api.nvim_create_autocmd("LspAttach", {
       desc = "LSP actions",
       callback = function(event)
@@ -61,104 +76,73 @@ return {
           vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
         end
 
-        -- Enable code lens if supported
-        if client and client.supports_method("textDocument/codeLens") then
-          vim.lsp.codelens.refresh()
-          vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-            buffer = bufnr,
-            callback = vim.lsp.codelens.refresh,
-          })
-        end
-
-        -- Disable semantic tokens to avoid errors
+        -- Disable semantic tokens (use treesitter instead)
         if client and client.supports_method("textDocument/semanticTokens/full") then
           client.server_capabilities.semanticTokensProvider = nil
         end
 
-        local bufmap = function(mode, lhs, rhs)
-          local opts = { buffer = bufnr }
-          vim.keymap.set(mode, lhs, rhs, opts)
+        local bufmap = function(mode, lhs, rhs, desc)
+          vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
         end
 
-        -- Displays hover information about the symbol under the cursor
-        bufmap("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>")
+        -- Navigation
+        bufmap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", "Go to definition")
+        bufmap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", "Go to declaration")
+        bufmap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", "Go to implementation")
+        bufmap("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", "Go to type definition")
+        bufmap("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", "List references")
+        bufmap("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature help")
 
-        -- Jump to the definition
-        bufmap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>")
+        -- Actions
+        bufmap("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol")
+        bufmap("n", "<F4>", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action")
 
-        -- Jump to declaration
-        bufmap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>")
-
-        -- Lists all the implementations for the symbol under the cursor
-        bufmap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>")
-
-        -- Jumps to the definition of the type symbol
-        bufmap("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>")
-
-        -- Lists all the references
-        bufmap("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>")
-
-        -- Displays a function's signature information
-        bufmap("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>")
-
-        -- Renames all references to the symbol under the cursor
-        bufmap("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<cr>")
-
-        -- Selects a code action available at the current cursor position
-        bufmap("n", "<F4>", "<cmd>lua vim.lsp.buf.code_action()<cr>")
-
-        -- Show diagnostics in a floating window
-        bufmap("n", "gl", "<cmd>lua vim.diagnostic.open_float()<cr>")
-
-        -- Move to the previous diagnostic
-        bufmap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<cr>")
-
-        -- Move to the next diagnostic
-        bufmap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<cr>")
+        -- Diagnostics
+        bufmap("n", "gl", "<cmd>lua vim.diagnostic.open_float()<cr>", "Show diagnostics")
+        bufmap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Previous diagnostic")
+        bufmap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next diagnostic")
 
         -- Toggle inlay hints
-        bufmap("n", "<leader>h", function()
-          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-        end)
+        bufmap("n", "<leader>ih", function()
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+        end, "Toggle inlay hints")
 
         -- Document symbols (outline view)
-        bufmap("n", "<leader>ds", "<cmd>Telescope lsp_document_symbols<cr>")
+        bufmap("n", "<leader>ds", "<cmd>Telescope lsp_document_symbols<cr>", "Document symbols")
 
         -- Workspace symbols (project-wide symbol search)
-        bufmap("n", "<leader>ws", "<cmd>Telescope lsp_workspace_symbols<cr>")
+        bufmap("n", "<leader>ws", "<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace symbols")
 
-        -- Code lens run
-        bufmap("n", "<leader>cl", "<cmd>lua vim.lsp.codelens.run()<cr>")
-
-        -- Code lens refresh
-        bufmap("n", "<leader>cr", "<cmd>lua vim.lsp.codelens.refresh()<cr>")
+        -- Code lens
+        bufmap("n", "<leader>cl", "<cmd>lua vim.lsp.codelens.run()<cr>", "Run code lens")
+        bufmap("n", "<leader>cL", "<cmd>lua vim.lsp.codelens.refresh()<cr>", "Refresh code lens")
 
         -- Debug LSP info
         bufmap("n", "<leader>li", function()
-          local clients = vim.lsp.get_clients({ bufnr = 0 })
+          local clients = vim.lsp.get_clients({ bufnr = bufnr })
           if #clients == 0 then
             vim.notify("No LSP clients attached to this buffer", vim.log.levels.INFO)
             return
           end
 
           local info = {}
-          for _, client in pairs(clients) do
+          for _, c in pairs(clients) do
             local capabilities = {}
-            if client.supports_method("textDocument/rename") then
+            if c.supports_method("textDocument/rename") then
               table.insert(capabilities, "rename")
             end
-            if client.supports_method("textDocument/codeAction") then
+            if c.supports_method("textDocument/codeAction") then
               table.insert(capabilities, "code_action")
             end
-            if client.supports_method("textDocument/hover") then
+            if c.supports_method("textDocument/hover") then
               table.insert(capabilities, "hover")
             end
 
-            table.insert(info, string.format("%s: %s", client.name, table.concat(capabilities, ", ")))
+            table.insert(info, string.format("%s: %s", c.name, table.concat(capabilities, ", ")))
           end
 
           vim.notify("LSP Clients:\n" .. table.concat(info, "\n"), vim.log.levels.INFO)
-        end)
+        end, "LSP info")
       end,
     })
   end,
