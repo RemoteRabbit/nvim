@@ -24,7 +24,13 @@
 | `<leader>Gsj` | Add JSON tags | go-nvim |
 | `<leader>Gsr` | Remove tags | go-nvim |
 | `<leader>Gsy` | Add YAML tags | go-nvim |
-| `<leader>O` | Toggle Outline Navigation | aerial |
+| `<leader>Oa` | Quick action | overseer |
+| `<leader>Ob` | Build task | overseer |
+| `<leader>Oc` | Clear cache | overseer |
+| `<leader>Or` | Run task | overseer |
+| `<leader>Osf` | Run tfsec Terraform scan | overseer |
+| `<leader>Ost` | Run trivy security scan | overseer |
+| `<leader>Ot` | Toggle task list | overseer |
 | `<leader>Ri` | Inspect REST request | kulala |
 | `<leader>Rl` | Replay last REST request | kulala |
 | `<leader>Rp` | Preview REST request | kulala |
@@ -35,7 +41,6 @@
 | `<leader>bo` | Delete other buffers | bufferline |
 | `<leader>bp` | Pin buffer | bufferline |
 | `<leader>br` | Delete buffers to the right | bufferline |
-| `<leader>cl` | Run linting | nvim-lint |
 | `<leader>coh` | Hide coverage | nvim-coverage |
 | `<leader>col` | Load coverage | nvim-coverage |
 | `<leader>cos` | Coverage summary | nvim-coverage |
@@ -52,7 +57,6 @@
 | `<leader>dt` | Terminate | nvim-dap |
 | `<leader>du` | Toggle DAP UI | nvim-dap |
 | `<leader>fS` | Workspace Symbols | telescope |
-| `<leader>fr` | Recent Files | telescope |
 | `<leader>fs` | Document Symbols | telescope |
 | `<leader>gCo` | Checkout PR | octo |
 | `<leader>gD` | Close diffview | diffview |
@@ -104,22 +108,15 @@
 | `<leader>ns` | Show dependency versions | package-info |
 | `<leader>nt` | Toggle dependency versions | package-info |
 | `<leader>nu` | Update dependency on line | package-info |
-| `<leader>o` | Toggle Outline | aerial |
-| `<leader>o` | Toggle Outline | outline-nvim |
+| `<leader>oA` | Toggle Aerial Navigation | aerial |
+| `<leader>oa` | Toggle Aerial | aerial |
+| `<leader>oo` | Toggle Outline | outline-nvim |
 | `<leader>pp` | Toggle profiling | profile |
-| `<leader>ra` | Quick action | overseer |
-| `<leader>rb` | Build task | overseer |
-| `<leader>rc` | Clear cache | overseer |
 | `<leader>rn` | LSP Rename | refactoring |
-| `<leader>rr` | Run task | overseer |
-| `<leader>rsf` | Run tfsec Terraform scan | overseer |
-| `<leader>rst` | Run trivy security scan | overseer |
-| `<leader>rt` | Toggle task list | overseer |
 | `<leader>sc` | Screenshot code | nvim-silicon |
 | `<leader>se` | [S]earch [E]moji | emoji |
 | `<leader>tF` | Run tests in file | neotest |
 | `<leader>tO` | Toggle test output panel | neotest |
-| `<leader>tV` | Show Module Info | mason-lspconfig |
 | `<leader>ta` | Run all tests | neotest |
 | `<leader>tn` | Run nearest test | neotest |
 | `<leader>ts` | Toggle test summary | neotest |
@@ -129,16 +126,15 @@
 | `<leader>xL` | Location List (Trouble) | trouble |
 | `<leader>xQ` | Quickfix List (Trouble) | trouble |
 | `<leader>xX` | Buffer Diagnostics (Trouble) | trouble |
+| `<leader>xl` | Run linting | nvim-lint |
 | `<leader>xl` | LSP Definitions / references / ... (Trouble) | trouble |
 | `<leader>xs` | Symbols (Trouble) | trouble |
 | `<leader>xx` | Diagnostics (Trouble) | trouble |
 | `K` | Peek fold or hover | nvim-ufo |
-| `[[` | Previous symbol | aerial |
-| `[[` | Previous symbol (up level) | aerial |
 | `[b` | Prev buffer | bufferline |
-| `]]` | Next symbol | aerial |
-| `]]` | Next symbol (up level) | aerial |
+| `[s` | Previous symbol | aerial |
 | `]b` | Next buffer | bufferline |
+| `]s` | Next symbol | aerial |
 | `zM` | Close all folds | nvim-ufo |
 | `zR` | Open all folds | nvim-ufo |
 | `zm` | Close folds with | nvim-ufo |
