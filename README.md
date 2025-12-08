@@ -151,16 +151,17 @@ This configuration is released into the public domain under the [Unlicense](LICE
 
 
 
+
 <!-- AUTO-GENERATED PLUGIN LIST START -->
 
-### Installed Plugins (72 total)
+### Installed Plugins (73 total)
 
 #### 🔧 Language & LSP
 
 - [neovim/nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
 - [onsails/lspkind.nvim](https://github.com/onsails/lspkind.nvim)
 - [ray-x/lsp_signature.nvim](https://github.com/ray-x/lsp_signature.nvim)
-- [williamboman/mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim)
+- [mason-org/mason-lspconfig.nvim](https://github.com/mason-org/mason-lspconfig.nvim)
 - [williamboman/mason.nvim](https://github.com/williamboman/mason.nvim)
 
 #### 🎨 UI & Themes
@@ -210,6 +211,7 @@ This configuration is released into the public domain under the [Unlicense](LICE
 
 - [stevearc/aerial.nvim](https://github.com/stevearc/aerial.nvim)
 - [laytan/cloak.nvim](https://github.com/laytan/cloak.nvim)
+- [olimorris/codecompanion.nvim](https://github.com/olimorris/codecompanion.nvim)
 - [stevearc/conform.nvim](https://github.com/stevearc/conform.nvim)
 - [sindrets/diffview.nvim](https://github.com/sindrets/diffview.nvim)
 - [elixir-tools/elixir-tools.nvim](https://github.com/elixir-tools/elixir-tools.nvim)
@@ -246,7 +248,7 @@ This configuration is released into the public domain under the [Unlicense](LICE
 - [folke/snacks.nvim](https://github.com/folke/snacks.nvim)
 - [nvim-pack/nvim-spectre](https://github.com/nvim-pack/nvim-spectre)
 - [nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim)
-- [nvim-telescope/telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
+- [nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim)
 - [folke/trouble.nvim](https://github.com/folke/trouble.nvim)
 - [linux-cultist/venv-selector.nvim](https://github.com/linux-cultist/venv-selector.nvim)
 - [RRethy/vim-illuminate](https://github.com/RRethy/vim-illuminate)

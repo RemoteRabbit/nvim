@@ -230,15 +230,15 @@ return {
       })
     end, {})
 
-    vim.keymap.set("n", "<leader>rr", "<cmd>OverseerRun<cr>", { desc = "Run task" })
-    vim.keymap.set("n", "<leader>rt", "<cmd>OverseerToggle<cr>", { desc = "Toggle task list" })
-    vim.keymap.set("n", "<leader>ra", "<cmd>OverseerQuickAction<cr>", { desc = "Quick action" })
-    vim.keymap.set("n", "<leader>rb", "<cmd>OverseerBuild<cr>", { desc = "Build task" })
-    vim.keymap.set("n", "<leader>rc", "<cmd>OverseerClearCache<cr>", { desc = "Clear cache" })
+    vim.keymap.set("n", "<leader>Or", "<cmd>OverseerRun<cr>", { desc = "Run task" })
+    vim.keymap.set("n", "<leader>Ot", "<cmd>OverseerToggle<cr>", { desc = "Toggle task list" })
+    vim.keymap.set("n", "<leader>Oa", "<cmd>OverseerQuickAction<cr>", { desc = "Quick action" })
+    vim.keymap.set("n", "<leader>Ob", "<cmd>OverseerBuild<cr>", { desc = "Build task" })
+    vim.keymap.set("n", "<leader>Oc", "<cmd>OverseerClearCache<cr>", { desc = "Clear cache" })
 
     -- Security scanning shortcuts
-    vim.keymap.set("n", "<leader>rst", "<cmd>TrivyScan<cr>", { desc = "Run trivy security scan" })
-    vim.keymap.set("n", "<leader>rsf", "<cmd>TfsecScan<cr>", { desc = "Run tfsec Terraform scan" })
+    vim.keymap.set("n", "<leader>Ost", "<cmd>TrivyScan<cr>", { desc = "Run trivy security scan" })
+    vim.keymap.set("n", "<leader>Osf", "<cmd>TfsecScan<cr>", { desc = "Run tfsec Terraform scan" })
 
     -- Debug commands to see raw output
     vim.api.nvim_create_user_command("TrivyDebug", function()

@@ -1,0 +1,114 @@
+name: Validate Neovim Config
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "**.lua"
+      - "init.lua"
+      - ".github/workflows/validate.yml"
+  pull_request:
+    branches: [main, master]
+    paths:
+      - "**.lua"
+      - "init.lua"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: stable
+
+      - name: Install Lua
+        uses: leafo/gh-actions-lua@v10
+        with:
+          luaVersion: "5.1"
+
+      - name: Check Lua syntax
+        run: |
+          echo "Checking Lua syntax..."
+          errors=0
+          while IFS= read -r -d '' file; do
+            if ! luac -p "$file" 2>/dev/null; then
+              echo "❌ Syntax error in: $file"
+              errors=$((errors + 1))
+            fi
+          done < <(find lua -name "*.lua" -print0)
+
+          if [ $errors -gt 0 ]; then
+            echo "Found $errors Lua syntax errors"
+            exit 1
+          fi
+          echo "✅ All Lua files have valid syntax"
+
+      - name: Validate Neovim startup
+        run: |
+          echo "Testing Neovim startup..."
+
+          # Create minimal config to test
+          export XDG_CONFIG_HOME=$(pwd)/test_config
+          export XDG_DATA_HOME=$(pwd)/test_data
+          export XDG_STATE_HOME=$(pwd)/test_state
+          export XDG_CACHE_HOME=$(pwd)/test_cache
+
+          mkdir -p "$XDG_CONFIG_HOME/nvim"
+          mkdir -p "$XDG_DATA_HOME"
+          mkdir -p "$XDG_STATE_HOME"
+          mkdir -p "$XDG_CACHE_HOME"
+
+          # Create minimal init that skips plugin installation
+          cat > "$XDG_CONFIG_HOME/nvim/init.lua" << 'EOF'
+          vim.g.mapleader = " "
+          -- Skip lazy.nvim in CI - just validate core config loads
+          require("config.options")
+          require("config.keymaps")
+          print("STARTUP_OK")
+          EOF
+          cp -r lua "$XDG_CONFIG_HOME/nvim/"
+
+          # Test startup (should be fast without plugins)
+          timeout 10 nvim --headless -c "qa!" 2>&1
+          echo "✅ Neovim startup check completed"
+
+      - name: Check for common issues
+        run: |
+          echo "Checking for common issues..."
+
+          # Check for deprecated API usage
+          if grep -r "vim.lsp.diagnostic" lua/ 2>/dev/null; then
+            echo "⚠️ Warning: Found deprecated vim.lsp.diagnostic usage"
+          fi
+
+          # Check for vim.fn.input without proper escaping
+          if grep -r 'vim.fn.input.*vim.lsp.get_client' lua/ 2>/dev/null; then
+            echo "⚠️ Warning: Found potentially unsafe input usage"
+          fi
+
+          # Check for duplicate leader key settings
+          leader_count=$(grep -r "vim.g.mapleader" lua/ init.lua 2>/dev/null | wc -l)
+          if [ "$leader_count" -gt 2 ]; then
+            echo "⚠️ Warning: mapleader set multiple times ($leader_count occurrences)"
+          fi
+
+          echo "✅ Common issues check completed"
+
+  stylua:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check formatting with StyLua
+        uses: JohnnyMorganz/stylua-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
+          args: --check lua/

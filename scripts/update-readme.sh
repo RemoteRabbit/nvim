@@ -8,15 +8,15 @@ PLUGINS_DIR="lua/plugins"
 
 # Function to get neovim version requirement
 get_nvim_version() {
-    echo "0.10.0+"
+  echo "0.10.0+"
 }
 
 # Function to count files of different types
 count_stats() {
-    local plugins=$(find "$PLUGINS_DIR" -name "*.lua" | wc -l)
-    local configs=$(find lua/config -name "*.lua" 2>/dev/null | wc -l || echo 0)
-    local templates=$(find templates -name "*" -type f 2>/dev/null | wc -l || echo 0)
-    echo "📊 **Config Stats:** $plugins plugins • $configs core configs • $templates file templates"
+  local plugins=$(find "$PLUGINS_DIR" -name "*.lua" | wc -l)
+  local configs=$(find lua/config -name "*.lua" 2>/dev/null | wc -l || echo 0)
+  local templates=$(find templates -name "*" -type f 2>/dev/null | wc -l || echo 0)
+  echo "📊 **Config Stats:** $plugins plugins • $configs core configs • $templates file templates"
 }
 
 # Create backup
@@ -24,70 +24,70 @@ cp "$README" "${README}.bak" 2>/dev/null || true
 
 # Function to count plugins
 count_plugins() {
-    find "$PLUGINS_DIR" -name "*.lua" | wc -l
+  find "$PLUGINS_DIR" -name "*.lua" | wc -l
 }
 
 # Function to extract plugin names
 get_plugin_list() {
-    echo "<!-- AUTO-GENERATED PLUGIN LIST START -->"
-    echo ""
-    echo "### Installed Plugins ($(count_plugins) total)"
-    echo ""
+  echo "<!-- AUTO-GENERATED PLUGIN LIST START -->"
+  echo ""
+  echo "### Installed Plugins ($(count_plugins) total)"
+  echo ""
 
-    # Group plugins by category based on filename
-    declare -A categories
+  # Group plugins by category based on filename
+  declare -A categories
 
-    for file in "$PLUGINS_DIR"/*.lua; do
-        if [ -f "$file" ]; then
-            filename=$(basename "$file" .lua)
+  for file in "$PLUGINS_DIR"/*.lua; do
+    if [ -f "$file" ]; then
+      filename=$(basename "$file" .lua)
 
-            # Categorize based on filename patterns
-            case "$filename" in
-                *lsp*|*mason*|*language*) category="🔧 Language & LSP" ;;
-                *git*|*fugitive*) category="📝 Git Integration" ;;
-                *telescope*|*search*|*tree*) category="🔍 Navigation & Search" ;;
-                *test*|*debug*|*dap*) category="🐛 Testing & Debugging" ;;
-                *ui*|*theme*|*color*|*catppuccin*|*bufferline*|*lualine*) category="🎨 UI & Themes" ;;
-                *treesitter*|*syntax*) category="🌳 Syntax & Parsing" ;;
-                *completion*|*cmp*|*snippet*) category="💡 Completion" ;;
-                *editor*|*autopair*|*surround*|*comment*) category="✏️ Editing" ;;
-                *productivity*|*todo*|*bookmark*) category="📋 Productivity" ;;
-                *terminal*|*tmux*) category="💻 Terminal" ;;
-                *) category="🔌 Other Plugins" ;;
-            esac
+      # Categorize based on filename patterns
+      case "$filename" in
+      *lsp* | *mason* | *language*) category="🔧 Language & LSP" ;;
+      *git* | *fugitive*) category="📝 Git Integration" ;;
+      *telescope* | *search* | *tree*) category="🔍 Navigation & Search" ;;
+      *test* | *debug* | *dap*) category="🐛 Testing & Debugging" ;;
+      *ui* | *theme* | *color* | *catppuccin* | *bufferline* | *lualine*) category="🎨 UI & Themes" ;;
+      *treesitter* | *syntax*) category="🌳 Syntax & Parsing" ;;
+      *completion* | *cmp* | *snippet*) category="💡 Completion" ;;
+      *editor* | *autopair* | *surround* | *comment*) category="✏️ Editing" ;;
+      *productivity* | *todo* | *bookmark*) category="📋 Productivity" ;;
+      *terminal* | *tmux*) category="💻 Terminal" ;;
+      *) category="🔌 Other Plugins" ;;
+      esac
 
-            # Extract main plugin repo from file
-            main_plugin=$(grep -E '^\s*"[^/]+/[^"]+",?\s*$' "$file" | head -1 | sed 's/.*"\([^"]*\)".*/\1/' || echo "$filename")
+      # Extract main plugin repo from file
+      main_plugin=$(grep -E '^\s*"[^/]+/[^"]+",?\s*$' "$file" | head -1 | sed 's/.*"\([^"]*\)".*/\1/' || echo "$filename")
 
-            if [ ! -z "${categories[$category]}" ]; then
-                categories[$category]="${categories[$category]}\n- [$main_plugin](https://github.com/$main_plugin)"
-            else
-                categories[$category]="- [$main_plugin](https://github.com/$main_plugin)"
-            fi
-        fi
-    done
+      if [ ! -z "${categories[$category]}" ]; then
+        categories[$category]="${categories[$category]}\n- [$main_plugin](https://github.com/$main_plugin)"
+      else
+        categories[$category]="- [$main_plugin](https://github.com/$main_plugin)"
+      fi
+    fi
+  done
 
-    # Output categorized plugins
-    for category in "🔧 Language & LSP" "🎨 UI & Themes" "🔍 Navigation & Search" "💡 Completion" "✏️ Editing" "📝 Git Integration" "🐛 Testing & Debugging" "📋 Productivity" "🌳 Syntax & Parsing" "💻 Terminal" "🔌 Other Plugins"; do
-        if [ ! -z "${categories[$category]}" ]; then
-            echo "#### $category"
-            echo ""
-            echo -e "${categories[$category]}"
-            echo ""
-        fi
-    done
+  # Output categorized plugins
+  for category in "🔧 Language & LSP" "🎨 UI & Themes" "🔍 Navigation & Search" "💡 Completion" "✏️ Editing" "📝 Git Integration" "🐛 Testing & Debugging" "📋 Productivity" "🌳 Syntax & Parsing" "💻 Terminal" "🔌 Other Plugins"; do
+    if [ ! -z "${categories[$category]}" ]; then
+      echo "#### $category"
+      echo ""
+      echo -e "${categories[$category]}"
+      echo ""
+    fi
+  done
 
-    echo "<!-- AUTO-GENERATED PLUGIN LIST END -->"
+  echo "<!-- AUTO-GENERATED PLUGIN LIST END -->"
 }
 
 # Update README with plugin list
 if [ -f "$README" ]; then
-    # Check if README has proper structure (not just plugin list)
-    if ! grep -q "# 🚀 Personal Neovim Configuration" "$README"; then
-        echo "Upgrading README to enhanced format..."
-        # Backup and recreate with enhanced content
-        mv "$README" "${README}.old"
-        cat > "$README" << EOF
+  # Check if README has proper structure (not just plugin list)
+  if ! grep -q "# 🚀 Personal Neovim Configuration" "$README"; then
+    echo "Upgrading README to enhanced format..."
+    # Backup and recreate with enhanced content
+    mv "$README" "${README}.old"
+    cat >"$README" <<EOF
 # 🚀 Personal Neovim Configuration
 
 > A modern, feature-rich Neovim setup built for productivity and development workflow optimization.
@@ -219,19 +219,19 @@ This configuration is released into the public domain under the [Unlicense](LICE
 ⭐ **Star this repo if you find it useful!**
 
 EOF
-        get_plugin_list >> "$README"
-        echo "Enhanced README.md with comprehensive documentation"
-    else
-        # Just update plugin list in existing enhanced README
-        sed '/<!-- AUTO-GENERATED PLUGIN LIST START -->/,/<!-- AUTO-GENERATED PLUGIN LIST END -->/d' "$README" > "${README}.tmp"
-        echo "" >> "${README}.tmp"
-        get_plugin_list >> "${README}.tmp"
-        mv "${README}.tmp" "$README"
-        echo "Updated plugin list in existing README.md"
-    fi
+    get_plugin_list >>"$README"
+    echo "Enhanced README.md with comprehensive documentation"
+  else
+    # Just update plugin list in existing enhanced README
+    sed '/<!-- AUTO-GENERATED PLUGIN LIST START -->/,/<!-- AUTO-GENERATED PLUGIN LIST END -->/d' "$README" >"${README}.tmp"
+    echo "" >>"${README}.tmp"
+    get_plugin_list >>"${README}.tmp"
+    mv "${README}.tmp" "$README"
+    echo "Updated plugin list in existing README.md"
+  fi
 else
-    # Create new README if it doesn't exist
-    cat > "$README" << EOF
+  # Create new README if it doesn't exist
+  cat >"$README" <<EOF
 # 🚀 Personal Neovim Configuration
 
 > A modern, feature-rich Neovim setup built for productivity and development workflow optimization.
@@ -364,9 +364,9 @@ This configuration is released into the public domain under the [Unlicense](LICE
 
 EOF
 
-    get_plugin_list >> "$README"
+  get_plugin_list >>"$README"
 
-    echo "Created enhanced README.md with full documentation"
+  echo "Created enhanced README.md with full documentation"
 fi
 
 # Clean up

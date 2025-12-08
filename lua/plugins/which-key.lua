@@ -13,15 +13,16 @@ return {
       {
         mode = { "n", "v" },
         -- Core groups
-        { "<leader>b", group = "Buffers/Bookmarks" },
+        { "<leader>b", group = "Buffers" },
         { "<leader>c", group = "Code/LSP" },
-        { "<leader>co", group = "Code Actions" },
-        { "<leader>cov", group = "Coverage" }, -- Fixed: matches actual keybindings
+        { "<leader>ca", group = "CodeCompanion" },
+        { "<leader>co", group = "Coverage" },
         { "<leader>d", group = "Debug" },
-        { "<leader>D", group = "Database" }, -- Added: missing DBUI
+        { "<leader>dp", group = "Debug Python" },
+        { "<leader>D", group = "Database" },
         { "<leader>f", group = "File/Find" },
 
-        -- Git ecosystem (reorganized)
+        -- Git ecosystem
         { "<leader>g", group = "Git" },
         { "<leader>gb", group = "Git Blame" },
         { "<leader>gd", group = "Git Diff" },
@@ -30,39 +31,40 @@ return {
         { "<leader>gP", group = "GitHub/GitLab PRs" },
         { "<leader>gR", group = "GitHub Repos" },
 
-        -- Go-specific (moved from git namespace)
-        { "<leader>G", group = "Go" }, -- Capital G to avoid conflict
+        -- Go-specific
+        { "<leader>G", group = "Go" },
         { "<leader>Gs", group = "Go Struct" },
         { "<leader>Gc", group = "Go Coverage" },
 
-        { "<leader>h", group = "Harpoon/Hunks" },
+        { "<leader>h", group = "Harpoon" },
+        { "<leader>i", group = "Inlay Hints" },
         { "<leader>j", group = "JQ/JSON" },
-        { "<leader>l", group = "Lazy" },
-        { "<leader>m", group = "Markdown/Minimap" },
-        { "<leader>n", group = "NPM/Packages" }, -- Added: missing package-info
+        { "<leader>l", group = "LSP Info" },
+        { "<leader>m", group = "Markdown/Table" },
+        { "<leader>n", group = "NPM/Neovim Tips" },
+        { "<leader>nt", group = "Neovim Tips" },
         { "<leader>o", group = "Outline" },
         { "<leader>p", group = "Profile/Python" },
 
-        -- Split the overloaded 'r' prefix
-        { "<leader>r", group = "Run/Tasks" }, -- Overseer, refactoring
-        { "<leader>R", group = "REST" }, -- Kulala REST client
-        { "<leader>rs", group = "Security Scans" },
+        -- Overseer/Tasks
+        { "<leader>O", group = "Overseer/Tasks" },
+        { "<leader>Os", group = "Security Scans" },
+
+        -- Refactoring
+        { "<leader>r", group = "Refactor" },
+        { "<leader>R", group = "REST" },
 
         { "<leader>s", group = "Search/Screenshot" },
 
-        -- Terraform-specific
-        { "<leader>t", group = "Test/Terminal/Terraform" },
-        { "<leader>tg", group = "Terminal/LazyGit" },
-        { "<leader>tm", group = "Terraform Modules" }, -- Added: missing
-        { "<leader>tn", group = "Test Nearest" },
-        { "<leader>tV", group = "Terraform Validation" }, -- Added: missing
+        -- Test/Terraform
+        { "<leader>t", group = "Test/Terraform" },
+        { "<leader>tm", group = "Terraform Modules" },
+        { "<leader>tr", group = "Terraform Registry" },
 
         { "<leader>u", group = "UI/Toggle" },
-        { "<leader>U", group = "Undotree" }, -- Added: missing
-        { "<leader>v", group = "Virtual Env" },
-        { "<leader>w", group = "Windows" },
-        { "<leader>x", group = "Diagnostics/Quickfix" },
-        { "<leader>y", group = "YAML" },
+        { "<leader>v", group = "Virtual Env/Review" },
+        { "<leader>w", group = "Windows/Workspace" },
+        { "<leader>x", group = "Diagnostics/Lint" },
         { "<leader>z", group = "Zen Mode" },
 
         -- Navigation
