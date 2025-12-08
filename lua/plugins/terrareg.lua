@@ -2,18 +2,14 @@ return {
   "terrareg.nvim",
   dir = "/home/remoterabbit/repos/open/terrareg",
   dependencies = {
-    "nvim-telescope/telescope.nvim",
     "nvim-lua/plenary.nvim",
   },
   config = function()
     require("terrareg").setup({
-      providers = {
-        "aws",
-        "azure",
-        "gcp",
-      },
-      debug = false,
+      debug = true,
+      ensure_installed = { "aws" },
+      keep_float_buffers = true,
     })
   end,
-  ft = { "terraform", "hcl" },
+  -- ft = { "terraform", "hcl" },
 }

@@ -1,7 +1,6 @@
 return {
   "saghen/blink.cmp",
   dependencies = { "allaman/emoji.nvim", "saghen/blink.compat", "rafamadriz/friendly-snippets" },
-  optional = true,
   version = "*",
   opts = {
     keymap = {
@@ -31,7 +30,7 @@ return {
         emoji = {
           name = "emoji",
           module = "blink.compat.source",
-          transform_items = function(ctx, items)
+          transform_items = function(_, items)
             local kind = require("blink.cmp.types").CompletionItemKind.Text
             for i = 1, #items do
               items[i].kind = kind
@@ -40,9 +39,7 @@ return {
           end,
         },
         lsp = {
-          -- Enhanced LSP completion for Terraform
-          transform_items = function(ctx, items)
-            -- Show more details for Terraform module variables
+          transform_items = function(_, items)
             if vim.bo.filetype == "terraform" then
               for i = 1, #items do
                 local item = items[i]

@@ -2,6 +2,10 @@
 local M = {}
 
 -- Function to generate PR/MR description (adapted from octo config)
+-- @param opts table Options table
+-- @param opts.is_gitlab boolean Whether this is a GitLab MR (default: false)
+-- @return string|nil The generated description, or nil if cancelled/error
+-- @return string|nil Error message if failed, or nil if successful
 function M.generate_description(opts)
   opts = opts or {}
   local is_gitlab = opts.is_gitlab or false
@@ -58,6 +62,8 @@ function M.generate_description(opts)
   local total_commits = #commit_subjects
 
   -- Helper function to add issue/PR links and tickets
+  -- @param text string Text to process
+  -- @return string Processed text with links
   local function add_links(text)
     if repo_path ~= "" then
       if is_gitlab then
@@ -251,7 +257,7 @@ function M.generate_description(opts)
 
     if stats_line and stats_line ~= "none" then
       total_files = tonumber(stats_line:match("(%d+) files? changed")) or 0
-      -- Handle formats like "38 insertions(+)" or just "38 insertions"
+      -- Handle formats like "38 insertions(+))" or just "38 insertions"
       total_insertions = tonumber(stats_line:match("(%d+) insertions?%(?%+?%)?")) or 0
       total_deletions = tonumber(stats_line:match("(%d+) deletions?%(?%-?%)?")) or 0
     end

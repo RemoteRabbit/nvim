@@ -47,6 +47,14 @@ return {
       enabled = true,
     },
     -----
+    picker = {
+      enabled = true,
+    },
+    -----
+    explorer = {
+      enabled = true,
+    },
+    -----
     indent = {
       enabled = true,
     },
@@ -78,21 +86,34 @@ return {
     },
   },
   keys = {
-    -- {
-    --   "<leader>st",
-    --   function()
-    --     Snacks.picker.todo_comments()
-    --   end,
-    --   desc = "Todo",
-    -- },
-    -- {
-    --   "<leader>sT",
-    --   function()
-    --     Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } })
-    --   end,
-    --   desc = "Todo/Fix/Fixme",
-    -- },
-    --
+    {
+      "<leader>ff",
+      function()
+        Snacks.picker.files()
+      end,
+      desc = "Find Files",
+    },
+    {
+      "<leader>fg",
+      function()
+        Snacks.picker.grep()
+      end,
+      desc = "Grep",
+    },
+    {
+      "<leader>fb",
+      function()
+        Snacks.picker.buffers()
+      end,
+      desc = "Buffers",
+    },
+    {
+      "<leader>fr",
+      function()
+        Snacks.picker.recent()
+      end,
+      desc = "Recent Files",
+    },
     {
       "<leader>.",
       function()

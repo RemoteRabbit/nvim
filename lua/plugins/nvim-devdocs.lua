@@ -1,5 +1,6 @@
 return {
   "warpaint9299/nvim-devdocs",
+  enabled = false,
   dependencies = {
     "nvim-lua/plenary.nvim",
     "nvim-telescope/telescope.nvim",

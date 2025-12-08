@@ -19,7 +19,7 @@ return {
         lsp_cfg = true,
         lsp_gofumpt = true,
         lsp_on_attach = true,
-        lsp_keymaps = true,
+        lsp_keymaps = false,
         lsp_codelens = true,
         diagnostic = {
           hdlr = false,
@@ -28,7 +28,7 @@ return {
           signs = true,
           update_in_insert = false,
         },
-        lsp_document_formatting = true,
+        lsp_document_formatting = false, -- Let conform.nvim handle formatting
         lsp_inlay_hints = {
           enable = true,
           only_current_line = false,
@@ -44,16 +44,6 @@ return {
         run_in_floaterm = false,
         luasnip = true,
         iferr_vertical_shift = 4,
-      })
-
-      -- Auto commands
-      local format_sync_grp = vim.api.nvim_create_augroup("GoImport", {})
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        pattern = "*.go",
-        callback = function()
-          require("go.format").goimport()
-        end,
-        group = format_sync_grp,
       })
 
       -- Keymaps (using <leader>G to avoid conflict with git)
