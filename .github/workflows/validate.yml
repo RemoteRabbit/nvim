@@ -64,8 +64,9 @@ jobs:
           mkdir -p "$XDG_STATE_HOME"
           mkdir -p "$XDG_CACHE_HOME"
 
-          # Copy config
-          cp -r . "$XDG_CONFIG_HOME/nvim/"
+          # Copy config (exclude test directories to avoid self-copy)
+          cp -r lua init.lua "$XDG_CONFIG_HOME/nvim/"
+          [ -f lazy-lock.json ] && cp lazy-lock.json "$XDG_CONFIG_HOME/nvim/" || true
 
           # Test startup (allow plugin download to fail in CI)
           timeout 60 nvim --headless -c "lua print('STARTUP_OK')" -c "qa!" 2>&1 || true
