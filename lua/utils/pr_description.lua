@@ -1,6 +1,8 @@
 -- Shared PR/MR description generator for both GitHub (octo) and GitLab
 local M = {}
 
+-- Adding this comment to use for testing
+
 -- Function to generate PR/MR description (adapted from octo config)
 -- @param opts table Options table
 -- @param opts.is_gitlab boolean Whether this is a GitLab MR (default: false)
