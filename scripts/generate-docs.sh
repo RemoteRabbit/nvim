@@ -80,10 +80,23 @@ EOF
 # Extract keybindings from all Lua files
 echo "## Plugin Keybindings" >> "$DOCS_DIR/KEYBINDINGS.md"
 echo "" >> "$DOCS_DIR/KEYBINDINGS.md"
+echo "| Key | Description | Source |" >> "$DOCS_DIR/KEYBINDINGS.md"
+echo "|-----|-------------|--------|" >> "$DOCS_DIR/KEYBINDINGS.md"
 
-find lua/ -name "*.lua" -exec grep -Hn "keymap\.set\|vim\.keymap\.set" {} \; | \
-    sed 's/.*keymap\.set("[^"]*",\s*"[^"]*",.*desc\s*=\s*"\([^"]*\)".*/- \1/' | \
-    grep -v "^-\s*$" | sort -u >> "$DOCS_DIR/KEYBINDINGS.md" 2>/dev/null || echo "- No keybindings with descriptions found" >> "$DOCS_DIR/KEYBINDINGS.md"
+# Extract keybindings with their descriptions and source files with line numbers
+for file in $(find lua/ -name "*.lua"); do
+    # Get line numbers where keymap.set( starts (with opening paren to be precise)
+    grep -nE 'keymap\.set\(' "$file" 2>/dev/null | while read -r line; do
+        lineno=$(echo "$line" | cut -d: -f1)
+        # Read from that line and join next few lines to capture multi-line definitions
+        content=$(sed -n "${lineno},$((lineno+5))p" "$file" | tr '\n' ' ')
+        if echo "$content" | grep -qE 'desc\s*=\s*"[^"]+"'; then
+            key=$(echo "$content" | sed -E 's/.*keymap\.set\(\s*"[^"]*"\s*,\s*"([^"]+)".*/\1/')
+            desc=$(echo "$content" | sed -E 's/.*desc\s*=\s*"([^"]+)".*/\1/')
+            echo "| \`$key\` | $desc | [$file#L$lineno]($file#L$lineno) |"
+        fi
+    done
+done | sort -u -t'|' -k2,3 >> "$DOCS_DIR/KEYBINDINGS.md" 2>/dev/null || echo "| - | No keybindings found | - |" >> "$DOCS_DIR/KEYBINDINGS.md"
 
 echo ""
 echo "Generated documentation in $DOCS_DIR/"
