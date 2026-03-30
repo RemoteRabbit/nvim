@@ -69,8 +69,7 @@ return {
     vim.keymap.set("n", "<leader>gPr", function()
       if is_gitlab_repo() then
         -- Generate description first, then create MR
-        local pr_desc = require("utils.pr_description")
-        local description, error = pr_desc.generate_description({ is_gitlab = true })
+        local description, error = require("pr-description").generate_description({ is_gitlab = true })
         if error then
           print("Error generating description: " .. error)
           require("gitlab").create_mr() -- Fallback to basic creation
@@ -84,8 +83,7 @@ return {
         end
       else
         -- Generate description for GitHub PR too
-        local pr_desc = require("utils.pr_description")
-        local description, error = pr_desc.generate_description({ is_gitlab = false })
+        local description, error = require("pr-description").generate_description({ is_gitlab = false })
         if error then
           print("Error generating description: " .. error)
           vim.cmd("Octo pr create") -- Fallback to basic creation
@@ -103,8 +101,7 @@ return {
     -- Add description generator keymap for GitLab
     vim.keymap.set("n", "<leader>gPg", function()
       if is_gitlab_repo() then
-        local pr_desc = require("utils.pr_description")
-        local description, error = pr_desc.generate_description({ is_gitlab = true })
+        local description, error = require("pr-description").generate_description({ is_gitlab = true })
         if error then
           print("Error: " .. error)
         elseif description then
@@ -118,8 +115,7 @@ return {
           print("Generated GitLab MR description (copied to clipboard)")
         end
       else
-        local pr_desc = require("utils.pr_description")
-        local description, error = pr_desc.generate_description({ is_gitlab = false })
+        local description, error = require("pr-description").generate_description({ is_gitlab = false })
         if error then
           print("Error: " .. error)
         elseif description then
