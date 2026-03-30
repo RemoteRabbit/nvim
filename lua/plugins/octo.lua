@@ -184,15 +184,12 @@ return {
     -- Quick checkout (moved to avoid gco conflict)
     vim.keymap.set("n", "<leader>gCo", ":Octo pr checkout<CR>", { desc = "Checkout PR" })
 
-    -- Use shared PR description generator
-    local pr_desc = require("utils.pr_description")
-
     -- Smart PR creation using conventional commits
     vim.keymap.set("n", "<leader>gPn", function()
       local branch = vim.fn.system("git branch --show-current"):gsub("\n", "")
       print("Creating PR for branch: " .. branch)
 
-      local description, err = pr_desc.generate_description()
+      local description, err = require("pr-description").generate_description()
       if err then
         print("❌ " .. err)
         return

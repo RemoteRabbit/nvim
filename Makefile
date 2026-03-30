@@ -30,10 +30,10 @@ help:
 #------------------------------------------------------------------------------
 
 pr-description:
-	@nvim --headless -c "lua print(require('utils.pr_description').generate_description())" -c "qa"
+	@nvim --headless -c "lua print(require('pr-description').generate_description())" -c "qa"
 
 mr-description:
-	@nvim --headless -c "lua print(require('utils.pr_description').generate_description({is_gitlab=true}))" -c "qa"
+	@nvim --headless -c "lua print(require('pr-description').generate_description({is_gitlab=true}))" -c "qa"
 
 # Aliases for backwards compatibility
 github: pr-description
