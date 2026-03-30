@@ -250,14 +250,14 @@ return {
       desc = "Rename File",
     },
     {
-      "]]",
+      "]w",
       function()
         Snacks.words.jump(vim.v.count1)
       end,
       desc = "Next Reference",
     },
     {
-      "[[",
+      "[w",
       function()
         Snacks.words.jump(-vim.v.count1)
       end,
@@ -268,13 +268,19 @@ return {
       function()
         Snacks.zen()
       end,
+      desc = "Zen Mode",
     },
     {
       "<leader>ee",
       function()
         Snacks.explorer.open()
       end,
+      desc = "Explorer",
     },
+    { "<S-h>", "<cmd>bprevious<cr>", desc = "Prev Buffer" },
+    { "<S-l>", "<cmd>bnext<cr>", desc = "Next Buffer" },
+    { "[b", "<cmd>bprevious<cr>", desc = "Prev Buffer" },
+    { "]b", "<cmd>bnext<cr>", desc = "Next Buffer" },
   },
   init = function()
     vim.api.nvim_create_autocmd("User", {

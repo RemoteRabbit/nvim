@@ -80,10 +80,7 @@ return {
     },
 
     signature = {
-      enabled = true,
-      window = {
-        border = "rounded",
-      },
+      enabled = false,
     },
   },
   opts_extend = { "sources.default" },
