@@ -8,7 +8,7 @@ return {
     vim.g.table_mode_header_fillchar = "-"
 
     -- Enable table mode for markdown files by default
-    vim.g.table_mode_map_prefix = "<Leader>t"
+    vim.g.table_mode_map_prefix = "<Leader>m"
 
     -- Disable default mappings to avoid conflicts
     vim.g.table_mode_disable_mappings = 0
@@ -26,14 +26,5 @@ return {
     vim.g.table_mode_motion_right_map = "<Bar><Right>"
 
     vim.keymap.set("n", "<leader>mt", ":TableModeToggle<CR>", { desc = "Toggle Table Mode" })
-    vim.keymap.set("n", "<leader>ma", ":TableModeRealign<CR>", { desc = "Realign Table" })
-
-    -- Auto-enable table mode for markdown files
-    vim.api.nvim_create_autocmd("FileType", {
-      pattern = "markdown",
-      callback = function()
-        vim.cmd("TableModeEnable")
-      end,
-    })
   end,
 }

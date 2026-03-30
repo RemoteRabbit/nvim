@@ -3,6 +3,7 @@ return {
     -- Dependency analysis
     "vuki656/package-info.nvim",
     dependencies = { "MunifTanjim/nui.nvim" },
+    event = { "BufRead package.json" },
     config = function()
       require("package-info").setup({
         highlight = {
@@ -36,7 +37,7 @@ return {
       )
       vim.keymap.set(
         "n",
-        "<leader>nt",
+        "<leader>nT",
         require("package-info").toggle,
         { desc = "Toggle dependency versions", silent = true }
       )

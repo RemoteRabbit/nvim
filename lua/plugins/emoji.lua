@@ -6,7 +6,6 @@ return {
     "nvim-lua/plenary.nvim",
     "saghen/blink.cmp",
     "nvim-telescope/telescope.nvim",
-    "ibhagwan/fzf-lua",
   },
   opts = {
     enable_cmp_integration = true,
