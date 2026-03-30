@@ -1,3 +1,23 @@
-.elixir-tools
+# Elixir tools (auto-generated)
+.elixir-tools/
+lua/plugins/.elixir-tools/
 erl_crash.dump
-lazy-lock.json
+
+# Neovim generated
+plugin/packer_compiled.lua
+spell/
+
+# Caches
+.aider.tags.cache.v4/
+.luac
+*.swp
+*.swo
+*~
+tags
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Profiling output
+profile.json

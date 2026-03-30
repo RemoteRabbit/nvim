@@ -1,5 +1,6 @@
 -- set leader key to space (must be before lazy setup)
 vim.g.mapleader = " "
+vim.g.maplocalleader = ","
 
 require("config.options")
 require("config.lazy")

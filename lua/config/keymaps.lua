@@ -1,9 +1,7 @@
 local keymap = vim.keymap -- for conciseness
 
 -- General Keymaps -------------------
-keymap.set("n", "<leader>l", ":Lazy<CR>", { desc = "Lazy" })
--- Removed: conflicts with snacks git keybindings
--- keymap.set("n", "<leader>gl", ":LazyGit<CR>", { desc = "LazyGit" })
+keymap.set("n", "<leader>L", ":Lazy<CR>", { desc = "Lazy" })
 keymap.set("n", "<leader>pm", ":Mason<CR>", { desc = "Mason" })
 
 keymap.set("n", "<leader>cw", ":%s/<C-r><C-w>//g<Left><Left>", { desc = "Change word" })
@@ -15,8 +13,8 @@ keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 keymap.set("n", "x", '"_x')
 
 -- increment/decrement numbers
-keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
-keymap.set("n", "<leader>=", "<C-x>", { desc = "Decrement number" }) -- decrement (changed from <leader>- to avoid conflict)
+keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" })
+keymap.set("n", "<leader>=", "<C-x>", { desc = "Decrement number" })
 
 -- windows
 keymap.set("n", "<leader>ww", "<C-W>p", { desc = "Other window", remap = true })
