@@ -13,7 +13,6 @@ return {
         enable = true,
       },
       indent = { enable = true },
-      autotag = { enable = true },
       ensure_installed = {
         "bash",
         "css",
@@ -26,6 +25,7 @@ return {
         "gitignore",
         "go",
         "gpg",
+        "hcl",
         "html",
         "javascript",
         "json",
@@ -38,14 +38,13 @@ return {
         "sql",
         "ssh_config",
         "terraform",
+        "toml",
         "vim",
         "yaml",
       },
-      context_commentstring = {
-        enable = true,
-        enable_autocmd = false,
-      },
       auto_install = true,
     })
+
+    require("nvim-ts-autotag").setup()
   end,
 }

@@ -1,6 +1,7 @@
 return {
   {
     "RRethy/vim-illuminate",
+    event = { "BufReadPost", "BufNewFile" },
     config = function()
       require("illuminate").configure({
         providers = {
@@ -13,8 +14,8 @@ return {
         filetypes_denylist = {
           "dirvish",
           "fugitive",
-          "NvimTree",
           "Trouble",
+          "snacks_dashboard",
         },
         filetypes_allowlist = {},
         modes_denylist = {},

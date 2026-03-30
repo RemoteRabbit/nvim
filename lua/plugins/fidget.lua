@@ -1,5 +1,6 @@
 return {
   "j-hui/fidget.nvim",
+  event = "LspAttach",
   config = function()
     require("fidget").setup({
       progress = {
@@ -73,11 +74,7 @@ return {
           relative = "editor",
         },
       },
-      integration = {
-        ["nvim-tree"] = {
-          enable = true,
-        },
-      },
+      integration = {},
       logger = {
         level = vim.log.levels.WARN,
         max_size = 10000,

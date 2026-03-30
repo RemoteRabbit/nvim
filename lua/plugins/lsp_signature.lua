@@ -2,6 +2,7 @@ return {
   {
     -- Enhanced signature help
     "ray-x/lsp_signature.nvim",
+    event = "LspAttach",
     config = function()
       require("lsp_signature").setup({
         bind = true,
@@ -39,15 +40,6 @@ return {
           local buftype = vim.bo[bufnr].buftype
           local filetype = vim.bo[bufnr].filetype
           return buftype ~= "terminal" and filetype ~= "toggleterm"
-        end,
-        -- Enhanced signature help with better UX
-        on_trigger = function()
-          -- Add custom behavior when signature help is triggered
-          vim.notify("Signature help triggered", vim.log.levels.INFO, { title = "LSP" })
-        end,
-        on_close = function()
-          -- Add custom behavior when signature help is closed
-          vim.notify("Signature help closed", vim.log.levels.INFO, { title = "LSP" })
         end,
       })
     end,

@@ -149,15 +149,6 @@ return {
   config = function(_, opts)
     require("render-markdown").setup(opts)
 
-    -- Toggle rendering
-    vim.keymap.set("n", "<leader>mr", ":RenderMarkdown toggle<CR>", { desc = "Toggle Markdown Rendering" })
-
-    -- Enable by default for markdown files
-    vim.api.nvim_create_autocmd("FileType", {
-      pattern = "markdown",
-      callback = function()
-        vim.cmd("RenderMarkdown enable")
-      end,
-    })
+    vim.keymap.set("n", "<leader>mR", ":RenderMarkdown toggle<CR>", { desc = "Toggle Markdown Rendering" })
   end,
 }

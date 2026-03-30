@@ -32,19 +32,23 @@ return {
         operators = {},
       },
       integrations = {
-        alpha = true,
-        cmp = true,
+        aerial = true,
+        blink_cmp = true,
+        diffview = true,
+        fidget = true,
         gitsigns = true,
-        nvimtree = {
-          enabled = true,
-          show_root = true,
-        },
+        harpoon = true,
+        lsp_trouble = true,
+        mason = true,
+        neotest = true,
+        snacks = true,
         telescope = {
           enabled = true,
         },
         treesitter = true,
         notify = true,
         semantic_tokens = true,
+        which_key = true,
       },
       custom_highlights = function(colors)
         return {

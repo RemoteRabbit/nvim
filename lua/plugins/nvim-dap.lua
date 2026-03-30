@@ -1,5 +1,10 @@
 return {
   "mfussenegger/nvim-dap",
+  cmd = { "DapContinue", "DapToggleBreakpoint" },
+  keys = {
+    { "<leader>db", desc = "Toggle Breakpoint" },
+    { "<leader>dc", desc = "Continue/Start Debugging" },
+  },
   dependencies = {
     "rcarriga/nvim-dap-ui",
     "nvim-neotest/nvim-nio",
@@ -30,24 +35,5 @@ return {
     vim.keymap.set("n", "<leader>dl", dap.run_last, { desc = "Run Last" })
     vim.keymap.set("n", "<leader>dt", dap.terminate, { desc = "Terminate" })
     vim.keymap.set("n", "<leader>du", dapui.toggle, { desc = "Toggle DAP UI" })
-
-    -- Basic Python configuration (modify as needed)
-    dap.adapters.python = {
-      type = "executable",
-      command = "python",
-      args = { "-m", "debugpy.adapter" },
-    }
-
-    dap.configurations.python = {
-      {
-        type = "python",
-        request = "launch",
-        name = "Launch file",
-        program = "${file}",
-        pythonPath = function()
-          return "/usr/bin/python3"
-        end,
-      },
-    }
   end,
 }

@@ -1,6 +1,6 @@
 return {
   "nvim-telescope/telescope.nvim",
-  tag = "0.1.8",
+  branch = "0.1.x",
   dependencies = {
     "nvim-lua/plenary.nvim",
     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
@@ -11,7 +11,6 @@ return {
     local telescope = require("telescope")
     local actions = require("telescope.actions")
     local open_with_trouble = require("trouble.sources.telescope").open
-    local add_to_trouble = require("trouble.sources.telescope").add
 
     telescope.setup({
       defaults = {
@@ -41,11 +40,5 @@ return {
     vim.keymap.set("n", "<leader>fc", function()
       require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
     end, { desc = "Config Files" })
-    vim.keymap.set("n", "<leader>fs", function()
-      require("telescope.builtin").lsp_document_symbols()
-    end, { desc = "Document Symbols" })
-    vim.keymap.set("n", "<leader>fS", function()
-      require("telescope.builtin").lsp_workspace_symbols()
-    end, { desc = "Workspace Symbols" })
   end,
 }

@@ -27,7 +27,7 @@ return {
           return nil
         end
         return {
-          lsp_fallback = true,
+          lsp_format = "fallback",
           timeout_ms = 500,
         }
       end,

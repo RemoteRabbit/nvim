@@ -1,13 +1,15 @@
 return {
   "stevearc/overseer.nvim",
+  cmd = { "OverseerRun", "OverseerToggle", "OverseerQuickAction", "OverseerBuild", "OverseerClearCache" },
+  keys = {
+    { "<leader>Or", desc = "Run task" },
+    { "<leader>Ot", desc = "Toggle task list" },
+  },
   config = function()
     require("overseer").setup({
       templates = { "builtin" },
       strategy = {
-        "toggleterm",
-        direction = "horizontal",
-        autos_croll = true,
-        quit_on_exit = "success",
+        "terminal",
       },
       component_aliases = {
         default = {
@@ -247,7 +249,7 @@ return {
       if current_file and current_file ~= "" then
         cwd = vim.fn.fnamemodify(current_file, ":h")
       end
-      vim.cmd("cd " .. cwd)
+      vim.cmd("lcd " .. vim.fn.fnameescape(cwd))
       vim.cmd("term trivy fs --format table .")
     end, {})
 
@@ -257,7 +259,7 @@ return {
       if current_file and current_file ~= "" then
         cwd = vim.fn.fnamemodify(current_file, ":h")
       end
-      vim.cmd("cd " .. cwd)
+      vim.cmd("lcd " .. vim.fn.fnameescape(cwd))
       vim.cmd("term tfsec . --format default --no-color")
     end, {})
   end,

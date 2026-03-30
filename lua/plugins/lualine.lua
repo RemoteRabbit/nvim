@@ -1,5 +1,6 @@
 return {
   "nvim-lualine/lualine.nvim",
+  event = "VeryLazy",
   config = function()
     local function lsp_status()
       local clients = vim.lsp.get_clients({ bufnr = 0 })
@@ -21,37 +22,6 @@ return {
         end
       end
       return ""
-    end
-
-    local function diagnostics_count()
-      local diagnostics = vim.diagnostic.get(0)
-      local count = { errors = 0, warnings = 0, info = 0, hints = 0 }
-      for _, diagnostic in ipairs(diagnostics) do
-        if diagnostic.severity == vim.diagnostic.severity.ERROR then
-          count.errors = count.errors + 1
-        elseif diagnostic.severity == vim.diagnostic.severity.WARN then
-          count.warnings = count.warnings + 1
-        elseif diagnostic.severity == vim.diagnostic.severity.INFO then
-          count.info = count.info + 1
-        elseif diagnostic.severity == vim.diagnostic.severity.HINT then
-          count.hints = count.hints + 1
-        end
-      end
-
-      local result = ""
-      if count.errors > 0 then
-        result = result .. " " .. count.errors
-      end
-      if count.warnings > 0 then
-        result = result .. " " .. count.warnings
-      end
-      if count.info > 0 then
-        result = result .. " " .. count.info
-      end
-      if count.hints > 0 then
-        result = result .. "󰌵 " .. count.hints
-      end
-      return result
     end
 
     require("lualine").setup({
@@ -81,7 +51,7 @@ return {
           { python_env, color = { fg = "#98be65" } },
         },
         lualine_x = {
-          { diagnostics_count, color = { fg = "#ff6c6b" } },
+          "diagnostics",
           { lsp_status, color = { fg = "#51afef" } },
           "encoding",
           "fileformat",

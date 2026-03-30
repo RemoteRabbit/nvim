@@ -2,6 +2,7 @@ return {
   {
     -- Code metrics and complexity analysis
     "mfussenegger/nvim-lint",
+    event = { "BufReadPost", "BufNewFile" },
     config = function()
       require("lint").linters_by_ft = {
         python = { "ruff", "mypy" },
@@ -34,7 +35,7 @@ return {
         end,
       })
 
-      vim.keymap.set("n", "<leader>xl", function()
+      vim.keymap.set("n", "<leader>xr", function()
         require("lint").try_lint()
       end, { desc = "Run linting" })
     end,

@@ -2,6 +2,7 @@ return {
   {
     -- Advanced git analysis
     "sindrets/diffview.nvim",
+    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory" },
     config = function()
       require("diffview").setup({
         diff_binaries = false,

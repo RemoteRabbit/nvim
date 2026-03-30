@@ -113,10 +113,25 @@ return {
           vim.cmd("new")
           vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(description, "\n"))
           vim.bo.filetype = "markdown"
+          vim.bo.buftype = "nofile"
+          vim.bo.bufhidden = "wipe"
           print("Generated GitLab MR description (copied to clipboard)")
         end
       else
-        vim.cmd("Octo pr create --template")
+        local pr_desc = require("utils.pr_description")
+        local description, error = pr_desc.generate_description({ is_gitlab = false })
+        if error then
+          print("Error: " .. error)
+        elseif description then
+          vim.fn.setreg("+", description)
+          vim.fn.setreg("*", description)
+          vim.cmd("new")
+          vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(description, "\n"))
+          vim.bo.filetype = "markdown"
+          vim.bo.buftype = "nofile"
+          vim.bo.bufhidden = "wipe"
+          print("Generated PR description (copied to clipboard)")
+        end
       end
     end, { desc = "Generate PR/MR Description" })
 
@@ -201,38 +216,6 @@ return {
         vim.cmd("Octo pr merge")
       end
     end, { desc = "Merge PR/MR" })
-
-    -- Issue management (if gitlab.nvim supports issues in future)
-    -- For now, we'll create placeholders that open GitLab in browser
-    vim.keymap.set("n", "<leader>gIl", function()
-      local url = vim.fn.system("git config --get remote.origin.url"):gsub("\n", "")
-      if url:match("gitlab") then
-        local repo_url = url:gsub("%.git$", ""):gsub("git@", "https://"):gsub("gitlab%.com:", "gitlab.com/")
-        vim.fn.system("xdg-open " .. repo_url .. "/-/issues 2>/dev/null &")
-      else
-        print("Not a GitLab repository")
-      end
-    end, { desc = "List Issues (Browser)" })
-    vim.keymap.set("n", "<leader>gIn", function()
-      local url = vim.fn.system("git config --get remote.origin.url"):gsub("\n", "")
-      if url:match("gitlab") then
-        local repo_url = url:gsub("%.git$", ""):gsub("git@", "https://"):gsub("gitlab%.com:", "gitlab.com/")
-        vim.fn.system("xdg-open " .. repo_url .. "/-/issues/new 2>/dev/null &")
-      else
-        print("Not a GitLab repository")
-      end
-    end, { desc = "New Issue (Browser)" })
-
-    -- Repository management
-    vim.keymap.set("n", "<leader>gRb", function()
-      local url = vim.fn.system("git config --get remote.origin.url"):gsub("\n", "")
-      if url:match("gitlab") then
-        local repo_url = url:gsub("%.git$", ""):gsub("git@", "https://"):gsub("gitlab%.com:", "gitlab.com/")
-        vim.fn.system("xdg-open " .. repo_url .. " 2>/dev/null &")
-      else
-        print("Not a GitLab repository")
-      end
-    end, { desc = "Open Repo in Browser" })
 
     -- Pipeline management
     vim.keymap.set("n", "<leader>gPp", function()

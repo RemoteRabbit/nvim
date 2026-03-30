@@ -170,8 +170,8 @@ install_dependencies() {
             sudo apt install -y gh
 
             log_info "Installing GitLab CLI..."
-            GLAB_VERSION=$(curl -s "https://api.github.com/repos/profclems/glab/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-            curl -Lo glab.tar.gz "https://github.com/profclems/glab/releases/latest/download/glab_${GLAB_VERSION}_Linux_x86_64.tar.gz"
+            GLAB_VERSION=$(curl -s "https://api.github.com/repos/gitlab-org/cli/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+            curl -Lo glab.tar.gz "https://github.com/gitlab-org/cli/releases/latest/download/glab_${GLAB_VERSION}_Linux_x86_64.tar.gz"
             tar xf glab.tar.gz bin/glab
             sudo install bin/glab /usr/local/bin
             rm -rf glab.tar.gz bin
