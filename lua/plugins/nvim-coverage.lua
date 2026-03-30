@@ -1,6 +1,7 @@
 return {
   "andythigpen/nvim-coverage",
   dependencies = { "nvim-lua/plenary.nvim" },
+  cmd = { "Coverage", "CoverageToggle", "CoverageSummary", "CoverageLoad" },
   config = function()
     require("coverage").setup({
       commands = true,
