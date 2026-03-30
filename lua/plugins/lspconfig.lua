@@ -6,9 +6,13 @@ return {
   config = function()
     local lsp_capabilities = require("blink.cmp").get_lsp_capabilities()
 
+    -- Apply blink capabilities to all LSP servers
+    vim.lsp.config("*", {
+      capabilities = lsp_capabilities,
+    })
+
     -- Lua language server configuration
     vim.lsp.config("lua_ls", {
-      capabilities = lsp_capabilities,
       root_markers = { ".luarc.json", ".luarc.jsonc", ".luacheckrc", ".stylua.toml", "stylua.toml", ".git" },
       settings = {
         Lua = {
@@ -39,11 +43,6 @@ return {
 
     vim.lsp.enable("lua_ls")
 
-    -- Custom hover handler with rounded border
-    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-      border = "rounded",
-    })
-
     -- Diagnostic configuration
     vim.diagnostic.config({
       signs = {
@@ -62,7 +61,7 @@ return {
       update_in_insert = false,
       severity_sort = true,
       float = {
-        source = "always",
+        source = true,
         border = "rounded",
       },
     })
@@ -77,11 +76,6 @@ return {
         -- Enable inlay hints if supported
         if client and client.supports_method("textDocument/inlayHint") then
           vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-        end
-
-        -- Disable semantic tokens (use treesitter instead)
-        if client and client.supports_method("textDocument/semanticTokens/full") then
-          client.server_capabilities.semanticTokensProvider = nil
         end
 
         local bufmap = function(mode, lhs, rhs, desc)
@@ -102,19 +96,22 @@ return {
 
         -- Diagnostics
         bufmap("n", "gl", "<cmd>lua vim.diagnostic.open_float()<cr>", "Show diagnostics")
-        bufmap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Previous diagnostic")
-        bufmap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next diagnostic")
-
-        -- Toggle inlay hints
-        bufmap("n", "<leader>ih", function()
-          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
-        end, "Toggle inlay hints")
+        bufmap("n", "[d", function()
+          vim.diagnostic.jump({ count = -1 })
+        end, "Previous diagnostic")
+        bufmap("n", "]d", function()
+          vim.diagnostic.jump({ count = 1 })
+        end, "Next diagnostic")
 
         -- Document symbols (outline view)
-        bufmap("n", "<leader>ds", "<cmd>Telescope lsp_document_symbols<cr>", "Document symbols")
+        bufmap("n", "<leader>ls", function()
+          Snacks.picker.lsp_symbols()
+        end, "Document symbols")
 
         -- Workspace symbols (project-wide symbol search)
-        bufmap("n", "<leader>ws", "<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace symbols")
+        bufmap("n", "<leader>lw", function()
+          Snacks.picker.lsp_workspace_symbols()
+        end, "Workspace symbols")
 
         -- Code lens
         bufmap("n", "<leader>cl", "<cmd>lua vim.lsp.codelens.run()<cr>", "Run code lens")

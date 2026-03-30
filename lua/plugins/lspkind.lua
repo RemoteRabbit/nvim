@@ -1,5 +1,6 @@
 return {
   "onsails/lspkind.nvim",
+  event = "LspAttach",
   config = function()
     require("lspkind").init({
       mode = "symbol_text",
