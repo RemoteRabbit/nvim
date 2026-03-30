@@ -168,7 +168,7 @@ return {
 
     -- GitHub-specific PR creation methods (only available for GitHub)
     vim.keymap.set("n", "<leader>gPt", ":Octo pr create --template<CR>", { desc = "Create PR with Template" })
-    vim.keymap.set("n", "<leader>gPd", ":Octo pr create --draft<CR>", { desc = "Create Draft PR" })
+    vim.keymap.set("n", "<leader>gPD", ":Octo pr create --draft<CR>", { desc = "Create Draft PR" })
 
     -- Issue management
     vim.keymap.set("n", "<leader>gIl", ":Octo issue list<CR>", { desc = "List Issues" })
@@ -188,7 +188,7 @@ return {
     local pr_desc = require("utils.pr_description")
 
     -- Smart PR creation using conventional commits
-    vim.keymap.set("n", "<leader>gPm", function()
+    vim.keymap.set("n", "<leader>gPn", function()
       local branch = vim.fn.system("git branch --show-current"):gsub("\n", "")
       print("Creating PR for branch: " .. branch)
 
@@ -241,29 +241,9 @@ return {
           print("❌ Failed to create temp file for PR body")
         end
       end
-    end, { desc = "Smart PR Creation with Conventional Commits" })
+    end, { desc = "New PR with Conventional Commits" })
 
-    -- Generate PR description only (copy to clipboard)
-    vim.keymap.set("n", "<leader>gPg", function()
-      local branch = vim.fn.system("git branch --show-current"):gsub("\n", "")
-      print("Generating PR description for branch: " .. branch)
-
-      local description, err = pr_desc.generate_description()
-      if err then
-        print("❌ " .. err)
-        return
-      end
-
-      vim.fn.setreg("+", description)
-      vim.fn.setreg("*", description)
-
-      vim.cmd("new")
-      vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(description, "\n"))
-      vim.bo.filetype = "markdown"
-      vim.bo.buftype = "nofile"
-      vim.bo.bufhidden = "wipe"
-
-      print("✅ PR description generated and copied to clipboard!")
-    end, { desc = "Generate PR Description (copy to clipboard)" })
+    -- Note: <leader>gPg (Generate PR/MR Description) is defined in gitlab.lua
+    -- with is_gitlab_repo() detection to handle both GitHub and GitLab
   end,
 }

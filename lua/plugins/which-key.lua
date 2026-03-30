@@ -15,7 +15,7 @@ return {
         -- Core groups
         { "<leader>b", group = "Buffers" },
         { "<leader>c", group = "Code/LSP" },
-        { "<leader>ca", group = "CodeCompanion" },
+        { "<leader>cA", group = "CodeCompanion" },
         { "<leader>co", group = "Coverage" },
         { "<leader>d", group = "Debug" },
         { "<leader>dp", group = "Debug Python" },
@@ -24,9 +24,6 @@ return {
 
         -- Git ecosystem
         { "<leader>g", group = "Git" },
-        { "<leader>gb", group = "Git Blame" },
-        { "<leader>gd", group = "Git Diff" },
-        { "<leader>gh", group = "Git History" },
         { "<leader>gI", group = "GitHub Issues" },
         { "<leader>gP", group = "GitHub/GitLab PRs" },
         { "<leader>gR", group = "GitHub Repos" },
@@ -37,7 +34,7 @@ return {
         { "<leader>Gc", group = "Go Coverage" },
 
         { "<leader>h", group = "Harpoon" },
-        { "<leader>i", group = "Inlay Hints" },
+
         { "<leader>j", group = "JQ/JSON" },
         { "<leader>l", group = "LSP Info" },
         { "<leader>m", group = "Markdown/Table" },

@@ -1,6 +1,8 @@
 return {
   {
     "stevearc/aerial.nvim",
+    event = "LspAttach",
+    cmd = { "AerialToggle", "AerialNavToggle" },
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
       "nvim-tree/nvim-web-devicons",
@@ -137,8 +139,8 @@ return {
       -- Global keymaps
       vim.keymap.set("n", "<leader>oa", "<cmd>AerialToggle<CR>", { desc = "Toggle Aerial" })
       vim.keymap.set("n", "<leader>oA", "<cmd>AerialNavToggle<CR>", { desc = "Toggle Aerial Navigation" })
-      vim.keymap.set("n", "[s", "<cmd>AerialPrev<CR>", { desc = "Previous symbol" })
-      vim.keymap.set("n", "]s", "<cmd>AerialNext<CR>", { desc = "Next symbol" })
+      vim.keymap.set("n", "[S", "<cmd>AerialPrev<CR>", { desc = "Previous symbol" })
+      vim.keymap.set("n", "]S", "<cmd>AerialNext<CR>", { desc = "Next symbol" })
     end,
   },
 }

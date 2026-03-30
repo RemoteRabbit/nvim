@@ -56,11 +56,11 @@ return {
           enable = true,
           swap_next = {
             ["]p"] = "@parameter.inner",
-            ["]m"] = "@function.outer",
+            ["]s"] = "@function.outer",
           },
           swap_previous = {
             ["[p"] = "@parameter.inner",
-            ["[m"] = "@function.outer",
+            ["[s"] = "@function.outer",
           },
         },
       },
