@@ -35,3 +35,21 @@ keymap.set("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous Tab
 -- Alternative simple tab navigation
 keymap.set("n", "gt", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 keymap.set("n", "gT", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+
+-- Sesh - tmux session picker
+keymap.set("n", "<leader>fs", function()
+  vim.fn.system([[
+    tmux display-popup -E -w 55% -h 60% 'sesh connect "$(
+      sesh list | fzf \
+        --no-sort --border-label " sesh " --prompt "⚡ " \
+        --header "^a all ^t tmux ^x zoxide ^g config ^d kill ^f find" \
+        --bind "tab:down,btab:up" \
+        --bind "ctrl-a:change-prompt(⚡ )+reload(sesh list)" \
+        --bind "ctrl-t:change-prompt(🪟 )+reload(sesh list -t)" \
+        --bind "ctrl-g:change-prompt(⚙️ )+reload(sesh list -c)" \
+        --bind "ctrl-x:change-prompt(📁 )+reload(sesh list -z)" \
+        --bind "ctrl-f:change-prompt(🔎 )+reload(fd -H -d 2 -t d -E .Trash . ~)" \
+        --bind "ctrl-d:execute(tmux kill-session -t {})+change-prompt(⚡ )+reload(sesh list)"
+    )"'
+  ]])
+end, { desc = "Sesh tmux sessions" })

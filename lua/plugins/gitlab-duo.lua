@@ -1,6 +1,7 @@
 return {
   "https://gitlab.com/gitlab-org/editor-extensions/gitlab.vim.git",
   name = "gitlab-duo",
+  enabled = false,
   event = { "BufReadPre", "BufNewFile" },
   ft = {
     "go",

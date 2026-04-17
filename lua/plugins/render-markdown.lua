@@ -4,6 +4,7 @@ return {
     "nvim-treesitter/nvim-treesitter",
     "echasnovski/mini.nvim", -- for icons
   },
+  enabled = true,
   ft = { "markdown", "norg", "rmd", "org" },
   opts = {
     heading = {
@@ -75,7 +76,6 @@ return {
     },
     checkbox = {
       enabled = true,
-      position = "inline",
       unchecked = {
         icon = "󰄱 ",
         highlight = "RenderMarkdownUnchecked",
@@ -116,7 +116,6 @@ return {
       alignment_indicator = "━",
       head = "RenderMarkdownTableHead",
       row = "RenderMarkdownTableRow",
-      filler = "RenderMarkdownTableFill",
     },
     callout = {
       note = { raw = "[!NOTE]", rendered = "󰋽 Note", highlight = "RenderMarkdownInfo" },
@@ -139,12 +138,7 @@ return {
       enabled = true,
       highlight = "RenderMarkdownSign",
     },
-    math = {
-      enabled = true,
-      inline = "$",
-      block = "$$",
-      highlight = "RenderMarkdownMath",
-    },
+
   },
   config = function(_, opts)
     require("render-markdown").setup(opts)

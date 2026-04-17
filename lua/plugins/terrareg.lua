@@ -1,6 +1,7 @@
 return {
   "terrareg.nvim",
   dir = vim.fn.expand("~/repos/open/terrareg"),
+  enabled = false,
   dependencies = {
     "nvim-lua/plenary.nvim",
   },

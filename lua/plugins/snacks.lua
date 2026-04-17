@@ -44,19 +44,32 @@ return {
     },
     -----
     image = {
-      enabled = true,
+      enabled = false,
     },
     -----
     picker = {
       enabled = true,
+      hidden = true,
     },
     -----
     explorer = {
       enabled = true,
+      hidden = true,
     },
     -----
     indent = {
       enabled = true,
+      filter = function(buf)
+        local ft = vim.bo[buf].filetype
+        return ft ~= "markdown" and ft ~= "markdown_inline"
+      end,
+    },
+    scope = {
+      enabled = true,
+      filter = function(buf)
+        local ft = vim.bo[buf].filetype
+        return ft ~= "markdown" and ft ~= "markdown_inline"
+      end,
     },
     -----
     lazygit = {
@@ -89,7 +102,7 @@ return {
     {
       "<leader>ff",
       function()
-        Snacks.picker.files()
+        Snacks.picker.files({ hidden = true })
       end,
       desc = "Find Files",
     },
@@ -278,9 +291,9 @@ return {
       desc = "Explorer",
     },
     { "<S-h>", "<cmd>bprevious<cr>", desc = "Prev Buffer" },
-    { "<S-l>", "<cmd>bnext<cr>", desc = "Next Buffer" },
-    { "[b", "<cmd>bprevious<cr>", desc = "Prev Buffer" },
-    { "]b", "<cmd>bnext<cr>", desc = "Next Buffer" },
+    { "<S-l>", "<cmd>bnext<cr>",     desc = "Next Buffer" },
+    { "[b",    "<cmd>bprevious<cr>", desc = "Prev Buffer" },
+    { "]b",    "<cmd>bnext<cr>",     desc = "Next Buffer" },
   },
   init = function()
     vim.api.nvim_create_autocmd("User", {
@@ -298,8 +311,8 @@ return {
         Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
         Snacks.toggle.diagnostics():map("<leader>ud")
         Snacks.toggle
-          .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-          :map("<leader>uc")
+            .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
+            :map("<leader>uc")
         Snacks.toggle.inlay_hints():map("<leader>uh")
         Snacks.toggle.dim({ enable = true }):map("<leader>uz")
       end,

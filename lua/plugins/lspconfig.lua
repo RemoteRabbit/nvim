@@ -4,6 +4,15 @@ return {
     "saghen/blink.cmp",
   },
   config = function()
+    vim.lsp.log.set_level("WARN")
+
+    -- Truncate LSP log if it exceeds 10 MB
+    local log_path = vim.lsp.log.get_filename()
+    local stat = vim.uv.fs_stat(log_path)
+    if stat and stat.size > 10 * 1024 * 1024 then
+      os.remove(log_path)
+    end
+
     local lsp_capabilities = require("blink.cmp").get_lsp_capabilities()
 
     -- Apply blink capabilities to all LSP servers
@@ -74,7 +83,7 @@ return {
         local bufnr = event.buf
 
         -- Enable inlay hints if supported
-        if client and client.supports_method("textDocument/inlayHint") then
+        if client and client:supports_method("textDocument/inlayHint") then
           vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
         end
 
@@ -128,13 +137,13 @@ return {
           local info = {}
           for _, c in pairs(clients) do
             local capabilities = {}
-            if c.supports_method("textDocument/rename") then
+            if c:supports_method("textDocument/rename") then
               table.insert(capabilities, "rename")
             end
-            if c.supports_method("textDocument/codeAction") then
+            if c:supports_method("textDocument/codeAction") then
               table.insert(capabilities, "code_action")
             end
-            if c.supports_method("textDocument/hover") then
+            if c:supports_method("textDocument/hover") then
               table.insert(capabilities, "hover")
             end
 
