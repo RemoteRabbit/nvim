@@ -44,19 +44,32 @@ return {
     },
     -----
     image = {
-      enabled = true,
+      enabled = false,
     },
     -----
     picker = {
       enabled = true,
+      hidden = true,
     },
     -----
     explorer = {
       enabled = true,
+      hidden = true,
     },
     -----
     indent = {
       enabled = true,
+      filter = function(buf)
+        local ft = vim.bo[buf].filetype
+        return ft ~= "markdown" and ft ~= "markdown_inline"
+      end,
+    },
+    scope = {
+      enabled = true,
+      filter = function(buf)
+        local ft = vim.bo[buf].filetype
+        return ft ~= "markdown" and ft ~= "markdown_inline"
+      end,
     },
     -----
     lazygit = {
@@ -89,7 +102,7 @@ return {
     {
       "<leader>ff",
       function()
-        Snacks.picker.files()
+        Snacks.picker.files({ hidden = true })
       end,
       desc = "Find Files",
     },

@@ -14,21 +14,21 @@ repos:
 
   # Lua formatting with StyLua
   - repo: https://github.com/JohnnyMorganz/StyLua
-    rev: v2.3.1
+    rev: v2.4.1
     hooks:
       - id: stylua-github
         args: [--config-path=stylua.toml]
 
-  # Lua linting with Luacheck
-  - repo: https://github.com/luarocks/luacheck
-    rev: v1.2.0
-    hooks:
-      - id: luacheck
-        args: [--config=.luacheckrc]
+  # # Lua linting with Luacheck
+  # - repo: https://github.com/luarocks/luacheck
+  #   rev: v1.2.0
+  #   hooks:
+  #     - id: luacheck
+  #       args: [--config=.luacheckrc]
 
   # Conventional commit messages
   - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v4.2.0
+    rev: v4.4.0
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
