@@ -138,7 +138,6 @@ return {
       enabled = true,
       highlight = "RenderMarkdownSign",
     },
-
   },
   config = function(_, opts)
     require("render-markdown").setup(opts)
