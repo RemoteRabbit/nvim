@@ -160,7 +160,7 @@ return {
       ),
     })
 
-    vim.keymap.set({ "i" }, "<C-K>", function()
+    vim.keymap.set({ "i" }, "<C-S>", function()
       luasnip.expand()
     end, { silent = true })
     vim.keymap.set({ "i", "s" }, "<C-L>", function()
