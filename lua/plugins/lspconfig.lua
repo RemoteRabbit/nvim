@@ -50,7 +50,27 @@ return {
       },
     })
 
-    vim.lsp.enable("lua_ls")
+    -- Terraform language server
+    vim.lsp.config("terraformls", {
+      filetypes = { "terraform", "terraform-vars", "tf" },
+      root_markers = { ".terraform", ".git" },
+    })
+
+    -- Pyright owns Python type checking
+    vim.lsp.config("pyright", {
+      settings = {
+        python = {
+          analysis = {
+            typeCheckingMode = "basic",
+            autoSearchPaths = true,
+            useLibraryCodeForTypes = true,
+            diagnosticMode = "openFilesOnly",
+          },
+        },
+      },
+    })
+
+    vim.lsp.enable({ "lua_ls", "pyright", "gopls", "terraformls" })
 
     -- Diagnostic configuration
     vim.diagnostic.config({

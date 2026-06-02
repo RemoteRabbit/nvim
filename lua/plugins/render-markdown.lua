@@ -5,7 +5,7 @@ return {
     "echasnovski/mini.nvim", -- for icons
   },
   enabled = true,
-  ft = { "markdown", "norg", "rmd", "org" },
+  ft = { "markdown" },
   opts = {
     heading = {
       enabled = true,

@@ -1,12 +1,21 @@
 return {
   "kevinhwang91/nvim-ufo",
   dependencies = "kevinhwang91/promise-async",
-  config = function()
+  event = { "BufReadPost", "BufNewFile" },
+  keys = {
+    { "zR", desc = "Open all folds" },
+    { "zM", desc = "Close all folds" },
+    { "zr", desc = "Open folds except kinds" },
+    { "zm", desc = "Close folds with" },
+  },
+  init = function()
+    -- Fold options must be set before ufo loads so folds work on first buffer
     vim.o.foldcolumn = "1"
     vim.o.foldlevel = 99
     vim.o.foldlevelstart = 99
     vim.o.foldenable = true
-
+  end,
+  config = function()
     require("ufo").setup({
       provider_selector = function(bufnr, filetype, buftype)
         return { "treesitter", "indent" }

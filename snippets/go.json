@@ -1,0 +1,29 @@
+{
+  "function": {
+    "prefix": "func",
+    "body": [
+      "func ${1:functionName}(${2}) ${3:returnType} {",
+      "\t${0}",
+      "}"
+    ],
+    "description": "Function declaration"
+  },
+  "struct": {
+    "prefix": "struct",
+    "body": [
+      "type ${1:StructName} struct {",
+      "\t${0}",
+      "}"
+    ],
+    "description": "Struct declaration"
+  },
+  "if err != nil": {
+    "prefix": "iferr",
+    "body": [
+      "if err != nil {",
+      "\treturn err",
+      "}"
+    ],
+    "description": "Standard error check"
+  }
+}

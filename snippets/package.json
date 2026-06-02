@@ -1,0 +1,34 @@
+{
+  "contributes": {
+    "snippets": [
+      {
+        "language": "python",
+        "path": "./python.json"
+      },
+      {
+        "language": "go",
+        "path": "./go.json"
+      },
+      {
+        "language": [
+          "terraform",
+          "terraform-vars",
+          "opentofu",
+          "opentofu-vars"
+        ],
+        "path": "./terraform.json"
+      },
+      {
+        "language": [
+          "tf"
+        ],
+        "path": "./tf.json"
+      }
+    ]
+  },
+  "engines": {
+    "vscode": "^1.11.0"
+  },
+  "name": "personal-snippets",
+  "version": "1.0.0"
+}
