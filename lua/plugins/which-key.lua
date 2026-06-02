@@ -17,6 +17,7 @@ return {
         { "<leader>c", group = "Code/LSP" },
         { "<leader>cA", group = "CodeCompanion" },
         { "<leader>co", group = "Coverage" },
+        { "<leader>cs", group = "Snippets" },
         { "<leader>d", group = "Debug" },
         { "<leader>dp", group = "Debug Python" },
         { "<leader>D", group = "Database" },

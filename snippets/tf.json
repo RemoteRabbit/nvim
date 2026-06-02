@@ -1,0 +1,11 @@
+{
+  "variable": {
+    "body": [
+      "variable {",
+      "  name = \"\"",
+      "  value = \"\"",
+      "}"
+    ],
+    "prefix": "variable"
+  }
+}

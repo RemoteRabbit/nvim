@@ -1,0 +1,30 @@
+{
+  "function definition": {
+    "prefix": "def",
+    "body": [
+      "def ${1:function_name}(${2}):",
+      "    \"\"\"${3:Description}\"\"\"",
+      "    ${0}"
+    ],
+    "description": "Function with docstring"
+  },
+  "class definition": {
+    "prefix": "class",
+    "body": [
+      "class ${1:ClassName}(${2:object}):",
+      "    \"\"\"${3:Description}\"\"\"",
+      "",
+      "    def __init__(self${4}):",
+      "        ${0}"
+    ],
+    "description": "Class with __init__ and docstring"
+  },
+  "if main": {
+    "prefix": "ifmain",
+    "body": [
+      "if __name__ == \"__main__\":",
+      "    main()"
+    ],
+    "description": "if __name__ == \"__main__\" guard"
+  }
+}

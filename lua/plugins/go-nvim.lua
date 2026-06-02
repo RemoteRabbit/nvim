@@ -42,7 +42,7 @@ return {
         test_runner = "go",
         verbose_tests = true,
         run_in_floaterm = false,
-        luasnip = true,
+        luasnip = false,
         iferr_vertical_shift = 4,
       })
 

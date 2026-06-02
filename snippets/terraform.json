@@ -1,0 +1,122 @@
+{
+  "resource block": {
+    "prefix": "resource",
+    "body": [
+      "resource \"${1:resource_type}\" \"${2:name}\" {",
+      "  ${0}",
+      "}"
+    ],
+    "description": "Terraform/OpenTofu resource block"
+  },
+  "variable block": {
+    "prefix": "variable",
+    "body": [
+      "variable \"${1:var_name}\" {",
+      "  description = \"${2:description}\"",
+      "  type        = ${3|string,number,list(string),map(string),set(string),any|}",
+      "  default     = ${4}",
+      "",
+      "  validation {",
+      "    condition     = ${5:true}",
+      "    error_message = \"${6:Invalid value.}\"",
+      "  }",
+      "}"
+    ],
+    "description": "Variable block with validation (remove manually for bool)"
+  },
+  "variable block (bool)": {
+    "prefix": "variableb",
+    "body": [
+      "variable \"${1:var_name}\" {",
+      "  description = \"${2:description}\"",
+      "  type        = bool",
+      "  default     = ${3:false}",
+      "}"
+    ],
+    "description": "Bool variable block (no validation)"
+  },
+  "output block": {
+    "prefix": "output",
+    "body": [
+      "output \"${1:output_name}\" {",
+      "  description = \"${2:description}\"",
+      "  value       = ${0}",
+      "}"
+    ],
+    "description": "Terraform/OpenTofu output block"
+  },
+  "module block": {
+    "prefix": "module",
+    "body": [
+      "module \"${1:module_name}\" {",
+      "  source = \"${2:./modules/example}\"",
+      "",
+      "  # Required variables:",
+      "  ${3:# Add required vars}",
+      "",
+      "  # Optional variables:",
+      "  ${0}",
+      "}"
+    ],
+    "description": "Terraform/OpenTofu module block"
+  },
+  "data source": {
+    "prefix": "data",
+    "body": [
+      "data \"${1:source_type}\" \"${2:name}\" {",
+      "  ${0}",
+      "}"
+    ],
+    "description": "Terraform/OpenTofu data source block"
+  },
+  "locals": {
+    "prefix": "locals",
+    "body": [
+      "locals {",
+      "  ${1:name} = ${0}",
+      "}"
+    ],
+    "description": "Terraform/OpenTofu locals block"
+  },
+  "lifecycle": {
+    "prefix": "lifecycle",
+    "body": [
+      "lifecycle {",
+      "  ${1|prevent_destroy,create_before_destroy,ignore_changes|} = ${0:true}",
+      "}"
+    ],
+    "description": "Terraform/OpenTofu lifecycle meta-argument"
+  },
+  "dynamic block": {
+    "prefix": "dynamic",
+    "body": [
+      "dynamic \"${1:block_name}\" {",
+      "  for_each = ${2:var.items}",
+      "  content {",
+      "    ${0}",
+      "  }",
+      "}"
+    ],
+    "description": "Terraform/OpenTofu dynamic block"
+  },
+  "moved block": {
+    "prefix": "moved",
+    "body": [
+      "moved {",
+      "  from = ${1:old.address}",
+      "  to   = ${2:new.address}",
+      "}"
+    ],
+    "description": "Refactor resource address without destroy/recreate"
+  },
+  "import block": {
+    "prefix": "import",
+    "body": [
+      "import {",
+      "  to = ${1:resource.address}",
+      "  id = \"${2:id}\"",
+      "}"
+    ],
+    "description": "Declarative import (Terraform 1.5+ / OpenTofu)"
+  }
+}
