@@ -38,31 +38,31 @@ keymap.set("n", "gT", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
 
 -- Box-drawing & arrow picker (insert at cursor)
 local box_chars = {
-  { text = "─ horizontal",        char = "─" },
-  { text = "│ vertical",          char = "│" },
-  { text = "┌ corner top-left",   char = "┌" },
-  { text = "┐ corner top-right",  char = "┐" },
-  { text = "└ corner bot-left",   char = "└" },
-  { text = "┘ corner bot-right",  char = "┘" },
-  { text = "├ tee right",         char = "├" },
-  { text = "┤ tee left",          char = "┤" },
-  { text = "┬ tee down",          char = "┬" },
-  { text = "┴ tee up",            char = "┴" },
-  { text = "┼ cross",             char = "┼" },
-  { text = "╭ round top-left",    char = "╭" },
-  { text = "╮ round top-right",   char = "╮" },
-  { text = "╰ round bot-left",    char = "╰" },
-  { text = "╯ round bot-right",   char = "╯" },
+  { text = "─ horizontal", char = "─" },
+  { text = "│ vertical", char = "│" },
+  { text = "┌ corner top-left", char = "┌" },
+  { text = "┐ corner top-right", char = "┐" },
+  { text = "└ corner bot-left", char = "└" },
+  { text = "┘ corner bot-right", char = "┘" },
+  { text = "├ tee right", char = "├" },
+  { text = "┤ tee left", char = "┤" },
+  { text = "┬ tee down", char = "┬" },
+  { text = "┴ tee up", char = "┴" },
+  { text = "┼ cross", char = "┼" },
+  { text = "╭ round top-left", char = "╭" },
+  { text = "╮ round top-right", char = "╮" },
+  { text = "╰ round bot-left", char = "╰" },
+  { text = "╯ round bot-right", char = "╯" },
   { text = "═ double horizontal", char = "═" },
-  { text = "║ double vertical",   char = "║" },
-  { text = "▶ arrow right",       char = "▶" },
-  { text = "◀ arrow left",        char = "◀" },
-  { text = "▲ arrow up",          char = "▲" },
-  { text = "▼ arrow down",        char = "▼" },
-  { text = "→ thin arrow right",  char = "→" },
-  { text = "← thin arrow left",   char = "←" },
-  { text = "↑ thin arrow up",     char = "↑" },
-  { text = "↓ thin arrow down",   char = "↓" },
+  { text = "║ double vertical", char = "║" },
+  { text = "▶ arrow right", char = "▶" },
+  { text = "◀ arrow left", char = "◀" },
+  { text = "▲ arrow up", char = "▲" },
+  { text = "▼ arrow down", char = "▼" },
+  { text = "→ thin arrow right", char = "→" },
+  { text = "← thin arrow left", char = "←" },
+  { text = "↑ thin arrow up", char = "↑" },
+  { text = "↓ thin arrow down", char = "↓" },
 }
 
 keymap.set({ "n", "i" }, "<leader>ub", function()
@@ -74,7 +74,9 @@ keymap.set({ "n", "i" }, "<leader>ub", function()
     layout = { preset = "select" },
     confirm = function(picker, item)
       picker:close()
-      if not item then return end
+      if not item then
+        return
+      end
       vim.schedule(function()
         if mode:sub(1, 1) == "i" then
           vim.api.nvim_put({ item.char }, "c", false, true)
@@ -97,13 +99,15 @@ local function box_wrap(opts)
   for i, l in ipairs(lines) do
     lines[i] = l:gsub("%s+$", "")
     local w = vim.fn.strdisplaywidth(lines[i])
-    if w > max then max = w end
+    if w > max then
+      max = w
+    end
   end
 
   local style = opts.args ~= "" and opts.args or "round"
   local styles = {
-    round  = { tl = "╭", tr = "╮", bl = "╰", br = "╯", h = "─", v = "│" },
-    sharp  = { tl = "┌", tr = "┐", bl = "└", br = "┘", h = "─", v = "│" },
+    round = { tl = "╭", tr = "╮", bl = "╰", br = "╯", h = "─", v = "│" },
+    sharp = { tl = "┌", tr = "┐", bl = "└", br = "┘", h = "─", v = "│" },
     double = { tl = "╔", tr = "╗", bl = "╚", br = "╝", h = "═", v = "║" },
   }
   local s = styles[style] or styles.round
@@ -121,7 +125,9 @@ end
 vim.api.nvim_create_user_command("Box", box_wrap, {
   range = true,
   nargs = "?",
-  complete = function() return { "round", "sharp", "double" } end,
+  complete = function()
+    return { "round", "sharp", "double" }
+  end,
   desc = "Wrap selected lines in a box (round|sharp|double)",
 })
 

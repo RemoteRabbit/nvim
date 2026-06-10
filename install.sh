@@ -1,4 +1,28 @@
 #!/usr/bin/env bash
+#
+# install.sh - Neovim configuration installer
+#
+# Interactive bootstrap script that sets up this Neovim configuration on a
+# fresh machine. It will, in order:
+#   1. Detect the operating system (macOS, Arch, or Debian/Ubuntu).
+#   2. Optionally install all system dependencies (Neovim, git, ripgrep, fd,
+#      fzf, language toolchains, LSP/formatter tools, a Nerd Font, etc.) using
+#      the platform package manager (brew / pacman / apt) plus pipx and npm.
+#   3. Back up any existing ~/.config/nvim to a timestamped directory.
+#   4. Symlink this repository to ~/.config/nvim.
+#   5. Optionally install plugins via lazy.nvim.
+#   6. Install and register pre-commit hooks.
+#
+# Usage:
+#   ./install.sh        # or: make install
+#
+# Notes:
+#   - The script is interactive and will prompt before installing
+#     dependencies and plugins.
+#   - It uses sudo for system package installation and for creating
+#     symlinks under /usr/local/bin.
+#   - Supported OSes: macOS, Arch Linux, Debian/Ubuntu. Other systems must
+#     install dependencies manually.
 
 set -e
 
@@ -145,14 +169,21 @@ install_dependencies() {
                 erlang \
                 yamllint
 
+            # On Debian/Ubuntu the fd binary is installed as "fdfind"; link it to "fd"
+            if command -v fdfind &> /dev/null && ! command -v fd &> /dev/null; then
+                log_info "Linking fdfind to fd..."
+                sudo ln -sf "$(command -v fdfind)" /usr/local/bin/fd
+            fi
+
             log_info "Installing/upgrading Neovim..."
             if ! check_command nvim || [[ $(nvim --version | head -n1 | grep -oP 'v\K[0-9]+\.[0-9]+' | awk '{print ($1 >= 0.10)}') != "1" ]]; then
                 log_info "Installing Neovim from GitHub releases..."
                 NVIM_VERSION="stable"
-                curl -LO "https://github.com/neovim/neovim/releases/download/$NVIM_VERSION/nvim-linux64.tar.gz"
-                sudo tar -C /opt -xzf nvim-linux64.tar.gz
-                sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim
-                rm nvim-linux64.tar.gz
+                NVIM_TARBALL="nvim-linux-x86_64.tar.gz"
+                curl -LO "https://github.com/neovim/neovim/releases/download/$NVIM_VERSION/$NVIM_TARBALL"
+                sudo tar -C /opt -xzf "$NVIM_TARBALL"
+                sudo ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
+                rm "$NVIM_TARBALL"
             fi
 
             log_info "Installing lazygit..."
@@ -233,7 +264,6 @@ install_dependencies() {
             brew install $PACKAGES
 
             log_info "Installing Nerd Font..."
-            brew tap homebrew/cask-fonts
             brew install --cask font-jetbrains-mono-nerd-font || log_warning "Nerd font installation failed"
             ;;
 
@@ -276,6 +306,16 @@ install_dependencies() {
     pipx install mypy || pipx upgrade mypy || log_warning "mypy installation failed"
     pipx install pytest || pipx upgrade pytest || log_warning "pytest installation failed"
     pipx install codespell || pipx upgrade codespell || log_warning "codespell installation failed"
+
+    # Install Lua tooling via luarocks (used by `make lint`)
+    log_info "Installing Lua CLI tools via luarocks..."
+    if command -v luarocks &> /dev/null; then
+        luarocks install luacheck 2>/dev/null \
+            || sudo luarocks install luacheck \
+            || log_warning "luacheck installation failed"
+    else
+        log_warning "luarocks not found, skipping luacheck installation"
+    fi
 
     log_info "Installing Node packages..."
     npm install -g neovim tree-sitter-cli

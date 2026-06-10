@@ -14,7 +14,7 @@ repos:
 
   # Lua formatting with StyLua
   - repo: https://github.com/JohnnyMorganz/StyLua
-    rev: v2.4.1
+    rev: v2.5.2
     hooks:
       - id: stylua-github
         args: [--config-path=stylua.toml]
@@ -63,23 +63,23 @@ repos:
     hooks:
       - id: generate-plugin-docs
         name: Generate Plugin Documentation
-        entry: scripts/generate-docs.sh
-        language: script
+        entry: nvim -l scripts/generate-docs.lua
+        language: system
         files: ^lua/plugins/.*\.lua$
         pass_filenames: false
         stages: [post-commit]
 
       - id: update-readme-plugins
         name: Update README with Plugin List
-        entry: scripts/update-readme.sh
-        language: script
+        entry: nvim -l scripts/update-readme.lua
+        language: system
         files: ^lua/plugins/.*\.lua$
         pass_filenames: false
         stages: [post-commit]
 
       - id: extract-keybindings
         name: Extract Keybindings Documentation
-        entry: scripts/extract-keybindings.py
+        entry: nvim -l scripts/extract-keybindings.lua
         language: system
         files: ^lua/.*\.lua$
         pass_filenames: false
