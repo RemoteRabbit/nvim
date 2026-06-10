@@ -1,0 +1,16 @@
+words = [
+  "nvim's",
+  "glab",
+  "bufferline",
+  "catppuccin",
+  "gitsigns",
+  "gopls",
+  "lazygit",
+  "neotest",
+  "neovim",
+  "nvim",
+  "pyright",
+  "ripgrep",
+  "statusline",
+  "tmux",
+]
