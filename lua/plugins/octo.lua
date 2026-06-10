@@ -2,12 +2,13 @@ return {
   "pwntester/octo.nvim",
   dependencies = {
     "nvim-lua/plenary.nvim",
-    "nvim-telescope/telescope.nvim",
+    "folke/snacks.nvim",
     "nvim-tree/nvim-web-devicons",
   },
   event = "VeryLazy",
   config = function()
     require("octo").setup({
+      picker = "snacks",
       default_remote = { "upstream", "origin" },
       default_delete_branch = true,
       default_merge_method = "squash",
@@ -166,9 +167,32 @@ return {
       },
     })
 
-    -- GitHub-specific PR creation methods (only available for GitHub)
-    vim.keymap.set("n", "<leader>gPt", ":Octo pr create --template<CR>", { desc = "Create PR with Template" })
-    vim.keymap.set("n", "<leader>gPD", ":Octo pr create --draft<CR>", { desc = "Create Draft PR" })
+    local git_repo = require("utils.git_repo")
+
+    -- PR/MR creation with a template (context-aware: GitHub via octo, GitLab via gitlab.nvim).
+    -- gitlab.nvim's create_mr() picks a template from .gitlab/merge_request_templates/
+    -- when no description is provided.
+    vim.keymap.set("n", "<leader>gPt", function()
+      if git_repo.is_gitlab() then
+        require("gitlab").create_mr()
+      else
+        vim.cmd("Octo pr create --template")
+      end
+    end, { desc = "Create PR/MR with Template" })
+
+    -- Draft PR/MR creation (context-aware). gitlab.nvim has no draft flag, so we
+    -- use GitLab's "Draft:" title-prefix convention.
+    vim.keymap.set("n", "<leader>gPD", function()
+      if git_repo.is_gitlab() then
+        local title = vim.fn.input("Draft MR Title: ")
+        if title == nil or title == "" then
+          return
+        end
+        require("gitlab").create_mr({ title = "Draft: " .. title })
+      else
+        vim.cmd("Octo pr create --draft")
+      end
+    end, { desc = "Create Draft PR/MR" })
 
     -- Issue management
     vim.keymap.set("n", "<leader>gIl", ":Octo issue list<CR>", { desc = "List Issues" })
@@ -184,12 +208,12 @@ return {
     -- Quick checkout (moved to avoid gco conflict)
     vim.keymap.set("n", "<leader>gCo", ":Octo pr checkout<CR>", { desc = "Checkout PR" })
 
-    -- Smart PR creation using conventional commits
+    -- Smart PR/MR creation using a conventional-commit generated description.
     vim.keymap.set("n", "<leader>gPn", function()
       local branch = vim.fn.system("git branch --show-current"):gsub("\n", "")
-      print("Creating PR for branch: " .. branch)
+      print("Creating PR/MR for branch: " .. branch)
 
-      local description, err = require("pr-description").generate_description()
+      local description, err = require("pr-description").generate_description({ is_gitlab = git_repo.is_gitlab() })
       if err then
         print("❌ " .. err)
         return
@@ -205,6 +229,16 @@ return {
           return
         end
         print("✅ Branch pushed to remote")
+      end
+
+      -- GitLab: create the MR via gitlab.nvim, pre-filling the generated description.
+      if git_repo.is_gitlab() then
+        local title = vim.fn.input("MR Title: ")
+        if title == nil or title == "" then
+          return
+        end
+        require("gitlab").create_mr({ title = title, description = description })
+        return
       end
 
       local title = vim.fn.input("PR Title: ")
@@ -238,7 +272,7 @@ return {
           print("❌ Failed to create temp file for PR body")
         end
       end
-    end, { desc = "New PR with Conventional Commits" })
+    end, { desc = "New PR/MR with Conventional Commits" })
 
     -- Note: <leader>gPg (Generate PR/MR Description) is defined in gitlab.lua
     -- with is_gitlab_repo() detection to handle both GitHub and GitLab

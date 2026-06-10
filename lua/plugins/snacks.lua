@@ -3,6 +3,9 @@ return {
   priority = 1000,
   lazy = false,
   opts = {
+    bigfile = {
+      enabled = true,
+    },
     bufferline = {
       style = "minimal",
     },
@@ -50,6 +53,18 @@ return {
     picker = {
       enabled = true,
       hidden = true,
+      actions = {
+        trouble_open = function(...)
+          return require("trouble.sources.snacks").actions.trouble_open.action(...)
+        end,
+      },
+      win = {
+        input = {
+          keys = {
+            ["<c-t>"] = { "trouble_open", mode = { "n", "i" } },
+          },
+        },
+      },
     },
     -----
     explorer = {
@@ -126,6 +141,20 @@ return {
         Snacks.picker.recent()
       end,
       desc = "Recent Files",
+    },
+    {
+      "<leader>fh",
+      function()
+        Snacks.picker.help()
+      end,
+      desc = "Help Tags",
+    },
+    {
+      "<leader>fc",
+      function()
+        Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
+      end,
+      desc = "Config Files",
     },
     {
       "<leader>.",

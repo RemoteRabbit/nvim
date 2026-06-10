@@ -63,6 +63,17 @@ return {
     vim.api.nvim_create_autocmd("FileType", {
       group = vim.api.nvim_create_augroup("treesitter_setup", { clear = true }),
       callback = function(ev)
+        -- Skip big files (Snacks sets b:bigfile) and oversized files to avoid
+        -- freezes from treesitter parsing + O(n) foldexpr on large/minified files.
+        if vim.b[ev.buf].bigfile then
+          return
+        end
+        local name = vim.api.nvim_buf_get_name(ev.buf)
+        local ok, stats = pcall(vim.uv.fs_stat, name)
+        if ok and stats and stats.size > 1024 * 1024 then
+          return
+        end
+
         pcall(vim.treesitter.start, ev.buf)
         local win = vim.api.nvim_get_current_win()
         if vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_buf(win) == ev.buf then

@@ -1,5 +1,5 @@
 .PHONY: help pr-description mr-description github gitlab \
-        lint format check validate clean docs update-readme \
+        lint format format-check check validate clean docs update-readme \
         install test health
 
 # Default target
@@ -10,14 +10,18 @@ help:
 	@echo "  make pr-description    Generate GitHub PR description"
 	@echo "  make mr-description    Generate GitLab MR description"
 	@echo ""
+	@echo "Setup:"
+	@echo "  make install           Install dependencies and link config"
+	@echo ""
 	@echo "Code Quality:"
 	@echo "  make lint              Run luacheck linter"
 	@echo "  make format            Format Lua files with stylua"
+	@echo "  make format-check      Check Lua formatting (no write)"
 	@echo "  make check             Run lint + format check (no write)"
 	@echo "  make validate          Run full config validation"
 	@echo ""
 	@echo "Documentation:"
-	@echo "  make docs              Generate plugin documentation"
+	@echo "  make docs              Generate plugin and keybinding docs"
 	@echo "  make update-readme     Update README with plugin list"
 	@echo ""
 	@echo "Maintenance:"
@@ -40,19 +44,28 @@ github: pr-description
 gitlab: mr-description
 
 #------------------------------------------------------------------------------
+# Setup
+#------------------------------------------------------------------------------
+
+# Run the interactive installer: installs dependencies, links this config to
+# ~/.config/nvim, installs plugins, and sets up pre-commit hooks.
+install:
+	@./install.sh
+
+#------------------------------------------------------------------------------
 # Code Quality
 #------------------------------------------------------------------------------
 
 lint:
 	@echo "Running luacheck..."
-	@luacheck lua/ --config .luacheckrc
+	@luacheck lua/ scripts/ --config .luacheckrc
 
 format:
 	@echo "Formatting with stylua..."
-	@stylua --config-path stylua.toml lua/
+	@stylua --config-path stylua.toml lua/ scripts/
 
 format-check:
-	@stylua --config-path stylua.toml --check lua/
+	@stylua --config-path stylua.toml --check lua/ scripts/
 
 check: lint format-check
 	@echo "All checks passed!"
@@ -65,10 +78,11 @@ validate:
 #------------------------------------------------------------------------------
 
 docs:
-	@./scripts/generate-docs.sh
+	@nvim -l scripts/generate-docs.lua
+	@nvim -l scripts/extract-keybindings.lua
 
 update-readme:
-	@./scripts/update-readme.sh
+	@nvim -l scripts/update-readme.lua
 
 #------------------------------------------------------------------------------
 # Maintenance
