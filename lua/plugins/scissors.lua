@@ -1,6 +1,6 @@
 return {
   "chrisgrieser/nvim-scissors",
-  dependencies = { "nvim-telescope/telescope.nvim" },
+  dependencies = { "folke/snacks.nvim" },
   cmd = { "ScissorsAddNewSnippet", "ScissorsEditSnippet" },
   keys = {
     {
@@ -21,6 +21,9 @@ return {
   },
   opts = {
     snippetDir = vim.fn.stdpath("config") .. "/snippets",
+    snippetSelection = {
+      picker = "snacks",
+    },
     editSnippetPopup = {
       height = 0.4,
       width = 0.6,

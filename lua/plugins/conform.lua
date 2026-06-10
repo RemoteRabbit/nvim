@@ -18,7 +18,7 @@ return {
         yaml = { "yamlfmt" },
         markdown = { "markdownlint" },
         ["_"] = { "trim_whitespace" },
-        ["*"] = { "codespell" },
+        toml = { "taplo" },
       },
       format_on_save = function(bufnr)
         -- Don't format .norg files (Neorg handles its own formatting)

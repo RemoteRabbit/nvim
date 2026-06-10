@@ -104,14 +104,6 @@ return {
   config = function(_, opts)
     require("refactoring").setup(opts)
 
-    -- Load refactoring Telescope extension
-    require("telescope").load_extension("refactoring")
-
-    -- Telescope refactoring
-    vim.keymap.set({ "n", "x" }, "<leader>rt", function()
-      require("telescope").extensions.refactoring.refactors()
-    end, { desc = "Telescope Refactoring" })
-
     -- Additional convenience mappings
     vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "LSP Rename" })
   end,

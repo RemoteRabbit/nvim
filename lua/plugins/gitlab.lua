@@ -12,29 +12,47 @@ return {
   end,
   event = "VeryLazy",
   config = function()
-    local git_root = vim.fn.system("git rev-parse --show-toplevel 2>/dev/null"):gsub("%s+", "")
-    local git_dir = git_root ~= "" and ("cd " .. git_root .. " && ") or ""
-    local gitlab_url = vim.fn.system(git_dir .. "git config --get gitlab.url 2>/dev/null"):gsub("%s+", "")
-    if gitlab_url == "" then
-      gitlab_url = os.getenv("GITLAB_URL") or "https://gitlab.com"
+    local git_repo = require("utils.git_repo")
+
+    -- Resolve the GitLab instance URL. The Go server derives the
+    -- namespace/project from the git remote itself, so we only need the host.
+    -- Priority: explicit `git config gitlab.url` / $GITLAB_URL override, then
+    -- the host parsed from the origin remote (handles self-hosted instances),
+    -- then gitlab.com as a last resort.
+    local function resolve_gitlab_url()
+      local configured = git_repo.configured_gitlab_url()
+      if configured ~= "" then
+        return configured
+      end
+      return git_repo.gitlab_url_from_remote() or "https://gitlab.com"
     end
-    local remote_url = vim.fn.system(git_dir .. "git config --get remote.origin.url 2>/dev/null"):gsub("%s+", "")
-    local project_path = remote_url:match("https?://[^/]+/(.+)%.git$") or remote_url:match("https?://[^/]+/(.+)$")
-    local gitlab_proxy = vim.fn.system(git_dir .. "git config --get http.gitlab.proxy"):gsub("%s+", "")
+
+    -- gitlab.nvim's Go server uses a custom HTTP transport that does NOT honor
+    -- the HTTPS_PROXY/HTTP_PROXY env vars on its own (unlike glab/gh). Behind a
+    -- corporate proxy this makes every API call hang. Pass the proxy explicitly.
+    local gitlab_proxy = git_repo.proxy_for_host(git_repo.host_from_remote(resolve_gitlab_url()))
 
     require("gitlab").setup({
-      gitlab_url = gitlab_url,
-      project_path = project_path,
       auth_provider = function()
-        local token = vim.fn.system(git_dir .. "git config --get gitlab.token 2>/dev/null"):gsub("%s+", "")
-        local url = gitlab_url
+        local url = resolve_gitlab_url()
+
+        -- Prefer the token glab already uses for this host (single source of
+        -- truth — avoids gitlab.nvim running with a stale/expired token).
+        local token = git_repo.glab_token_for_host(git_repo.host_from_remote(url))
+
+        if not token or token == "" then
+          token = vim.fn.system("git config --get gitlab.token 2>/dev/null"):gsub("%s+", "")
+        end
 
         if token == "" then
           token = os.getenv("GITLAB_TOKEN")
         end
 
         if not token or token == "" then
-          vim.notify("GitLab token not found. Set with: git config --global gitlab.token <token>", vim.log.levels.WARN)
+          vim.notify(
+            "GitLab token not found. Authenticate with `glab auth login` or set `git config --global gitlab.token <token>`.",
+            vim.log.levels.WARN
+          )
           return nil, nil, "No GitLab token found"
         end
 
@@ -60,10 +78,7 @@ return {
     })
 
     -- Helper function to detect if current repo is GitLab
-    local function is_gitlab_repo()
-      local remote_url = vim.fn.system("git config --get remote.origin.url 2>/dev/null"):gsub("\n", "")
-      return remote_url:match("gitlab") ~= nil
-    end
+    local is_gitlab_repo = require("utils.git_repo").is_gitlab
 
     -- Context-aware keymaps that work with both GitHub (octo) and GitLab
     vim.keymap.set("n", "<leader>gPr", function()
