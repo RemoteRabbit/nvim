@@ -2,6 +2,7 @@ return {
   "neovim/nvim-lspconfig",
   dependencies = {
     "saghen/blink.cmp",
+    "b0o/schemastore.nvim",
   },
   config = function()
     vim.lsp.log.set_level("WARN")
@@ -50,10 +51,27 @@ return {
       },
     })
 
-    -- Terraform language server
+    -- Terraform / HCL language server
     vim.lsp.config("terraformls", {
-      filetypes = { "terraform", "terraform-vars", "tf" },
+      filetypes = { "terraform", "terraform-vars", "tf", "hcl" },
       root_markers = { ".terraform", ".git" },
+    })
+
+    -- Markdown language server (links, headings, references, completion)
+    vim.lsp.config("marksman", {
+      filetypes = { "markdown", "markdown.mdx" },
+      root_markers = { ".marksman.toml", ".git" },
+    })
+
+    -- JSON language server with SchemaStore (package.json, tsconfig, gh actions...)
+    vim.lsp.config("jsonls", {
+      filetypes = { "json", "jsonc" },
+      settings = {
+        json = {
+          schemas = require("schemastore").json.schemas(),
+          validate = { enable = true },
+        },
+      },
     })
 
     -- Pyright owns Python type checking
@@ -70,7 +88,47 @@ return {
       },
     })
 
-    vim.lsp.enable({ "lua_ls", "pyright", "gopls", "terraformls" })
+    -- Go language server
+    vim.lsp.config("gopls", {
+      root_markers = { "go.work", "go.mod", ".git" },
+      settings = {
+        gopls = {
+          gofumpt = true,
+          staticcheck = true,
+          usePlaceholders = true,
+          completeUnimported = true,
+          experimentalPostfixCompletions = true,
+          analyses = {
+            unusedparams = true,
+            unusedwrite = true,
+            useany = true,
+            nilness = true,
+            shadow = true,
+          },
+          codelenses = {
+            gc_details = true,
+            generate = true,
+            regenerate_cgo = true,
+            test = true,
+            tidy = true,
+            upgrade_dependency = true,
+            vendor = true,
+          },
+          hints = {
+            assignVariableTypes = true,
+            compositeLiteralFields = true,
+            compositeLiteralTypes = true,
+            constantValues = true,
+            functionTypeParameters = true,
+            parameterNames = true,
+            rangeVariableTypes = true,
+          },
+          semanticTokens = true,
+        },
+      },
+    })
+
+    vim.lsp.enable({ "lua_ls", "pyright", "gopls", "terraformls", "marksman", "jsonls" })
 
     -- Diagnostic configuration
     vim.diagnostic.config({
@@ -122,6 +180,17 @@ return {
         -- Actions
         bufmap("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol")
         bufmap("n", "<F4>", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action")
+
+        -- Hover: LSP hover, falls back to diagnostic float if no hover info
+        bufmap("n", "K", function()
+          local has_diag = #vim.diagnostic.get(bufnr, { lnum = vim.fn.line(".") - 1 }) > 0
+          local clients = vim.lsp.get_clients({ bufnr = bufnr, method = "textDocument/hover" })
+          if #clients > 0 then
+            vim.lsp.buf.hover({ border = "rounded" })
+          elseif has_diag then
+            vim.diagnostic.open_float({ border = "rounded" })
+          end
+        end, "Hover / diagnostic")
 
         -- Diagnostics
         bufmap("n", "gl", "<cmd>lua vim.diagnostic.open_float()<cr>", "Show diagnostics")

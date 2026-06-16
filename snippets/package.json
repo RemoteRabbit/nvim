@@ -14,15 +14,10 @@
           "terraform",
           "terraform-vars",
           "opentofu",
-          "opentofu-vars"
-        ],
-        "path": "./terraform.json"
-      },
-      {
-        "language": [
+          "opentofu-vars",
           "tf"
         ],
-        "path": "./tf.json"
+        "path": "./terraform.json"
       }
     ]
   },

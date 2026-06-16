@@ -5,7 +5,7 @@ return {
     "nvim-lua/plenary.nvim",
     "nvim-treesitter/nvim-treesitter",
     "nvim-neotest/neotest-python",
-    "nvim-neotest/neotest-go",
+    "fredrikaverpil/neotest-golang",
     "jfpedroza/neotest-elixir",
     "nvim-neotest/neotest-jest",
     "rouge8/neotest-rust",
@@ -19,11 +19,10 @@ return {
           runner = "pytest",
           python = "python3",
         }),
-        require("neotest-go")({
-          experimental = {
-            test_table = true,
-          },
-          args = { "-count=1", "-timeout=60s" },
+        require("neotest-golang")({
+          go_test_args = { "-v", "-race", "-count=1", "-timeout=60s" },
+          dap_go_enabled = true,
+          runner = "go",
         }),
         require("neotest-elixir")({
           mix_task = "test",

@@ -16,9 +16,10 @@ return {
         test_template = "",
         test_template_dir = "",
         comment_placeholder = "   ",
-        lsp_cfg = true,
+        -- Let nvim-lspconfig own gopls so settings live in one place.
+        lsp_cfg = false,
         lsp_gofumpt = true,
-        lsp_on_attach = true,
+        lsp_on_attach = false,
         lsp_keymaps = false,
         lsp_codelens = true,
         diagnostic = {

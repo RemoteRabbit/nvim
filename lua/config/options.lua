@@ -1,5 +1,11 @@
 local opt = vim.opt -- for conciseness
 
+-- Disable unused language providers (avoids checkhealth noise + startup cost)
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_node_provider = 0
+
 -- line numbers
 opt.relativenumber = true -- show relative line numbers
 opt.number = true -- shows absolute line number on cursor line (when relative number is on)

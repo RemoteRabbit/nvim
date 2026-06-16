@@ -8,7 +8,7 @@ return {
         python = { "ruff" },
         javascript = { "eslint" },
         typescript = { "eslint" },
-        go = { "golangcilint", "staticcheck" },
+        go = { "golangcilint" },
         terraform = { "tflint", "tfsec" },
         yaml = { "yamllint" },
         json = { "jsonlint" },

@@ -1,13 +1,7 @@
 return {
-  "kevinhwang91/nvim-ufo",
-  enabled = false, -- trying nvim-origami instead; flip to true to switch back
-  dependencies = "kevinhwang91/promise-async",
-  event = { "BufReadPost", "BufNewFile" },
+  "chrisgrieser/nvim-origami",
+  event = "VeryLazy",
   keys = {
-    { "zR", desc = "Open all folds" },
-    { "zM", desc = "Close all folds" },
-    { "zr", desc = "Open folds except kinds" },
-    { "zm", desc = "Close folds with" },
     { "z1", desc = "Fold level 1" },
     { "z2", desc = "Fold level 2" },
     { "z3", desc = "Fold level 3" },
@@ -16,53 +10,45 @@ return {
     { "zP", desc = "Pick fold" },
   },
   init = function()
-    -- Fold options must be set before ufo loads so folds work on first buffer
+    -- disable vim's auto-folding (recommended by origami)
     vim.o.foldcolumn = "1"
     vim.o.foldlevel = 99
     vim.o.foldlevelstart = 99
     vim.o.foldenable = true
   end,
-  config = function()
-    require("ufo").setup({
-      provider_selector = function(bufnr, filetype, buftype)
-        return { "treesitter", "indent" }
-      end,
-      open_fold_hl_timeout = 150,
-      close_fold_kinds_for_ft = {
-        default = { "imports", "comment" },
-        json = { "array" },
-        c = { "comment", "region" },
+  opts = {
+    useLspFoldsWithTreesitterFallback = {
+      enabled = true,
+      foldmethodIfNeitherIsAvailable = "indent",
+    },
+    pauseFoldsOnSearch = true,
+    foldtext = {
+      enabled = true,
+      padding = { character = " ", width = 3 },
+      lineCount = {
+        template = "  %d lines",
+        hlgroup = "Comment",
       },
-      preview = {
-        win_config = {
-          border = { "", "─", "", "", "", "─", "", "" },
-          winhighlight = "Normal:Folded",
-          winblend = 0,
-        },
-        mappings = {
-          scrollU = "<C-u>",
-          scrollD = "<C-d>",
-          jumpTop = "[",
-          jumpBot = "]",
-        },
-      },
-    })
+      diagnosticsCount = true,
+      gitsignsCount = true,
+    },
+    autoFold = {
+      enabled = true,
+      kinds = { "comment", "imports" },
+    },
+    foldKeymaps = {
+      setup = true, -- h/l/^/$ become fold-aware at line edges
+      closeOnlyOnFirstColumn = false,
+      scrollLeftOnCaret = false,
+    },
+  },
+  config = function(_, opts)
+    require("origami").setup(opts)
 
-    vim.keymap.set("n", "zR", require("ufo").openAllFolds, { desc = "Open all folds" })
-    vim.keymap.set("n", "zM", require("ufo").closeAllFolds, { desc = "Close all folds" })
-    vim.keymap.set("n", "zr", require("ufo").openFoldsExceptKinds, { desc = "Open folds except kinds" })
-    vim.keymap.set("n", "zm", require("ufo").closeFoldsWith, { desc = "Close folds with" })
-    vim.keymap.set("n", "K", function()
-      local winid = require("ufo").peekFoldedLinesUnderCursor()
-      if not winid then
-        vim.lsp.buf.hover({ border = "rounded" })
-      end
-    end, { desc = "Peek fold or hover" })
-
-    -- Quick fold-level shortcuts: z1..z5 set foldlevel and close deeper folds
+    -- Quick fold-level shortcuts: z1..z5 set foldlevel
     for i = 1, 5 do
       vim.keymap.set("n", "z" .. i, function()
-        require("ufo").closeFoldsWith(i)
+        vim.o.foldlevel = i
       end, { desc = "Fold level " .. i })
     end
 

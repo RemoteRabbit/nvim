@@ -47,12 +47,53 @@ return {
     },
     -----
     image = {
-      enabled = false,
+      enabled = true,
+    },
+    -----
+    -- Auto-disable LSP/treesitter/etc. on huge files (>1.5MB by default).
+    bigfile = {
+      enabled = true,
+    },
+    -----
+    -- Render the file before plugins load for a snappier startup feel.
+    quickfile = {
+      enabled = true,
+    },
+    -----
+    -- Pretty floating prompt for vim.ui.input (rename, etc.).
+    input = {
+      enabled = true,
+    },
+    -----
+    -- Combined number + sign + fold column with git sign integration.
+    statuscolumn = {
+      enabled = true,
+    },
+    -----
+    -- Smooth scrolling (replaces neoscroll).
+    scroll = {
+      enabled = true,
+    },
+    -----
+    -- Highlight + jump between LSP references to the word under cursor
+    -- (replaces vim-illuminate). Keymaps `]w` / `[w` are already defined below.
+    words = {
+      enabled = true,
     },
     -----
     picker = {
       enabled = true,
       hidden = true,
+      sources = {
+        files = {
+          exclude = {
+            ".git",
+            ".devenv",
+            ".direnv",
+            "node_modules",
+          },
+        },
+      },
       actions = {
         trouble_open = function(...)
           return require("trouble.sources.snacks").actions.trouble_open.action(...)
@@ -70,6 +111,7 @@ return {
     explorer = {
       enabled = true,
       hidden = true,
+      ignored = true,
     },
     -----
     indent = {
@@ -117,7 +159,7 @@ return {
     {
       "<leader>ff",
       function()
-        Snacks.picker.files({ hidden = true })
+        Snacks.picker.files({ hidden = true, ignored = true })
       end,
       desc = "Find Files",
     },
