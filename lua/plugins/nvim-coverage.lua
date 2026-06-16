@@ -24,7 +24,8 @@ return {
           coverage_file = "coverage.json",
         },
         go = {
-          coverage_command = "go test -coverprofile=coverage.out ./... && go tool cover -func=coverage.out",
+          coverage_file = "coverage.out",
+          coverage_command = "go test -coverprofile=coverage.out -coverpkg=./... ./...",
         },
         javascript = {
           coverage_command = "cat coverage/lcov-report/index.html | grep -o '\\\"decimal\\\">[^<]*' | head -n 4",
