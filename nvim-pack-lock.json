@@ -1,5 +1,10 @@
 {
   "plugins": {
+    "blink.cmp": {
+      "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
+      "src": "https://github.com/saghen/blink.cmp",
+      "version": "1.0.0 - 2.0.0"
+    },
     "conform.nvim": {
       "rev": "3543d000dafbc41cc7761d860cfdb24e82154f75",
       "src": "https://github.com/stevearc/conform.nvim",
@@ -9,6 +14,16 @@
       "rev": "a462f416e2ce4744531c6256252dee99a7d34a83",
       "src": "https://github.com/lewis6991/gitsigns.nvim",
       "version": "'v2.1.0'"
+    },
+    "mini.nvim": {
+      "rev": "a995fe9cd4193fb492b5df69175a351a74b3d36b",
+      "src": "https://github.com/nvim-mini/mini.nvim",
+      "version": "'stable'"
+    },
+    "nvim-autopairs": {
+      "rev": "23320e75953ac82e559c610bec5a90d9c6dfa743",
+      "src": "https://github.com/windwp/nvim-autopairs",
+      "version": "'0.10.0'"
     },
     "nvim-treesitter": {
       "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
@@ -23,6 +38,11 @@
     "vim-tmux-navigator": {
       "rev": "e41c431a0c7b7388ae7ba341f01a0d217eb3a432",
       "src": "https://github.com/christoomey/vim-tmux-navigator"
+    },
+    "which-key.nvim": {
+      "rev": "fcbf4eea17cb299c02557d576f0d568878e354a4",
+      "src": "https://github.com/folke/which-key.nvim",
+      "version": "'v3.17.0'"
     }
   }
 }

@@ -3,57 +3,11 @@ return {
   version = "v2.31.0",
   config = function()
     require("snacks").setup({
-      bigfile = { enabled = true }, -- disables heavy features on huge files
+      animate = { enabled = true },
+      bigfile = { enabled = true },
+      bufferline = { enabled = true },
       dashboard = {
-        enabled = true,
-        width = 60,
-        row = nil, -- dashboard position. nil for center
-        col = nil, -- dashboard position. nil for center
-        pane_gap = 4, -- empty columns between vertical panes
         preset = {
-          ---@type fun(cmd:string, opts:table)|nil
-          pick = "snacks",
-          -- Used by the `keys` section to show keymaps.
-          -- Set your custom keymaps here.
-          -- When using a function, the `items` argument are the default keymaps.
-          ---@type snacks.dashboard.Item[]
-          keys = {
-            {
-              icon = " ",
-              key = "f",
-              desc = "Find File",
-              action = ":lua Snacks.dashboard.pick('files')",
-            },
-            { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-            {
-              icon = " ",
-              key = "g",
-              desc = "Find Text",
-              action = ":lua Snacks.dashboard.pick('live_grep')",
-            },
-            {
-              icon = " ",
-              key = "r",
-              desc = "Recent Files",
-              action = ":lua Snacks.dashboard.pick('oldfiles')",
-            },
-            {
-              icon = " ",
-              key = "c",
-              desc = "Config",
-              action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})",
-            },
-            { icon = " ", key = "s", desc = "Restore Session", section = "session" },
-            {
-              icon = "󰒲 ",
-              key = "L",
-              desc = "Lazy",
-              action = ":Lazy",
-              enabled = package.loaded.lazy ~= nil,
-            },
-            { icon = " ", key = "q", desc = "Quit", action = ":qa" },
-          },
-          -- Used by the `header` section
           header = [[
      --------------------------------------------------------------------------------------------------------
         ██████╗ ███████╗███╗   ███╗ ██████╗ ████████╗███████╗██████╗  █████╗ ██████╗ ██████╗ ██╗████████╗
@@ -64,41 +18,59 @@ return {
         ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝ ╚═════╝    ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═════╝ ╚═╝   ╚═╝
      --------------------------------------------------------------------------------------------------------
 ]],
-        },
-        -- item field formatters
-        formats = {
-          icon = function(item)
-            if item.file and item.icon == "file" or item.icon == "directory" then
-              return Snacks.dashboard.icon(item.file, item.icon)
-            end
-            return { item.icon, width = 2, hl = "icon" }
-          end,
-          footer = { "%s", align = "center" },
-          header = { "%s", align = "center" },
-          file = function(item, ctx)
-            local fname = vim.fn.fnamemodify(item.file, ":~")
-            fname = ctx.width and #fname > ctx.width and vim.fn.pathshorten(fname) or fname
-            if #fname > ctx.width then
-              local dir = vim.fn.fnamemodify(fname, ":h")
-              local file = vim.fn.fnamemodify(fname, ":t")
-              if dir and file then
-                file = file:sub(-(ctx.width - #dir - 2))
-                fname = dir .. "/…" .. file
-              end
-            end
-            local dir, file = fname:match("^(.*)/(.+)$")
-            return dir and { { dir .. "/", hl = "dir" }, { file, hl = "file" } } or { { fname, hl = "file" } }
-          end,
+          keys = {
+            { icon = "󰈞", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+            { icon = "", key = "n", desc = "New File", action = ":ene | startinsert" },
+            { icon = "󰪶", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+            { icon = "󱉶", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+            {
+              icon = "",
+              key = "c",
+              desc = "Config",
+              action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})",
+            },
+            { icon = "󰩈", key = "q", desc = "Quit", action = ":qa" },
+          },
         },
         sections = {
           { section = "header" },
-          { section = "keys", gap = 1, padding = 1 },
+          { section = "keys", title = "Keymaps", indent = 2, padding = 1 },
+          {
+            icon = " ",
+            title = "Recent Files",
+            section = "recent_files",
+            indent = 2,
+            padding = 1,
+          },
+          {
+            icon = " ",
+            title = "Projects",
+            section = "projects",
+            indent = 2,
+            padding = 1,
+          },
+          {
+            icon = " ",
+            title = "Git Status",
+            section = "terminal",
+            enabled = function()
+              return Snacks.git.get_root() ~= nil
+            end,
+            cmd = "git status --short --branch --renames",
+            height = 5,
+            padding = 1,
+            ttl = 5 * 60,
+            indent = 3,
+          },
         },
       },
-      explorer = { enabled = true, hidden = true, ignored = true }, -- file explorer (uses picker)
-      indent = { enabled = true }, -- indent guides
+      dim = { enabled = true },
+      explorer = { enabled = true, trash = true, replace_netrw = true },
+      git = { enabled = true },
+      image = { enabled = true },
+      indent = { enabled = true },
+      input = { enabled = true },
       lazygit = { enabled = true },
-      notifier = { enabled = true }, -- vim.notify replacement
       picker = {
         enabled = true,
         hidden = true,
@@ -112,12 +84,37 @@ return {
             },
           },
         },
-      }, -- fuzzy finder (files, grep, buffers, ...)
-      quickfile = { enabled = true }, -- render files before plugins load
-      scroll = { enabled = true }, -- smooth scrolling
-      statuscolumn = { enabled = true }, -- pretty status column
-      terminal = { enabled = true }, -- toggleable terminal
-      words = { enabled = true }, -- highlight/navigate references under cursor
+      },
+      scope = { enabled = true },
+      scroll = { enabled = true },
+      statuscolumn = { enabled = true },
+      quickfile = { enabled = true },
+      words = { enabled = true },
     })
+
+    -- Keymaps
+    local function map(mode, lhs, rhs, desc)
+      vim.keymap.set(mode, lhs, rhs, { desc = desc })
+    end
+
+    map("n", "<leader>e", function()
+      Snacks.explorer()
+    end, "Snacks Explorer")
+
+    map("n", "<leader>sk", function()
+      Snacks.picker.keymaps()
+    end, "Keymaps")
+
+    map("n", "<leader>sb", function()
+      Snacks.picker.buffers()
+    end, "Buffer list")
+
+    map("n", "<leader>ff", function()
+      Snacks.picker.pick("files")
+    end, "Snacks file picker")
+
+    map("n", "<leader>gg", function()
+      Snacks.lazygit()
+    end, "Lazygit")
   end,
 }

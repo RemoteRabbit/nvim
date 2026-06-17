@@ -16,7 +16,6 @@ vim.g.loaded_node_provider = 0
 require("autocmds")
 require("keymaps")
 require("options")
-require("statusline")
 
 --- Plugins
 --- Each file in the plugins/ dir returns a spec table:
