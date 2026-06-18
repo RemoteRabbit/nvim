@@ -3,7 +3,13 @@ return {
   version = vim.version.range("1.*"),
   config = function()
     require("blink.cmp").setup({
-      keymap = { preset = "default" },
+      keymap = {
+        preset = "default",
+        -- Jump through snippet tabstops (LuaSnip). Falls back to normal
+        -- Tab behaviour when not inside a snippet.
+        ["<Tab>"] = { "snippet_forward", "fallback" },
+        ["<S-Tab>"] = { "snippet_backward", "fallback" },
+      },
       appearance = {
         nerd_font_variant = "mono",
       },
@@ -33,6 +39,7 @@ return {
         },
       },
       signature = { enabled = true },
+      snippets = { preset = "luasnip" },
       fuzzy = { implementation = "prefer_rust" },
     })
   end,

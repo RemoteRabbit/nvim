@@ -4,18 +4,18 @@ return {
   config = function()
     require("conform").setup({
       formatters_by_ft = {
-        lua = { "stylua" },
-        python = { "ruff_format", "ruff_organize_imports" },
-        go = { "goimports", "gofumpt" },
-        terraform = { "terraform_fmt" },
-        sh = { "shfmt" },
+        ["_"] = { "trim_whitespace" },
         bash = { "shfmt" },
         elixir = { "mix" },
+        go = { "goimports", "gofumpt" },
         json = { "jq" },
-        yaml = { "yamlfmt" },
+        lua = { "stylua" },
         markdown = { "markdownlint" },
-        ["_"] = { "trim_whitespace" },
+        python = { "ruff_format", "ruff_organize_imports" },
+        sh = { "shfmt" },
+        terraform = { "terraform_fmt" },
         toml = { "taplo" },
+        yaml = { "yamlfmt" },
       },
       format_on_save = function(bufnr)
         -- Don't format .norg files (Neorg handles its own formatting)

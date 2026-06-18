@@ -9,14 +9,14 @@ return {
       dashboard = {
         preset = {
           header = [[
-     --------------------------------------------------------------------------------------------------------
-        ██████╗ ███████╗███╗   ███╗ ██████╗ ████████╗███████╗██████╗  █████╗ ██████╗ ██████╗ ██╗████████╗
-        ██╔══██╗██╔════╝████╗ ████║██╔═══██╗╚══██╔══╝██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║╚══██╔══╝
-        ██████╔╝█████╗  ██╔████╔██║██║   ██║   ██║   █████╗  ██████╔╝███████║██████╔╝██████╔╝██║   ██║
-        ██╔══██╗██╔══╝  ██║╚██╔╝██║██║   ██║   ██║   ██╔══╝  ██╔══██╗██╔══██║██╔══██╗██╔══██╗██║   ██║
-        ██║  ██║███████╗██║ ╚═╝ ██║╚██████╔╝   ██║   ███████╗██║  ██║██║  ██║██████╔╝██████╔╝██║   ██║
-        ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝ ╚═════╝    ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═════╝ ╚═╝   ╚═╝
-     --------------------------------------------------------------------------------------------------------
+  ---------------------------------------------------------------------------------------------------
+    ██████╗ ███████╗███╗   ███╗ ██████╗ ████████╗███████╗██████╗  █████╗ ██████╗ ██████╗ ██╗████████╗
+    ██╔══██╗██╔════╝████╗ ████║██╔═══██╗╚══██╔══╝██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║╚══██╔══╝
+  ██████╔╝█████╗  ██╔████╔██║██║   ██║   ██║   █████╗  ██████╔╝███████║██████╔╝██████╔╝██║   ██║
+  ██╔══██╗██╔══╝  ██║╚██╔╝██║██║   ██║   ██║   ██╔══╝  ██╔══██╗██╔══██║██╔══██╗██╔══██╗██║   ██║
+  ██║  ██║███████╗██║ ╚═╝ ██║╚██████╔╝   ██║   ███████╗██║  ██║██║  ██║██████╔╝██████╔╝██║   ██║
+  ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝ ╚═════╝    ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═════╝ ╚═╝   ╚═╝
+---------------------------------------------------------------------------------------------------
 ]],
           keys = {
             { icon = "󰈞", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
@@ -87,34 +87,95 @@ return {
       },
       scope = { enabled = true },
       scroll = { enabled = true },
+      scratch = {
+        enabled = true,
+      },
       statuscolumn = { enabled = true },
       quickfile = { enabled = true },
       words = { enabled = true },
     })
 
     -- Keymaps
-    local function map(mode, lhs, rhs, desc)
-      vim.keymap.set(mode, lhs, rhs, { desc = desc })
-    end
-
-    map("n", "<leader>e", function()
+    Snacks.keymap.set("n", "<leader>e", function()
       Snacks.explorer()
-    end, "Snacks Explorer")
+    end, { desc = "Snack Explorer" })
 
-    map("n", "<leader>sk", function()
+    Snacks.keymap.set("n", "<leader>sk", function()
       Snacks.picker.keymaps()
-    end, "Keymaps")
+    end, { desc = "Keymaps" })
 
-    map("n", "<leader>sb", function()
+    Snacks.keymap.set("n", "<leader>sb", function()
       Snacks.picker.buffers()
-    end, "Buffer list")
+    end, { desc = "Buffer list" })
 
-    map("n", "<leader>ff", function()
+    Snacks.keymap.set("n", "<leader>ff", function()
       Snacks.picker.pick("files")
-    end, "Snacks file picker")
+    end, { desc = "Snacks file picker" })
 
-    map("n", "<leader>gg", function()
+    Snacks.keymap.set("n", "<leader>gg", function()
       Snacks.lazygit()
-    end, "Lazygit")
+    end, { desc = "Lazygit" })
+
+    Snacks.keymap.set("n", "<leader>sn", function()
+      Snacks.scratch.open({
+        name = "Notes",
+        ft = "markdown",
+        filekey = {
+          branch = false,
+        },
+      })
+    end, { desc = "Load repo notes markdown scratchpad." })
+
+    Snacks.keymap.set("n", "<leader>sN", function()
+      local filetypes = {
+        "markdown",
+        "lua",
+        "python",
+        "bash",
+        "text",
+        "json",
+        "yaml",
+      }
+
+      local current_ft = vim.bo.filetype
+      if current_ft and current_ft ~= "" then
+        local found = false
+        for _, ft in ipairs(filetypes) do
+          if ft == current_ft then
+            found = true
+            break
+          end
+        end
+        if not found then
+          table.insert(filetypes, 1, current_ft .. " (current)")
+        end
+      end
+
+      vim.ui.select(filetypes, {
+        prompt = "Select filetype: ",
+        format_item = function(item)
+          return item
+        end,
+      }, function(choice)
+        if choice then
+          local selected_ft = choice:gsub(" %(current%)", "")
+          Snacks.scratch.open({
+            ft = selected_ft,
+            filekey = {
+              branch = false,
+            },
+          })
+        end
+      end)
+    end, { desc = "Create new scratch pad." })
+
+    Snacks.keymap.set("n", "<leader>sl", function()
+      local cwd = vim.fs.normalize(vim.uv.cwd())
+      Snacks.picker.scratch({
+        transform = function(item)
+          return item.item and item.item.cwd == cwd
+        end,
+      })
+    end, { desc = "Select scratch buffer." })
   end,
 }
