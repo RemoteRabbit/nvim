@@ -3,6 +3,7 @@ return {
   version = "v2.31.0",
   config = function()
     require("snacks").setup({
+      ---@module 'snacks' Snacks
       animate = { enabled = true },
       bigfile = { enabled = true },
       bufferline = { enabled = true },
@@ -94,6 +95,9 @@ return {
       quickfile = { enabled = true },
       words = { enabled = true },
     })
+
+    ---@module 'Snacks' snacks
+    Snacks = require("snacks")
 
     -- Keymaps
     Snacks.keymap.set("n", "<leader>e", function()

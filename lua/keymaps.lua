@@ -1,4 +1,4 @@
--- ============================================================================
+-- =============================================================================
 -- KEYMAPS (core / editor only)
 --
 -- Convention:
@@ -10,7 +10,13 @@
 --     needed rather than appending to the bottom.
 -- ============================================================================
 
--- Thin wrapper so each mapping is a single readable line.
+---Thin wrapper so each mapping is a single readable line.
+---@param mode string|string[] Array or single character to signify vim mode.
+---@param lhs string Left hand side.
+---@param rhs string|function Right hand side.
+---@param desc string Description for keymap.
+---@param opts? table Optional configuration table.
+---@return nil
 local function map(mode, lhs, rhs, desc, opts)
   opts = vim.tbl_extend("force", { desc = desc }, opts or {})
   vim.keymap.set(mode, lhs, rhs, opts)
@@ -36,7 +42,7 @@ map("n", "N", "Nzzzv", "Previous search result (centered)")
 
 -- Editing ---------------------------------------------------------------------
 map("x", "<leader>p", '"_dP', "Paste without yanking")
-map({ "n", "v" }, "<leader>x", '"_d', "Delete without yanking")
+map({ "n", "v" }, "<leader>d", '"_d', "Delete without yanking")
 map("n", "<A-j>", ":m .+1<CR>==", "Move line down")
 map("n", "<A-k>", ":m .-2<CR>==", "Move line up")
 map("v", "<A-j>", ":m '>+1<CR>gv=gv", "Move selection down")
@@ -58,6 +64,31 @@ map("n", "<C-Left>", ":vertical resize -2<CR>", "Decrease window width")
 map("n", "<C-Right>", ":vertical resize +2<CR>", "Increase window width")
 
 -- Utility / toggles -----------------------------------------------------------
+local width = 80
+---Build a banner divider using the current buffer's comment leader, padded with
+---`=` out to `width` columns (e.g. `-- =====...`, `# =====...`, `// =====...`).
+---@param width integer target line width (column to fill up to) [80]
+---@return string the full banner line with comment start.
+local function comment_banner(width)
+  local cs = vim.bo.commentstring
+  if cs == nil or cs == "" then
+    cs = "# %s"
+  end
+  local prefix, suffix = cs:match("^(.-)%%s(.-)$")
+  prefix = vim.trim(prefix or "#")
+  suffix = vim.trim(suffix or "")
+  local used = #prefix + 1 + (#suffix > 0 and #suffix + 1 or 0)
+  local fill = math.max(width - used, 1)
+  local line = prefix .. " " .. string.rep("=", fill)
+  if #suffix > 0 then
+    line = line .. " " .. suffix
+  end
+  return line
+end
+map("n", "<leader>cb", function() -- comment banner / section divider
+  vim.api.nvim_set_current_line(comment_banner(width))
+end, "Insert comment banner divider")
+
 map("n", "<leader>pa", function() -- copy full file path
   local path = vim.fn.expand("%:p")
   vim.fn.setreg("+", path)
@@ -66,3 +97,7 @@ end, "Copy full file path")
 map("n", "<leader>td", function()
   vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 end, "Toggle diagnostics")
+
+-- Vim Pack -------------------------------------------------------------------
+map("n", "<leader>vu", ":lua vim.pack.update()<CR>", "Update plugins (no force)")
+map("n", "<leader>vf", ":lua vim.pack.update(all,{force=true})<CR>", "Update plugins (FORCE)")

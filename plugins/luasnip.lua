@@ -1,3 +1,7 @@
+-- ===============================Keymaps Start=================================
+-- n <leader>se Edit snippets
+-- =================================Keymaps End=================================
+
 --- LuaSnip — the snippet engine that blink.cmp drives (see plugins/blink.lua,
 --- `snippets.preset = "luasnip"`).
 ---

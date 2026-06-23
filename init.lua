@@ -16,6 +16,7 @@ vim.g.loaded_node_provider = 0
 require("autocmds")
 require("keymaps")
 require("options")
+require("utils.keymapdoc").setup()
 
 --- Plugins
 --- Each file in the plugins/ dir returns either a single spec table, or a
@@ -32,10 +33,17 @@ require("options")
 --- Configs run sorted by `priority` (desc), then file name (asc) for
 --- deterministic ordering. Use `priority` for load-order dependencies.
 local plugins_dir = vim.fn.stdpath("config") .. "/plugins"
+
+---@type table Table holding compiled set of @configs
 local specs = {}
+
+---@type table Table holding individual plugin configurations.
 local configs = {}
 
 --- Validate a single spec and queue its add-spec/config.
+---@param name string Spec file name (used in error messages)
+---@param plugin table Spec table returned by a plugins/*.lua file
+---@return nil
 local function process_spec(name, plugin)
   if type(plugin) ~= "table" then
     vim.notify(

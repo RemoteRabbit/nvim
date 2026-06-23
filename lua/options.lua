@@ -1,6 +1,13 @@
 -- ============================================================================
 -- OPTIONS
 -- ============================================================================
+local undodir = vim.fn.expand("~/.vim/undodir")
+if
+  vim.fn.isdirectory(undodir) == 0 -- create undodir if nonexistent
+then
+  vim.fn.mkdir(undodir, "p")
+end
+
 vim.opt.autochdir = false -- do not autochange directories
 vim.opt.autoindent = true -- copy indent from current line
 vim.opt.autoread = true -- auto-reload changes if outside of neovim
@@ -58,9 +65,3 @@ vim.opt.wildmode = "longest:full,full" -- complete longest common match, full co
 vim.opt.winblend = 0 -- floating window transparency
 vim.opt.wrap = false -- do not wrap lines by default
 vim.opt.writebackup = false -- do not write to a backup file
-local undodir = vim.fn.expand("~/.vim/undodir")
-if
-  vim.fn.isdirectory(undodir) == 0 -- create undodir if nonexistent
-then
-  vim.fn.mkdir(undodir, "p")
-end

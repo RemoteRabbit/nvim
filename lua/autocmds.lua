@@ -4,6 +4,18 @@
 
 local augroup = vim.api.nvim_create_augroup("UserConfig", { clear = true })
 
+-- OpenTofu files share Terraform/HCL syntax but Neovim doesn't detect them by
+-- default. Map them to `terraform` so LSP, treesitter and the terraform
+-- snippets all apply.
+vim.filetype.add({
+  extension = {
+    tofu = "terraform",
+  },
+  pattern = {
+    [".*%.tofu%.json"] = "json",
+  },
+})
+
 -- Format on save (ONLY real file buffers, ONLY when efm is attached)
 vim.api.nvim_create_autocmd("BufWritePre", {
   group = augroup,

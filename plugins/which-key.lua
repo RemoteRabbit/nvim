@@ -12,11 +12,13 @@ return {
     -- their `desc` automatically. Register only the <leader> prefixes here.
     wk.add({
       { "<leader>b", group = "buffer" },
+      { "<leader>d", group = "delete (no yank)" },
       { "<leader>f", group = "find" },
       { "<leader>g", group = "git" },
       { "<leader>p", group = "paste/path" },
       { "<leader>s", group = "split/scratch" },
       { "<leader>t", group = "toggle" },
+      { "<leader>x", group = "trouble/diagnostics" },
     })
   end,
 }

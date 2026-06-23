@@ -36,7 +36,6 @@ return {
         lualine_b = { "branch", "diff" },
         lualine_c = {
           { "filename", path = 1 },
-          { python_env, color = { fg = "#98be65" } },
         },
         lualine_x = {
           "diagnostics",
