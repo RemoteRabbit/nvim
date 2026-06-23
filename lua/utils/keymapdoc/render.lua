@@ -4,8 +4,8 @@ local START = "-- ===============================Keymaps Start==================
 local STOP = "-- =================================Keymaps End================================="
 
 --- Build table of keymaps.
----@param entries table -- TODO: Add description
----@return table -- TODO: Add description
+---@param entries table A list of keymap entries, each containing mode, lhs, and desc fields.
+---@return table A table containing the formatted keymaps from the current file.
 local function build_lines(entries)
   local lines = { START }
   if #entries == 0 then
@@ -27,8 +27,8 @@ local function build_lines(entries)
 end
 
 --- Inject keymap lines to top of current file between marker blocks.
----@param buf integer Neovim buffer or nil; current buffer is 0.
----@param entries table -- TODO: Add description
+---@param buf integer Neovim buffer number or nil; if nil, the current buffer is used.
+---@param entries table A list of keymap entries to inject into the file.
 function M.inject(buf, entries)
   buf = (buf == 0) and vim.api.nvim_get_current_buf() or buf
 

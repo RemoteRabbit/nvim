@@ -1,6 +1,6 @@
 local M = {}
 
---- Matches all function calls; filter by name in Lua
+--- Matches all function calls; filter by name in Lua.
 ---@type vim.treesitter.Query
 local QUERY = vim.treesitter.query.parse(
   "lua",
@@ -48,7 +48,7 @@ end
 --- Scan an opts table_constructor for a `desc = "..."` field.
 ---@param opts_node TSNode|nil Treesitter node or nil
 ---@param buf integer|string Nvim buf index or nil; nil or 0 is current buf.
----@return string -- TODO: Add definition
+---@return string Description text if found, otherwise empty string.
 ---@see node_str
 local function find_desc(opts_node, buf)
   if not opts_node or opts_node:type() ~= "table_constructor" then
@@ -67,9 +67,9 @@ end
 
 --- Pull one capture node out of an iter_matches result, handling both the older API (id -> node)
 --- and the newer API (id -> { node, ... }).
----@param match table -- TODO: Add description
----@param want_name string -- TODO: Add description
----@return TSNode|nil -- TODO: Add description
+---@param match table Match result from iter_matches.
+---@param want_name string Name of the capture to extract.
+---@return TSNode|nil Extracted node if found, otherwise nil.
 local function capture_node(match, want_name)
   for id, nodes in pairs(match) do
     if QUERY.captures[id] == want_name then
@@ -81,7 +81,7 @@ end
 
 --- Extract keymap entries from buffer.
 ---@param buf integer|string Nvim buf index or nil; nil or 0 is current buf.
----@return KeymapEntry[]
+---@return KeymapEntry[] List of extracted keymap entries.
 function M.extract(buf)
   buf = (buf == nil or buf == 0) and vim.api.nvim_get_current_buf() or buf
 
