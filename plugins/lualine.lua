@@ -12,6 +12,7 @@ return {
       end
       return " " .. table.concat(names, ", ")
     end
+
     require("lualine").setup({
       options = {
         icons_enabled = true,
@@ -45,7 +46,7 @@ return {
           "filetype",
         },
         lualine_y = { "progress" },
-        lualine_z = { "location" },
+        lualine_z = { "location", "datetime" },
       },
       inactive_sections = {
         lualine_a = {},

@@ -28,6 +28,9 @@ require("utils.keymapdoc").setup()
 ---     version = "v1.2.3" or "main",           -- optional (tag/branch/commit)
 ---     config = function() ... end,            -- optional, runs after install/load
 ---     priority = 100,                         -- optional, higher runs first (default 0)
+---     enabled = false,                        -- optional, default true; when false
+---                                             --   the plugin is not loaded/configured
+---                                             --   and is uninstalled if present
 ---   }
 ---
 --- Configs run sorted by `priority` (desc), then file name (asc) for
@@ -39,6 +42,10 @@ local specs = {}
 
 ---@type table Table holding individual plugin configurations.
 local configs = {}
+
+---@type table Set of plugin names (last path segment of `src`) explicitly
+--- disabled via `enabled = false`, queued for uninstall.
+local disabled = {}
 
 --- Validate a single spec and queue its add-spec/config.
 ---@param name string Spec file name (used in error messages)
@@ -53,6 +60,12 @@ local function process_spec(name, plugin)
     return
   elseif not plugin.src then
     vim.notify(("Plugin spec '%s' is missing the required `src` field."):format(name), vim.log.levels.ERROR)
+    return
+  end
+
+  -- Default is enabled; only `enabled = false` opts out.
+  if plugin.enabled == false then
+    disabled[plugin.src:gsub("%.git$", ""):match("([^/]+)$")] = true
     return
   end
 
@@ -106,6 +119,23 @@ end)
 local ok_add, add_err = pcall(vim.pack.add, specs)
 if not ok_add then
   vim.notify("vim.pack.add failed:\n" .. tostring(add_err), vim.log.levels.ERROR)
+end
+
+--- Uninstall any plugins explicitly disabled via `enabled = false`, but only
+--- those actually installed (vim.pack.del errors on unknown names).
+if next(disabled) then
+  local to_remove = {}
+  for _, p in ipairs(vim.pack.get()) do
+    if disabled[p.spec.name] then
+      table.insert(to_remove, p.spec.name)
+    end
+  end
+  if #to_remove > 0 then
+    local ok_del, del_err = pcall(vim.pack.del, to_remove)
+    if not ok_del then
+      vim.notify("vim.pack.del failed:\n" .. tostring(del_err), vim.log.levels.ERROR)
+    end
+  end
 end
 
 for _, config in ipairs(configs) do
