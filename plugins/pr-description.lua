@@ -1,3 +1,12 @@
+-- INFO ========================================================================
+-- Project Name: pr-description.nvim
+-- Author: RemoteRabbit
+-- URL: https://github.com/remoterabbit/pr-description.nvim
+-- Description: Generate well-formatted PR/MR descriptions from your git commits.
+-- Analyzes commits using conventional commit patterns, categorizes them, links
+-- issues and Jira tickets, and produces markdown output for GitHub PRs or
+-- GitLab MRs.
+-- =============================================================================
 -- ===============================Keymaps Start=================================
 -- n <leader>gd Generate PR Description from commits.
 -- =================================Keymaps End=================================
