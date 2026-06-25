@@ -1,3 +1,7 @@
+-- ===============================Keymaps Start=================================
+-- n <leader>gd Generate PR Description from commits.
+-- =================================Keymaps End=================================
+
 return {
   src = "https://github.com/remoterabbit/pr-description.nvim",
   config = function()
