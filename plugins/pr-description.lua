@@ -17,6 +17,7 @@ return {
     require("pr-description").setup({
       foldable_file_changes = true,
     })
+
     vim.api.nvim_set_keymap(
       "n",
       "<leader>gd",

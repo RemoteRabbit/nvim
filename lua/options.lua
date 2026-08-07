@@ -29,6 +29,7 @@ vim.opt.foldmethod = "expr"
 vim.opt.hidden = true -- allow hidden buffers
 vim.opt.hlsearch = true -- highlight search matches
 vim.opt.ignorecase = true -- case insensitive search
+vim.opt.inccommand = "split"
 vim.opt.incsearch = true -- show matches as you type
 vim.opt.iskeyword:append("-") -- include - in words
 vim.opt.maxmempattern = 20000 -- increase max memory

@@ -52,7 +52,7 @@ return {
             border = "rounded",
           },
         },
-        ghost_text = { enabled = true },
+        ghost_text = { enabled = true, show_without_selection = true },
         menu = {
           border = "rounded",
           auto_show = true,
