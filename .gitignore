@@ -8,12 +8,14 @@ plugin/packer_compiled.lua
 spell/
 
 # Caches
-.aider.tags.cache.v4/
 .luac
 *.swp
 *.swo
 *~
 tags
+*.cache
+*.cache.*
+*.history
 
 # OS
 .DS_Store
