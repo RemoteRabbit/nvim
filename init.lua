@@ -89,7 +89,7 @@ local function process_spec(name, plugin)
 end
 
 for name, type_ in vim.fs.dir(plugins_dir) do
-  if type_ == "file" and name:match("%.lua$") then
+  if (type_ == "file" or type_ == "link") and name:match("%.lua$") then
     local ok, plugin = pcall(dofile, plugins_dir .. "/" .. name)
     if not ok then
       vim.notify(
@@ -116,7 +116,7 @@ table.sort(configs, function(a, b)
   return a.name < b.name
 end)
 
-local ok_add, add_err = pcall(vim.pack.add, specs)
+local ok_add, add_err = pcall(vim.pack.add, specs, { load = true })
 if not ok_add then
   vim.notify("vim.pack.add failed:\n" .. tostring(add_err), vim.log.levels.ERROR)
 end
