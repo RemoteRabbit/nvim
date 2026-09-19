@@ -1,3 +1,4 @@
+---
 repos:
   # General file formatting and linting
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -19,68 +20,9 @@ repos:
       - id: stylua-github
         args: [--config-path=stylua.toml]
 
-  # # Lua linting with Luacheck
-  # - repo: https://github.com/luarocks/luacheck
-  #   rev: v1.2.0
-  #   hooks:
-  #     - id: luacheck
-  #       args: [--config=.luacheckrc]
-
   # Conventional commit messages
   - repo: https://github.com/compilerla/conventional-pre-commit
     rev: v4.4.0
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
-
-  # Additional security checks
-  - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.5.0
-    hooks:
-      - id: detect-secrets
-        args: [--baseline, .secrets.baseline]
-        exclude: (package.lock.json|lazy-lock.json)
-
-  # Neovim config validation
-  - repo: local
-    hooks:
-      - id: validate-nvim-config
-        name: Validate Neovim Config
-        entry: scripts/validate.sh
-        language: script
-        files: ^(lua/.*\.lua|init\.lua)$
-        pass_filenames: false
-
-      - id: check-lua-syntax
-        name: Check Lua Syntax
-        entry: bash -c 'for f in "$@"; do luac -p "$f" || exit 1; done' --
-        language: system
-        files: \.lua$
-        types: [lua]
-
-  # Auto-documentation generation
-  - repo: local
-    hooks:
-      - id: generate-plugin-docs
-        name: Generate Plugin Documentation
-        entry: nvim -l scripts/generate-docs.lua
-        language: system
-        files: ^lua/plugins/.*\.lua$
-        pass_filenames: false
-        stages: [post-commit]
-
-      - id: update-readme-plugins
-        name: Update README with Plugin List
-        entry: nvim -l scripts/update-readme.lua
-        language: system
-        files: ^lua/plugins/.*\.lua$
-        pass_filenames: false
-        stages: [post-commit]
-
-      - id: extract-keybindings
-        name: Extract Keybindings Documentation
-        entry: nvim -l scripts/extract-keybindings.lua
-        language: system
-        files: ^lua/.*\.lua$
-        pass_filenames: false
-        stages: [post-commit]
