@@ -1,0 +1,16 @@
+[tools]
+fd = "10.5.0"
+lazygit = "0.65.1"
+lua = "5.1.5"
+neovim = "0.12.5"
+pre-commit = "4.6.2"
+ripgrep = "15.2.0"
+stylua = "2.5.2"
+
+[tasks.check]
+description = "Run all pre-commit checks"
+run = "pre-commit run --all-files"
+
+[tasks.format]
+description = "Format the Neovim configuration"
+run = "stylua init.lua lua plugins snippets"
