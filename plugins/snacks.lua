@@ -116,6 +116,10 @@ return {
       Snacks.picker.pick("files")
     end, { desc = "Snacks file picker" })
 
+    Snacks.keymap.set("n", "<leader>fg", function()
+      Snacks.picker.grep()
+    end, { desc = "Snacks grep file picker." })
+
     Snacks.keymap.set("n", "<leader>gg", function()
       Snacks.lazygit()
     end, { desc = "Lazygit" })
