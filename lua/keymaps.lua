@@ -97,6 +97,9 @@ end, "Copy full file path")
 map("n", "<leader>td", function()
   vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 end, "Toggle diagnostics")
+map("n", "<leader>th", function()
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }), { bufnr = 0 })
+end, "Toggle inlay hints")
 
 -- Vim Pack -------------------------------------------------------------------
 map("n", "<leader>vu", ":lua vim.pack.update()<CR>", "Update plugins (no force)")
