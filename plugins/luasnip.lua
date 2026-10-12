@@ -43,6 +43,13 @@ return {
         require("luasnip.loaders").edit_snippet_files()
       end, { desc = "Edit snippets" })
 
+      -- Cycle choice nodes (e.g. `err` vs `fmt.Errorf(...)` in Go's iferr).
+      vim.keymap.set({ "i", "s" }, "<C-l>", function()
+        if ls.choice_active() then
+          ls.change_choice(1)
+        end
+      end, { desc = "Next snippet choice" })
+
       if not pcall(require, "luasnip-jsregexp") and not pcall(require, "jsregexp") then
         local info = vim.iter(vim.pack.get()):find(function(p)
           return p.spec and p.spec.name == "LuaSnip"
