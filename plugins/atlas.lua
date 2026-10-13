@@ -59,5 +59,21 @@ return {
         },
       },
     })
+    -- Atlas has no hook for custom PR bodies, so wrap its description builder
+    -- and swap in pr-description.nvim's output. Falls back to Atlas's body if
+    -- pr-description fails (e.g. no commits ahead of base).
+    local description = require("atlas.pulls.create.description")
+    local build = description.build
+    description.build = function(root, repo_slug, base, head, repository, on_done)
+      return build(root, repo_slug, base, head, repository, function(content, err)
+        if content then
+          local body = require("pr-description").generate_description()
+          if body then
+            content.body = body
+          end
+        end
+        on_done(content, err)
+      end)
+    end
   end,
 }
