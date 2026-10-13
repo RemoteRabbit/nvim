@@ -51,9 +51,35 @@ return {
           -- gopls disables the `test` codelens by default. Enabling it puts a
           -- runnable "run test"/"run benchmark" lens above each Test/Benchmark
           -- function in *_test.go files; trigger it with <leader>cl (run lens).
+          -- The other lenses (generate, tidy, vendor, upgrade_dependency,
+          -- run_govulncheck, regenerate_cgo) are on by default.
           codelenses = {
             test = true,
           },
+          -- Match conform's gofumpt so LSP-fallback formatting agrees.
+          gofumpt = true,
+          -- Fill in function-argument / struct-field placeholders on completion.
+          usePlaceholders = true,
+          -- Richer, type-aware highlighting on top of treesitter.
+          semanticTokens = true,
+          -- Extra analyzers beyond gopls' defaults. Most staticcheck checks
+          -- come from golangci-lint (golangci_lint_ls) using the repo config.
+          analyses = {
+            nilness = true,
+            unusedparams = true,
+            unusedvariable = true,
+            unusedwrite = true,
+            useany = true,
+          },
+          -- Inlay hints are enabled on attach; toggle with <leader>th.
+          hints = {
+            compositeLiteralFields = true,
+            constantValues = true,
+            functionTypeParameters = true,
+            parameterNames = true,
+            rangeVariableTypes = true,
+          },
+          directoryFilters = { "-.git", "-.direnv", "-.devenv", "-**/node_modules" },
         },
       },
     })
@@ -85,8 +111,8 @@ return {
         vim.keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", { desc = "Signature help" })
 
         -- Actions
-        vim.keymap.set("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<cr>", { desc = "Rename symbol" })
-        vim.keymap.set("n", "<F4>", "<cmd>lua vim.lsp.buf.code_action()<cr>", { desc = "Code action" })
+        vim.keymap.set("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", { desc = "Rename symbol" })
+        vim.keymap.set({ "n", "x" }, "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", { desc = "Code action" })
 
         -- Hover: LSP hover, falls back to diagnostic float if no hover info
         vim.keymap.set("n", "K", function()

@@ -23,3 +23,11 @@ Thumbs.db
 
 # Profiling output
 profile.json
+
+# Devenv
+.devenv*
+devenv.local.nix
+devenv.local.yaml
+
+# direnv
+.direnv
