@@ -12,19 +12,25 @@
 ---                 s JSON -> struct
 ---   tests         t test for func · T tests for file · E tests for exported
 ---                 o switch between foo.go / foo_test.go
----   docs          d full `go doc` for symbol under cursor in a split (q closes)
 ---   go commands   m go mod tidy · g go get (prompt) · G go generate (file)
+---                 b go build ./... · v go vet ./... (errors -> quickfix)
+---                 x go run . (terminal split, package of the current file)
 return {
   src = "https://github.com/olexsmir/gopher.nvim",
   version = vim.version.range("0.*"),
   config = function()
     require("gopher").setup({})
 
-    --- Prompt for arguments, then run `cmd <input>`; keeps a visual range.
-    ---@param cmd string Ex command name
-    ---@param prompt string
+    --- Mapping that runs `[range]cmd [input]`, keeping a visual range.
+    --- `prompt` asks for the input first. `save` writes the buffer before
+    --- running: gomodifytags (GoTag*) reads the file from disk, so unsaved
+    --- edits make it fail ("struct name does not exist") or splice its
+    --- output over the wrong lines.
+    ---@param cmd string Ex command, optionally with fixed arguments
+    ---@param opts? { prompt?: string, save?: boolean }
     ---@return function
-    local function prompt_cmd(cmd, prompt)
+    local function go_cmd(cmd, opts)
+      opts = opts or {}
       return function()
         local range = ""
         if vim.fn.mode():match("[vV\22]") then
@@ -32,70 +38,62 @@ return {
           range = math.min(s, e) .. "," .. math.max(s, e)
           vim.api.nvim_feedkeys(vim.keycode("<Esc>"), "nx", false)
         end
-        vim.ui.input({ prompt = prompt }, function(input)
+        local function run(input)
+          if opts.save then
+            vim.cmd("silent update")
+            -- Format-on-save may have changed the buffer; refresh the tree
+            -- gopher uses to find the struct under the cursor.
+            vim.treesitter.get_parser():parse()
+          end
+          vim.cmd(range .. cmd .. (input and " " .. input or ""))
+        end
+        if not opts.prompt then
+          return run()
+        end
+        vim.ui.input({ prompt = opts.prompt }, function(input)
           if input ~= nil then
-            vim.cmd(range .. cmd .. " " .. input)
+            run(input)
           end
         end)
       end
     end
 
-    --- Full `go doc -all` for the symbol under the cursor, in a reusable split.
-    --- Unlike K (hover), this includes every method/field doc of a type, or the
-    --- whole package when the cursor is on a package name. gopls resolves the
-    --- symbol (aliases, dependencies, local packages) via the pkg.go.dev link
-    --- it puts in hover text; `go doc` then runs from the file's directory so
-    --- module dependencies resolve.
+    --- Run `go <args>` from the buffer's module root and load the errors into
+    --- the quickfix list (opened when there are any).
     ---@param buf integer
-    local function godoc_split(buf)
-      local params = vim.lsp.util.make_position_params(0, "utf-16")
-      vim.lsp.buf_request_all(buf, "textDocument/hover", params, function(results)
-        local target
-        for _, res in pairs(results) do
-          local value = vim.tbl_get(res, "result", "contents", "value") or ""
-          local path, sym = value:match("https://pkg%.go%.dev/([^#%)]+)#?([%w_%.]*)")
-          if path then
-            -- Drop a module version (github.com/x/y@v1.2.3/sub -> github.com/x/y/sub).
-            target = { path:gsub("@[^/]+", ""), sym ~= "" and sym or nil }
-            break
+    ---@param args string[]
+    local function go_quickfix(buf, args)
+      local root = vim.fs.root(buf, "go.mod") or vim.fs.dirname(vim.api.nvim_buf_get_name(buf))
+      local title = "go " .. table.concat(args, " ")
+      vim.notify(title .. " …")
+      vim.system(vim.list_extend({ "go" }, args), { cwd = root, text = true }, function(out)
+        vim.schedule(function()
+          -- go prints paths relative to `root` (vet type errors prefixed with
+          -- "vet: "); make them absolute so quickfix resolves them from any cwd.
+          local lines = vim.tbl_map(function(line)
+            local file, rest = line:gsub("^vet: ", ""):match("^([^%s:]+%.go)(:.*)$")
+            if not file then
+              return line
+            end
+            if not vim.startswith(file, "/") then
+              file = vim.fs.normalize(vim.fs.joinpath(root, file))
+            end
+            return file .. rest
+          end, vim.split(out.stdout .. out.stderr, "\n", { trimempty = true }))
+          -- Same errorformat as Neovim's `:compiler go`.
+          local efm = [[%-G# %.%#,%A%f:%l:%c: %m,%A%f:%l: %m,%C%*\s%m,%-G%.%#]]
+          vim.fn.setqflist({}, " ", { title = title, lines = lines, efm = efm })
+          local items = vim.tbl_filter(function(item)
+            return item.valid == 1
+          end, vim.fn.getqflist())
+          if #items > 0 then
+            vim.cmd("botright copen")
+          elseif out.code ~= 0 then
+            vim.notify(title .. " failed:\n" .. table.concat(lines, "\n"), vim.log.levels.ERROR)
+          else
+            vim.cmd("cclose")
+            vim.notify(title .. ": ok")
           end
-        end
-        if not target then
-          vim.notify("No Go documentation for symbol under cursor", vim.log.levels.WARN)
-          return
-        end
-
-        local cmd = vim.list_extend({ "go", "doc", "-all" }, target)
-        local dir = vim.fs.dirname(vim.api.nvim_buf_get_name(buf))
-        vim.system(cmd, { cwd = dir, text = true }, function(out)
-          vim.schedule(function()
-            if out.code ~= 0 then
-              vim.notify(vim.trim(out.stderr), vim.log.levels.WARN)
-              return
-            end
-            -- Reuse the godoc window in this tab, otherwise open a vertical split.
-            local win = vim.iter(vim.api.nvim_tabpage_list_wins(0)):find(function(w)
-              return vim.bo[vim.api.nvim_win_get_buf(w)].filetype == "godoc"
-            end)
-            local doc
-            if win then
-              doc = vim.api.nvim_win_get_buf(win)
-              vim.api.nvim_set_current_win(win)
-            else
-              doc = vim.api.nvim_create_buf(false, true)
-              vim.bo[doc].bufhidden = "wipe"
-              -- Own filetype so gopls/conform don't attach; Go syntax colors.
-              vim.bo[doc].filetype = "godoc"
-              pcall(vim.treesitter.start, doc, "go")
-              vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = doc, desc = "Close godoc" })
-              vim.cmd("vertical sbuffer " .. doc)
-            end
-            pcall(vim.api.nvim_buf_set_name, doc, "godoc://" .. table.concat(target, " "))
-            vim.bo[doc].modifiable = true
-            vim.api.nvim_buf_set_lines(doc, 0, -1, false, vim.split(vim.trim(out.stdout), "\n"))
-            vim.bo[doc].modifiable = false
-            vim.api.nvim_win_set_cursor(0, { 1, 0 })
-          end)
         end)
       end)
     end
@@ -109,15 +107,25 @@ return {
         end
         local nx = { "n", "x" }
 
-        -- Struct tags (`:` instead of <cmd> so a visual range is passed along).
-        map(nx, "<leader>Gj", ":GoTagAdd json<cr>", "Add json tags")
-        map(nx, "<leader>Gy", ":GoTagAdd yaml<cr>", "Add yaml tags")
-        map(nx, "<leader>Ga", prompt_cmd("GoTagAdd", "Add tags (e.g. json=omitempty db): "), "Add tags…")
-        map(nx, "<leader>Gr", prompt_cmd("GoTagRm", "Remove tags (empty = json): "), "Remove tags…")
-        map("n", "<leader>GR", "<cmd>GoTagClear<cr>", "Clear all tags")
+        -- Struct tags (save first; j/y/a/r pass a visual range along).
+        map(nx, "<leader>Gj", go_cmd("GoTagAdd json", { save = true }), "Add json tags")
+        map(nx, "<leader>Gy", go_cmd("GoTagAdd yaml", { save = true }), "Add yaml tags")
+        map(
+          nx,
+          "<leader>Ga",
+          go_cmd("GoTagAdd", { prompt = "Add tags (e.g. json=omitempty db): ", save = true }),
+          "Add tags…"
+        )
+        map(
+          nx,
+          "<leader>Gr",
+          go_cmd("GoTagRm", { prompt = "Remove tags (empty = json): ", save = true }),
+          "Remove tags…"
+        )
+        map("n", "<leader>GR", go_cmd("GoTagClear", { save = true }), "Clear all tags")
 
         -- Code generation
-        map("n", "<leader>Gi", prompt_cmd("GoImpl", "Implement (e.g. io.Reader): "), "Implement interface…")
+        map("n", "<leader>Gi", go_cmd("GoImpl", { prompt = "Implement (e.g. io.Reader): " }), "Implement interface…")
         map("n", "<leader>Ge", "<cmd>GoIfErr<cr>", "Insert if err != nil")
         map("n", "<leader>Gn", "<cmd>GoNew<cr>", "Generate constructor")
         map("n", "<leader>Gc", "<cmd>GoCmt<cr>", "Generate doc comment")
@@ -133,15 +141,22 @@ return {
           vim.cmd.edit(vim.fn.fnameescape(alt))
         end, "Alternate test/impl file")
 
-        -- Docs
-        map("n", "<leader>Gd", function()
-          godoc_split(ev.buf)
-        end, "Go doc in split (full)")
-
         -- go commands
         map("n", "<leader>Gm", "<cmd>GoMod tidy<cr>", "go mod tidy")
-        map("n", "<leader>Gg", prompt_cmd("GoGet", "go get: "), "go get…")
+        map("n", "<leader>Gg", go_cmd("GoGet", { prompt = "go get: " }), "go get…")
         map("n", "<leader>GG", "<cmd>GoGenerate %<cr>", "go generate (file)")
+        map("n", "<leader>Gb", function()
+          go_quickfix(ev.buf, { "build", "./..." })
+        end, "go build ./... (quickfix)")
+        map("n", "<leader>Gv", function()
+          go_quickfix(ev.buf, { "vet", "./..." })
+        end, "go vet ./... (quickfix)")
+        map("n", "<leader>Gx", function()
+          local dir = vim.fs.dirname(vim.api.nvim_buf_get_name(ev.buf))
+          vim.cmd("botright 15new")
+          vim.fn.jobstart({ "go", "run", "." }, { term = true, cwd = dir })
+          vim.cmd.startinsert()
+        end, "go run . (terminal)")
       end,
     })
   end,

@@ -8,9 +8,9 @@ return {
       pulls = {
         default_merge_method = "squash",
         default_delete_source_branch = true,
-        description = {
-          include_diffstat = true,
-        },
+        -- description = {
+        --   include_diffstat = true,
+        -- },
         diff = {
           review_panel = {
             hidden = false,

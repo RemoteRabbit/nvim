@@ -16,6 +16,7 @@ return {
             package_uninstalled = "✗",
           },
         },
+        max_concurrent_installers = 4,
       })
 
       require("mason-lspconfig").setup({

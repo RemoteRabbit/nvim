@@ -62,20 +62,21 @@ return {
           usePlaceholders = true,
           -- Richer, type-aware highlighting on top of treesitter.
           semanticTokens = true,
-          -- Extra analyzers beyond gopls' defaults. Most staticcheck checks
-          -- come from golangci-lint (golangci_lint_ls) using the repo config.
-          analyses = {
-            nilness = true,
-            unusedparams = true,
-            unusedvariable = true,
-            unusedwrite = true,
-            useany = true,
-          },
+          -- gopls' default analyzers (nilness, unused*, modernize, ...) are
+          -- enough; staticcheck-style checks come from golangci-lint
+          -- (golangci_lint_ls) using the repo config.
+          -- Report known-vulnerable dependencies as go.mod diagnostics.
+          vulncheck = "Imports",
+          -- Template files (gotmpl filetype, see lua/autocmds.lua).
+          templateExtensions = { "gotmpl", "tmpl" },
           -- Inlay hints are enabled on attach; toggle with <leader>th.
           hints = {
+            assignVariableTypes = true,
             compositeLiteralFields = true,
+            compositeLiteralTypes = true,
             constantValues = true,
             functionTypeParameters = true,
+            ignoredError = true,
             parameterNames = true,
             rangeVariableTypes = true,
           },
@@ -102,17 +103,58 @@ return {
           vim.lsp.codelens.enable(true, { bufnr = bufnr })
         end
 
+        -- Go: float listing the unset fields of the struct literal under the
+        -- cursor in insert mode (follows the <leader>th inlay-hint toggle).
+        if client and client.name == "gopls" then
+          require("utils.gostructfields").attach(bufnr)
+        end
+
         -- Navigation
-        vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", { desc = "Go to definition" })
-        vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", { desc = "Go to declaration" })
-        vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", { desc = "Go to implementation" })
-        vim.keymap.set("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", { desc = "Go to type definition" })
-        vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", { desc = "List references" })
-        vim.keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", { desc = "Signature help" })
+        vim.keymap.set(
+          "n",
+          "gd",
+          "<cmd>lua vim.lsp.buf.definition()<cr>",
+          { buffer = bufnr, desc = "Go to definition" }
+        )
+        vim.keymap.set(
+          "n",
+          "gD",
+          "<cmd>lua vim.lsp.buf.declaration()<cr>",
+          { buffer = bufnr, desc = "Go to declaration" }
+        )
+        vim.keymap.set(
+          "n",
+          "gi",
+          "<cmd>lua vim.lsp.buf.implementation()<cr>",
+          { buffer = bufnr, desc = "Go to implementation" }
+        )
+        vim.keymap.set(
+          "n",
+          "go",
+          "<cmd>lua vim.lsp.buf.type_definition()<cr>",
+          { buffer = bufnr, desc = "Go to type definition" }
+        )
+        vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", { buffer = bufnr, desc = "List references" })
+        vim.keymap.set(
+          "n",
+          "gs",
+          "<cmd>lua vim.lsp.buf.signature_help()<cr>",
+          { buffer = bufnr, desc = "Signature help" }
+        )
 
         -- Actions
-        vim.keymap.set("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", { desc = "Rename symbol" })
-        vim.keymap.set({ "n", "x" }, "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", { desc = "Code action" })
+        vim.keymap.set(
+          "n",
+          "<leader>cr",
+          "<cmd>lua vim.lsp.buf.rename()<cr>",
+          { buffer = bufnr, desc = "Rename symbol" }
+        )
+        vim.keymap.set(
+          { "n", "x" },
+          "<leader>ca",
+          "<cmd>lua vim.lsp.buf.code_action()<cr>",
+          { buffer = bufnr, desc = "Code action" }
+        )
 
         -- Hover: LSP hover, falls back to diagnostic float if no hover info
         vim.keymap.set("n", "K", function()
@@ -123,30 +165,40 @@ return {
           elseif has_diag then
             vim.diagnostic.open_float({ border = "rounded" })
           end
-        end, { desc = "Hover / diagnostic" })
+        end, { buffer = bufnr, desc = "Hover / diagnostic" })
 
         -- Diagnostics
-        vim.keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<cr>", { desc = "Show diagnostics" })
+        vim.keymap.set(
+          "n",
+          "gl",
+          "<cmd>lua vim.diagnostic.open_float()<cr>",
+          { buffer = bufnr, desc = "Show diagnostics" }
+        )
         vim.keymap.set("n", "[d", function()
           vim.diagnostic.jump({ count = -1 })
-        end, { desc = "Previous diagnostic" })
+        end, { buffer = bufnr, desc = "Previous diagnostic" })
         vim.keymap.set("n", "]d", function()
           vim.diagnostic.jump({ count = 1 })
-        end, { desc = "Next diagnostic" })
+        end, { buffer = bufnr, desc = "Next diagnostic" })
 
         -- Document symbols (outline view)
         vim.keymap.set("n", "<leader>ls", function()
           Snacks.picker.lsp_symbols()
-        end, { desc = "Document symbols" })
+        end, { buffer = bufnr, desc = "Document symbols" })
 
         -- Workspace symbols (project-wide symbol search)
         vim.keymap.set("n", "<leader>lw", function()
           Snacks.picker.lsp_workspace_symbols()
-        end, { desc = "Workspace symbols" })
+        end, { buffer = bufnr, desc = "Workspace symbols" })
 
         -- Code lens is refreshed automatically (see the codeLens autocmd
         -- above); <leader>cl runs the lens action under the cursor.
-        vim.keymap.set("n", "<leader>cl", "<cmd>lua vim.lsp.codelens.run()<cr>", { desc = "Run code lens" })
+        vim.keymap.set(
+          "n",
+          "<leader>cl",
+          "<cmd>lua vim.lsp.codelens.run()<cr>",
+          { buffer = bufnr, desc = "Run code lens" }
+        )
 
         -- Debug LSP info
         vim.keymap.set("n", "<leader>li", function()
@@ -173,7 +225,7 @@ return {
           end
 
           vim.notify("LSP Clients:\n" .. table.concat(info, "\n"), vim.log.levels.INFO)
-        end, { desc = "LSP info" })
+        end, { buffer = bufnr, desc = "LSP info" })
       end,
     })
   end,
