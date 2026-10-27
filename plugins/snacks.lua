@@ -1,6 +1,6 @@
 return {
   src = "https://github.com/folke/snacks.nvim",
-  version = "v2.31.0",
+  version = vim.version.range("*"),
   config = function()
     require("snacks").setup({
       ---@module 'snacks' Snacks
@@ -92,6 +92,15 @@ return {
         enabled = true,
       },
       statuscolumn = { enabled = true },
+      terminal = {
+        enabled = true,
+        win = {
+          position = "float",
+          width = 0.85,
+          height = 0.85,
+          border = "rounded",
+        },
+      },
       quickfile = { enabled = true },
       words = { enabled = true },
     })
@@ -185,5 +194,13 @@ return {
         end,
       })
     end, { desc = "Select scratch buffer." })
+
+    Snacks.keymap.set("n", "<leader>st", function()
+      Snacks.terminal.toggle()
+    end, { desc = "Snack Terminal" })
+
+    Snacks.keymap.set("n", "<leader>td", function()
+      Snacks.toggle.dim()
+    end, { desc = "Snack dim" })
   end,
 }
